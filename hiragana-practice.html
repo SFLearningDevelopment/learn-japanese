@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hiragana Pronunciation Practice</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 { font-size: 2.5em; margin-bottom: 10px; }
+        .header p { font-size: 1.1em; opacity: 0.9; }
+        .content { padding: 40px; }
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .hiragana-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            border: 3px solid #e74c3c;
+            transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+            cursor: pointer;
+            min-height: 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .hiragana-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(231, 76, 60, 0.3);
+        }
+        .hiragana-card.playing {
+            background: #fee;
+            border-color: #c0392b;
+            transform: scale(1.05);
+        }
+        .hiragana-char {
+            font-size: 3.5em;
+            color: #e74c3c;
+            font-weight: bold;
+            margin-bottom: 10px;
+            line-height: 1;
+        }
+        .romanji {
+            font-size: 1.3em;
+            color: #666;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .info-box {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        .info-box h3 { color: #856404; margin-bottom: 10px; }
+        .info-box p { color: #856404; line-height: 1.6; }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 0.9em;
+        }
+        @media (max-width: 600px) {
+            .header h1 { font-size: 2em; }
+            .grid-container {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+                gap: 10px;
+            }
+            .hiragana-char { font-size: 2.5em; }
+            .romanji { font-size: 1.1em; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🇯🇵 Hiragana Pronunciation Practice</h1>
+            <p>Click any character to hear its pronunciation</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>How to Use:</h3>
+                <p>
+                    🔊 Click any Hiragana character to hear its pronunciation<br>
+                    🔁 Click again to repeat as many times as you need<br>
+                    📱 Works on all devices - desktop, tablet, and mobile
+                </p>
+            </div>
+            <div class="grid-container" id="hiraganaGrid"></div>
+        </div>
+        <div class="footer">
+            Practice makes perfect! ひらがなをがんばって！ (Hiragana wo ganbatte!)
+        </div>
+    </div>
+    <script>
+        const hiragana = [
+            { char: "あ", romanji: "A" },
+            { char: "い", romanji: "I" },
+            { char: "う", romanji: "U" },
+            { char: "え", romanji: "E" },
+            { char: "お", romanji: "O" },
+            { char: "か", romanji: "KA" },
+            { char: "き", romanji: "KI" },
+            { char: "く", romanji: "KU" },
+            { char: "け", romanji: "KE" },
+            { char: "こ", romanji: "KO" },
+            { char: "さ", romanji: "SA" },
+            { char: "し", romanji: "SHI" },
+            { char: "す", romanji: "SU" },
+            { char: "せ", romanji: "SE" },
+            { char: "そ", romanji: "SO" },
+            { char: "た", romanji: "TA" },
+            { char: "ち", romanji: "CHI" },
+            { char: "つ", romanji: "TSU" },
+            { char: "て", romanji: "TE" },
+            { char: "と", romanji: "TO" },
+            { char: "な", romanji: "NA" },
+            { char: "に", romanji: "NI" },
+            { char: "ぬ", romanji: "NU" },
+            { char: "ね", romanji: "NE" },
+            { char: "の", romanji: "NO" },
+            { char: "は", romanji: "HA" },
+            { char: "ひ", romanji: "HI" },
+            { char: "ふ", romanji: "FU" },
+            { char: "へ", romanji: "HE" },
+            { char: "ほ", romanji: "HO" },
+            { char: "ま", romanji: "MA" },
+            { char: "み", romanji: "MI" },
+            { char: "む", romanji: "MU" },
+            { char: "め", romanji: "ME" },
+            { char: "も", romanji: "MO" },
+            { char: "や", romanji: "YA" },
+            { char: "ゆ", romanji: "YU" },
+            { char: "よ", romanji: "YO" },
+            { char: "ら", romanji: "RA" },
+            { char: "り", romanji: "RI" },
+            { char: "る", romanji: "RU" },
+            { char: "れ", romanji: "RE" },
+            { char: "ろ", romanji: "RO" },
+            { char: "わ", romanji: "WA" },
+            { char: "を", romanji: "WO" },
+            { char: "ん", romanji: "N" }
+        ];
+        
+        let currentUtterance = null;
+        let currentPlayingIndex = null;
+        
+        function createHiraganaGrid() {
+            const grid = document.getElementById('hiraganaGrid');
+            hiragana.forEach((item, index) => {
+                const card = document.createElement('div');
+                card.className = 'hiragana-card';
+                card.id = 'card' + index;
+                card.onclick = function() { speakCharacter(item.char, index); };
+                
+                const cardHTML = 
+                    '<div class="hiragana-char">' + item.char + '</div>' +
+                    '<div class="romanji">' + item.romanji + '</div>';
+                
+                card.innerHTML = cardHTML;
+                grid.appendChild(card);
+            });
+        }
+        
+        function speakCharacter(char, index) {
+            if ('speechSynthesis' in window) {
+                if (currentUtterance) {
+                    window.speechSynthesis.cancel();
+                    resetPlayingState();
+                }
+                if (currentPlayingIndex === index) {
+                    currentPlayingIndex = null;
+                    return;
+                }
+                
+                const utterance = new SpeechSynthesisUtterance(char);
+                const voices = window.speechSynthesis.getVoices();
+                const japaneseVoice = voices.find(function(voice) {
+                    return voice.lang === 'ja-JP' || voice.lang.indexOf('ja') === 0;
+                });
+                
+                if (japaneseVoice) utterance.voice = japaneseVoice;
+                utterance.lang = 'ja-JP';
+                utterance.rate = 0.8;
+                utterance.pitch = 1;
+                
+                currentPlayingIndex = index;
+                document.getElementById('card' + index).classList.add('playing');
+                
+                utterance.onend = function() {
+                    resetPlayingState();
+                    currentPlayingIndex = null;
+                };
+                
+                utterance.onerror = function() {
+                    resetPlayingState();
+                    currentPlayingIndex = null;
+                    alert('Unable to play audio. Please ensure your device has Japanese language support enabled.');
+                };
+                
+                currentUtterance = utterance;
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert('Sorry, your browser does not support text-to-speech functionality.');
+            }
+        }
+        
+        function resetPlayingState() {
+            const cards = document.querySelectorAll('.hiragana-card');
+            for (var i = 0; i < cards.length; i++) {
+                cards[i].classList.remove('playing');
+            }
+        }
+        
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', createHiraganaGrid);
+        } else {
+            createHiraganaGrid();
+        }
+        
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.getVoices();
+            window.speechSynthesis.onvoiceschanged = function() {
+                window.speechSynthesis.getVoices();
+            };
+        }
+        
+        window.addEventListener('beforeunload', function() {
+            if (window.speechSynthesis) window.speechSynthesis.cancel();
+        });
+    </script>
+</body>
+</html>
