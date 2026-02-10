@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Katakana Pronunciation Practice</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 { font-size: 2.5em; margin-bottom: 10px; }
+        .header p { font-size: 1.1em; opacity: 0.9; }
+        .content { padding: 40px; }
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .katakana-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            border: 3px solid #3498db;
+            transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+            cursor: pointer;
+            min-height: 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .katakana-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(52, 152, 219, 0.3);
+        }
+        .katakana-card.playing {
+            background: #ebf5fb;
+            border-color: #2980b9;
+            transform: scale(1.05);
+        }
+        .katakana-char {
+            font-size: 3.5em;
+            color: #3498db;
+            font-weight: bold;
+            margin-bottom: 10px;
+            line-height: 1;
+        }
+        .romanji {
+            font-size: 1.3em;
+            color: #666;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .info-box {
+            background: #d1ecf1;
+            border: 2px solid #17a2b8;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        .info-box h3 { color: #0c5460; margin-bottom: 10px; }
+        .info-box p { color: #0c5460; line-height: 1.6; }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 0.9em;
+        }
+        @media (max-width: 600px) {
+            .header h1 { font-size: 2em; }
+            .grid-container {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+                gap: 10px;
+            }
+            .katakana-char { font-size: 2.5em; }
+            .romanji { font-size: 1.1em; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🇯🇵 Katakana Pronunciation Practice</h1>
+            <p>Click any character to hear its pronunciation</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>How to Use:</h3>
+                <p>
+                    🔊 Click any Katakana character to hear its pronunciation<br>
+                    🔁 Click again to repeat as many times as you need<br>
+                    📱 Works on all devices - desktop, tablet, and mobile
+                </p>
+            </div>
+            <div class="grid-container" id="katakanaGrid"></div>
+        </div>
+        <div class="footer">
+            Practice makes perfect! カタカナをがんばって！ (Katakana wo ganbatte!)
+        </div>
+    </div>
+    <script>
+        const katakana = [
+            { char: "ア", romanji: "A" },
+            { char: "イ", romanji: "I" },
+            { char: "ウ", romanji: "U" },
+            { char: "エ", romanji: "E" },
+            { char: "オ", romanji: "O" },
+            { char: "カ", romanji: "KA" },
+            { char: "キ", romanji: "KI" },
+            { char: "ク", romanji: "KU" },
+            { char: "ケ", romanji: "KE" },
+            { char: "コ", romanji: "KO" },
+            { char: "サ", romanji: "SA" },
+            { char: "シ", romanji: "SHI" },
+            { char: "ス", romanji: "SU" },
+            { char: "セ", romanji: "SE" },
+            { char: "ソ", romanji: "SO" },
+            { char: "タ", romanji: "TA" },
+            { char: "チ", romanji: "CHI" },
+            { char: "ツ", romanji: "TSU" },
+            { char: "テ", romanji: "TE" },
+            { char: "ト", romanji: "TO" },
+            { char: "ナ", romanji: "NA" },
+            { char: "ニ", romanji: "NI" },
+            { char: "ヌ", romanji: "NU" },
+            { char: "ネ", romanji: "NE" },
+            { char: "ノ", romanji: "NO" },
+            { char: "ハ", romanji: "HA" },
+            { char: "ヒ", romanji: "HI" },
+            { char: "フ", romanji: "FU" },
+            { char: "ヘ", romanji: "HE" },
+            { char: "ホ", romanji: "HO" },
+            { char: "マ", romanji: "MA" },
+            { char: "ミ", romanji: "MI" },
+            { char: "ム", romanji: "MU" },
+            { char: "メ", romanji: "ME" },
+            { char: "モ", romanji: "MO" },
+            { char: "ヤ", romanji: "YA" },
+            { char: "ユ", romanji: "YU" },
+            { char: "ヨ", romanji: "YO" },
+            { char: "ラ", romanji: "RA" },
+            { char: "リ", romanji: "RI" },
+            { char: "ル", romanji: "RU" },
+            { char: "レ", romanji: "RE" },
+            { char: "ロ", romanji: "RO" },
+            { char: "ワ", romanji: "WA" },
+            { char: "ヲ", romanji: "WO" },
+            { char: "ン", romanji: "N" },
+            { char: "ガ", romanji: "GA" },
+            { char: "ギ", romanji: "GI" },
+            { char: "グ", romanji: "GU" },
+            { char: "ゲ", romanji: "GE" },
+            { char: "ゴ", romanji: "GO" },
+            { char: "ザ", romanji: "ZA" },
+            { char: "ジ", romanji: "JI" },
+            { char: "ズ", romanji: "ZU" },
+            { char: "ゼ", romanji: "ZE" },
+            { char: "ゾ", romanji: "ZO" },
+            { char: "ダ", romanji: "DA" },
+            { char: "ヂ", romanji: "JI" },
+            { char: "ヅ", romanji: "ZU" },
+            { char: "デ", romanji: "DE" },
+            { char: "ド", romanji: "DO" },
+            { char: "バ", romanji: "BA" },
+            { char: "ビ", romanji: "BI" },
+            { char: "ブ", romanji: "BU" },
+            { char: "ベ", romanji: "BE" },
+            { char: "ボ", romanji: "BO" },
+            { char: "パ", romanji: "PA" },
+            { char: "ピ", romanji: "PI" },
+            { char: "プ", romanji: "PU" },
+            { char: "ペ", romanji: "PE" },
+            { char: "ポ", romanji: "PO" },
+            { char: "キャ", romanji: "KYA" },
+            { char: "キュ", romanji: "KYU" },
+            { char: "キョ", romanji: "KYO" },
+            { char: "シャ", romanji: "SHA" },
+            { char: "シュ", romanji: "SHU" },
+            { char: "ショ", romanji: "SHO" },
+            { char: "チャ", romanji: "CHA" },
+            { char: "チュ", romanji: "CHU" },
+            { char: "チョ", romanji: "CHO" },
+            { char: "ニャ", romanji: "NYA" },
+            { char: "ニュ", romanji: "NYU" },
+            { char: "ニョ", romanji: "NYO" },
+            { char: "ヒャ", romanji: "HYA" },
+            { char: "ヒュ", romanji: "HYU" },
+            { char: "ヒョ", romanji: "HYO" },
+            { char: "ミャ", romanji: "MYA" },
+            { char: "ミュ", romanji: "MYU" },
+            { char: "ミョ", romanji: "MYO" },
+            { char: "リャ", romanji: "RYA" },
+            { char: "リュ", romanji: "RYU" },
+            { char: "リョ", romanji: "RYO" },
+            { char: "ギャ", romanji: "GYA" },
+            { char: "ギュ", romanji: "GYU" },
+            { char: "ギョ", romanji: "GYO" },
+            { char: "ジャ", romanji: "JA" },
+            { char: "ジュ", romanji: "JU" },
+            { char: "ジョ", romanji: "JO" },
+            { char: "ビャ", romanji: "BYA" },
+            { char: "ビュ", romanji: "BYU" },
+            { char: "ビョ", romanji: "BYO" },
+            { char: "ピャ", romanji: "PYA" },
+            { char: "ピュ", romanji: "PYU" },
+            { char: "ピョ", romanji: "PYO" }
+        ];
+        
+        let currentUtterance = null;
+        let currentPlayingIndex = null;
+        
+        function createKatakanaGrid() {
+            const grid = document.getElementById('katakanaGrid');
+            katakana.forEach((item, index) => {
+                const card = document.createElement('div');
+                card.className = 'katakana-card';
+                card.id = 'card' + index;
+                card.onclick = function() { speakCharacter(item.char, index); };
+                
+                const cardHTML = 
+                    '<div class="katakana-char">' + item.char + '</div>' +
+                    '<div class="romanji">' + item.romanji + '</div>';
+                
+                card.innerHTML = cardHTML;
+                grid.appendChild(card);
+            });
+        }
+        
+        function speakCharacter(char, index) {
+            if ('speechSynthesis' in window) {
+                if (currentUtterance) {
+                    window.speechSynthesis.cancel();
+                    resetPlayingState();
+                }
+                if (currentPlayingIndex === index) {
+                    currentPlayingIndex = null;
+                    return;
+                }
+                
+                const utterance = new SpeechSynthesisUtterance(char);
+                const voices = window.speechSynthesis.getVoices();
+                const japaneseVoice = voices.find(function(voice) {
+                    return voice.lang === 'ja-JP' || voice.lang.indexOf('ja') === 0;
+                });
+                
+                if (japaneseVoice) utterance.voice = japaneseVoice;
+                utterance.lang = 'ja-JP';
+                utterance.rate = 0.8;
+                utterance.pitch = 1;
+                
+                currentPlayingIndex = index;
+                document.getElementById('card' + index).classList.add('playing');
+                
+                utterance.onend = function() {
+                    resetPlayingState();
+                    currentPlayingIndex = null;
+                };
+                
+                utterance.onerror = function() {
+                    resetPlayingState();
+                    currentPlayingIndex = null;
+                    alert('Unable to play audio. Please ensure your device has Japanese language support enabled.');
+                };
+                
+                currentUtterance = utterance;
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert('Sorry, your browser does not support text-to-speech functionality.');
+            }
+        }
+        
+        function resetPlayingState() {
+            const cards = document.querySelectorAll('.katakana-card');
+            for (var i = 0; i < cards.length; i++) {
+                cards[i].classList.remove('playing');
+            }
+        }
+        
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', createKatakanaGrid);
+        } else {
+            createKatakanaGrid();
+        }
+        
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.getVoices();
+            window.speechSynthesis.onvoiceschanged = function() {
+                window.speechSynthesis.getVoices();
+            };
+        }
+        
+        window.addEventListener('beforeunload', function() {
+            if (window.speechSynthesis) window.speechSynthesis.cancel();
+        });
+    </script>
+</body>
+</html>
