@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Japanese Weekdays</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        .header p {
+            font-size: 1.3em;
+            opacity: 0.95;
+        }
+        .content {
+            padding: 40px;
+            background: #f5f7fa;
+        }
+        .weekday-card {
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            margin-bottom: 25px;
+            border-left: 6px solid transparent;
+            border-image: linear-gradient(180deg, #8b5cf6, #ec4899, #f59e0b) 1;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .weekday-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+        .day-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .day-icon {
+            font-size: 2.5em;
+        }
+        .english-day {
+            font-size: 2em;
+            color: #1e293b;
+            font-weight: bold;
+        }
+        .kanji-text {
+            font-size: 2.8em;
+            color: #8b5cf6;
+            font-weight: bold;
+            margin-bottom: 8px;
+            line-height: 1.2;
+        }
+        .hiragana-text {
+            font-size: 1.4em;
+            color: #64748b;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+        .audio-controls {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .play-btn {
+            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-size: 1.1em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+        }
+        .play-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+        }
+        .play-btn.playing {
+            background: linear-gradient(135deg, #dc2626, #991b1b);
+        }
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .volume-slider {
+            width: 120px;
+            height: 6px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: #e2e8f0;
+            border-radius: 5px;
+            outline: none;
+        }
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            background: #8b5cf6;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+        .volume-slider::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            background: #8b5cf6;
+            cursor: pointer;
+            border-radius: 50%;
+            border: none;
+        }
+        .info-box {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border: 2px solid #f59e0b;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2);
+        }
+        .info-box h3 { 
+            color: #92400e; 
+            margin-bottom: 12px;
+            font-size: 1.3em;
+        }
+        .info-box p { 
+            color: #92400e; 
+            line-height: 1.7;
+            font-size: 1.05em;
+        }
+        .footer-note {
+            background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            font-size: 1.1em;
+            margin-top: 30px;
+            border-radius: 15px;
+        }
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2em; }
+            .header p { font-size: 1.1em; }
+            .english-day { font-size: 1.6em; }
+            .kanji-text { font-size: 2.2em; }
+            .content { padding: 25px; }
+            .day-header { flex-direction: column; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📅 Japanese Weekdays</h1>
+            <p>Learn the days of the week with audio pronunciation</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>💡 Did You Know?</h3>
+                <p>
+                    Japanese weekdays are named after the five classical elements and celestial bodies:<br>
+                    <strong>月</strong> (Moon), <strong>火</strong> (Fire), <strong>水</strong> (Water), <strong>木</strong> (Wood), <strong>金</strong> (Metal/Gold), <strong>土</strong> (Earth), <strong>日</strong> (Sun)
+                </p>
+            </div>
+            
+            <div id="weekdays"></div>
+            
+            <div class="footer-note">
+                💡 Click the play buttons to hear native-like pronunciation. Adjust volume with the sliders.<br>
+                Compatible with all modern web browsers that support Web Speech API.
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const weekdays = [
+            {
+                english: "Monday",
+                kanji: "月曜日",
+                hiragana: "げつようび",
+                icon: "🌙"
+            },
+            {
+                english: "Tuesday",
+                kanji: "火曜日",
+                hiragana: "かようび",
+                icon: "🔥"
+            },
+            {
+                english: "Wednesday",
+                kanji: "水曜日",
+                hiragana: "すいようび",
+                icon: "💧"
+            },
+            {
+                english: "Thursday",
+                kanji: "木曜日",
+                hiragana: "もくようび",
+                icon: "🌳"
+            },
+            {
+                english: "Friday",
+                kanji: "金曜日",
+                hiragana: "きんようび",
+                icon: "⭐"
+            },
+            {
+                english: "Saturday",
+                kanji: "土曜日",
+                hiragana: "どようび",
+                icon: "🌍"
+            },
+            {
+                english: "Sunday",
+                kanji: "日曜日",
+                hiragana: "にちようび",
+                icon: "☀️"
+            }
+        ];
+        
+        let currentUtterance = null;
+        let currentPlayingIndex = null;
+        
+        function createWeekdayCards() {
+            const container = document.getElementById('weekdays');
+            weekdays.forEach((item, index) => {
+                const card = document.createElement('div');
+                card.className = 'weekday-card';
+                card.id = 'card' + index;
+                
+                const cardHTML = `
+                    <div class="day-header">
+                        <span class="day-icon">${item.icon}</span>
+                        <span class="english-day">${item.english}</span>
+                    </div>
+                    <div class="kanji-text">${item.kanji}</div>
+                    <div class="hiragana-text">${item.hiragana}</div>
+                    <div class="audio-controls">
+                        <button class="play-btn" id="btn${index}">
+                            <span id="icon${index}">🔊</span> Play
+                        </button>
+                        <div class="volume-control">
+                            <span>🔉</span>
+                            <input type="range" class="volume-slider" id="volume${index}" 
+                                   min="0" max="100" value="80">
+                        </div>
+                    </div>
+                `;
+                
+                card.innerHTML = cardHTML;
+                container.appendChild(card);
+                
+                // Add event listener to play button
+                const btn = document.getElementById('btn' + index);
+                btn.addEventListener('click', function() {
+                    speakText(item.kanji, index);
+                });
+            });
+        }
+        
+        function speakText(text, index) {
+            if ('speechSynthesis' in window) {
+                if (currentUtterance) {
+                    window.speechSynthesis.cancel();
+                    resetPlayingState();
+                }
+                
+                if (currentPlayingIndex === index) {
+                    currentPlayingIndex = null;
+                    return;
+                }
+                
+                const utterance = new SpeechSynthesisUtterance(text);
+                const voices = window.speechSynthesis.getVoices();
+                const japaneseVoice = voices.find(function(voice) {
+                    return voice.lang === 'ja-JP' || voice.lang.indexOf('ja') === 0;
+                });
+                
+                if (japaneseVoice) utterance.voice = japaneseVoice;
+                utterance.lang = 'ja-JP';
+                utterance.rate = 0.85;
+                utterance.pitch = 1;
+                
+                // Get volume from slider
+                const volumeSlider = document.getElementById('volume' + index);
+                utterance.volume = volumeSlider.value / 100;
+                
+                currentPlayingIndex = index;
+                const btn = document.getElementById('btn' + index);
+                const icon = document.getElementById('icon' + index);
+                btn.classList.add('playing');
+                icon.textContent = '⏸️';
+                
+                utterance.onend = function() {
+                    resetPlayingState();
+                    currentPlayingIndex = null;
+                };
+                
+                utterance.onerror = function() {
+                    resetPlayingState();
+                    currentPlayingIndex = null;
+                    alert('Unable to play audio. Please ensure your device has Japanese language support enabled.');
+                };
+                
+                currentUtterance = utterance;
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert('Sorry, your browser does not support text-to-speech functionality.');
+            }
+        }
+        
+        function resetPlayingState() {
+            const btns = document.querySelectorAll('.play-btn');
+            btns.forEach(function(btn) {
+                btn.classList.remove('playing');
+            });
+            
+            weekdays.forEach(function(_, index) {
+                const icon = document.getElementById('icon' + index);
+                if (icon) icon.textContent = '🔊';
+            });
+        }
+        
+        // Initialize
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', createWeekdayCards);
+        } else {
+            createWeekdayCards();
+        }
+        
+        // Load voices
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.getVoices();
+            window.speechSynthesis.onvoiceschanged = function() {
+                window.speechSynthesis.getVoices();
+            };
+        }
+        
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', function() {
+            if (window.speechSynthesis) window.speechSynthesis.cancel();
+        });
+    </script>
+</body>
+</html>
