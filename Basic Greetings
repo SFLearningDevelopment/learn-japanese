@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Japanese Salutations</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #ff6b6b 0%, #f59e0b 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        .header p {
+            font-size: 1.3em;
+            opacity: 0.95;
+        }
+        .content {
+            padding: 40px;
+            background: #f5f7fa;
+        }
+        .salutation-card {
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            margin-bottom: 25px;
+            border-left: 6px solid transparent;
+            border-image: linear-gradient(180deg, #ff6b6b, #f59e0b, #10b981) 1;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .salutation-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+        .japanese-text {
+            font-size: 2.8em;
+            color: #1e293b;
+            font-weight: bold;
+            margin-bottom: 8px;
+            line-height: 1.2;
+        }
+        .romanji {
+            font-size: 1.4em;
+            color: #64748b;
+            font-style: italic;
+            margin-bottom: 12px;
+        }
+        .english {
+            font-size: 1.5em;
+            color: #10b981;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        .description {
+            background: #f0fdf4;
+            border-left: 4px solid #10b981;
+            padding: 15px 20px;
+            color: #166534;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            font-size: 1.05em;
+        }
+        .audio-controls {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .play-btn {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-size: 1.1em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+        .play-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        }
+        .play-btn.playing {
+            background: linear-gradient(135deg, #dc2626, #991b1b);
+        }
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .volume-slider {
+            width: 120px;
+            height: 6px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: #e2e8f0;
+            border-radius: 5px;
+            outline: none;
+        }
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            background: #3b82f6;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+        .volume-slider::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            background: #3b82f6;
+            cursor: pointer;
+            border-radius: 50%;
+            border: none;
+        }
+        .footer-note {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            font-size: 1.1em;
+            margin-top: 30px;
+            border-radius: 15px;
+        }
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2em; }
+            .header p { font-size: 1.1em; }
+            .japanese-text { font-size: 2.2em; }
+            .english { font-size: 1.3em; }
+            .content { padding: 25px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🇯🇵 Japanese Salutations</h1>
+            <p>Learn basic greetings with audio pronunciation</p>
+        </div>
+        <div class="content">
+            <div id="salutations"></div>
+            
+            <div class="footer-note">
+                💡 Click the play buttons to hear native-like pronunciation. Adjust volume with the sliders.<br>
+                Compatible with all modern web browsers that support Web Speech API.
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const salutations = [
+            {
+                japanese: "おはよう",
+                romanji: "Ohayou",
+                english: "Good morning (casual)",
+                description: "Used with friends, family, or people of similar age/status. Informal morning greeting."
+            },
+            {
+                japanese: "おはようございます",
+                romanji: "Ohayou gozaimasu",
+                english: "Good morning (polite)",
+                description: "Formal morning greeting used in professional settings or with people you don't know well."
+            },
+            {
+                japanese: "こんにちは",
+                romanji: "Konnichiwa",
+                english: "Hello / Good afternoon",
+                description: "Universal greeting used from late morning through afternoon. Appropriate in most situations."
+            },
+            {
+                japanese: "こんばんは",
+                romanji: "Konbanwa",
+                english: "Good evening",
+                description: "Evening greeting used from around 6 PM onwards. Suitable for both formal and informal situations."
+            },
+            {
+                japanese: "さようなら",
+                romanji: "Sayounara",
+                english: "Goodbye (formal)",
+                description: "Formal farewell, often implies you won't see the person for a while. Less commonly used in daily conversation."
+            },
+            {
+                japanese: "また明日",
+                romanji: "Mata ashita",
+                english: "See you tomorrow",
+                description: "Casual way to say goodbye when you'll see the person the next day. Common among friends and colleagues."
+            },
+            {
+                japanese: "はじめまして",
+                romanji: "Hajimemashite",
+                english: "Nice to meet you",
+                description: "Used when meeting someone for the first time. Often followed by \"よろしくお願いします\" (yoroshiku onegaishimasu)."
+            },
+            {
+                japanese: "お疲れ様",
+                romanji: "Otsukaresama",
+                english: "Thank you for your hard work",
+                description: "Versatile greeting/farewell used in workplace settings. Acknowledges someone's effort or hard work."
+            }
+        ];
+        
+        let currentUtterance = null;
+        let currentPlayingIndex = null;
+        
+        function createSalutationCards() {
+            const container = document.getElementById('salutations');
+            salutations.forEach((item, index) => {
+                const card = document.createElement('div');
+                card.className = 'salutation-card';
+                card.id = 'card' + index;
+                
+                const cardHTML = `
+                    <div class="japanese-text">${item.japanese}</div>
+                    <div class="romanji">${item.romanji}</div>
+                    <div class="english">${item.english}</div>
+                    <div class="description">${item.description}</div>
+                    <div class="audio-controls">
+                        <button class="play-btn" id="btn${index}">
+                            <span id="icon${index}">🔊</span> Play
+                        </button>
+                        <div class="volume-control">
+                            <span>🔉</span>
+                            <input type="range" class="volume-slider" id="volume${index}" 
+                                   min="0" max="100" value="80">
+                        </div>
+                    </div>
+                `;
+                
+                card.innerHTML = cardHTML;
+                container.appendChild(card);
+                
+                // Add event listener to play button
+                const btn = document.getElementById('btn' + index);
+                btn.addEventListener('click', function() {
+                    speakText(item.japanese, index);
+                });
+            });
+        }
+        
+        function speakText(text, index) {
+            if ('speechSynthesis' in window) {
+                if (currentUtterance) {
+                    window.speechSynthesis.cancel();
+                    resetPlayingState();
+                }
+                
+                if (currentPlayingIndex === index) {
+                    currentPlayingIndex = null;
+                    return;
+                }
+                
+                const utterance = new SpeechSynthesisUtterance(text);
+                const voices = window.speechSynthesis.getVoices();
+                const japaneseVoice = voices.find(function(voice) {
+                    return voice.lang === 'ja-JP' || voice.lang.indexOf('ja') === 0;
+                });
+                
+                if (japaneseVoice) utterance.voice = japaneseVoice;
+                utterance.lang = 'ja-JP';
+                utterance.rate = 0.85;
+                utterance.pitch = 1;
+                
+                // Get volume from slider
+                const volumeSlider = document.getElementById('volume' + index);
+                utterance.volume = volumeSlider.value / 100;
+                
+                currentPlayingIndex = index;
+                const btn = document.getElementById('btn' + index);
+                const icon = document.getElementById('icon' + index);
+                btn.classList.add('playing');
+                icon.textContent = '⏸️';
+                
+                utterance.onend = function() {
+                    resetPlayingState();
+                    currentPlayingIndex = null;
+                };
+                
+                utterance.onerror = function() {
+                    resetPlayingState();
+                    currentPlayingIndex = null;
+                    alert('Unable to play audio. Please ensure your device has Japanese language support enabled.');
+                };
+                
+                currentUtterance = utterance;
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert('Sorry, your browser does not support text-to-speech functionality.');
+            }
+        }
+        
+        function resetPlayingState() {
+            const btns = document.querySelectorAll('.play-btn');
+            btns.forEach(function(btn) {
+                btn.classList.remove('playing');
+            });
+            
+            salutations.forEach(function(_, index) {
+                const icon = document.getElementById('icon' + index);
+                if (icon) icon.textContent = '🔊';
+            });
+        }
+        
+        // Initialize
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', createSalutationCards);
+        } else {
+            createSalutationCards();
+        }
+        
+        // Load voices
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.getVoices();
+            window.speechSynthesis.onvoiceschanged = function() {
+                window.speechSynthesis.getVoices();
+            };
+        }
+        
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', function() {
+            if (window.speechSynthesis) window.speechSynthesis.cancel();
+        });
+    </script>
+</body>
+</html>
