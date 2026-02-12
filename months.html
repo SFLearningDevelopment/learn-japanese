@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Japanese Months</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #f43f5e 0%, #f97316 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #f43f5e 0%, #f97316 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        .header p { font-size: 1.3em; opacity: 0.95; }
+        .content { padding: 40px; background: #f5f7fa; }
+        .month-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px 35px;
+            margin-bottom: 20px;
+            border-left: 6px solid transparent;
+            border-image: linear-gradient(180deg, #f43f5e, #f97316, #f59e0b) 1;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        .month-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+        .month-card.question-card {
+            border-image: linear-gradient(180deg, #8b5cf6, #3b82f6) 1;
+            background: #faf5ff;
+        }
+        .month-badge {
+            background: linear-gradient(135deg, #f43f5e, #f97316);
+            color: white;
+            border-radius: 15px;
+            padding: 15px 20px;
+            text-align: center;
+            min-width: 110px;
+            flex-shrink: 0;
+        }
+        .month-card.question-card .month-badge {
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+        }
+        .month-icon {
+            font-size: 2em;
+            line-height: 1;
+        }
+        .month-label {
+            font-size: 0.85em;
+            opacity: 0.85;
+            margin-top: 4px;
+            font-weight: 600;
+        }
+        .word-content { flex: 1; min-width: 200px; }
+        .english-text {
+            font-size: 1.5em;
+            color: #1e293b;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+        .japanese-text {
+            font-size: 2.2em;
+            color: #f43f5e;
+            font-weight: bold;
+            margin-bottom: 6px;
+            line-height: 1.2;
+        }
+        .month-card.question-card .japanese-text {
+            color: #8b5cf6;
+        }
+        .romaji-text {
+            font-size: 1.2em;
+            color: #64748b;
+            font-style: italic;
+        }
+        .audio-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-shrink: 0;
+        }
+        .play-btn {
+            background: linear-gradient(135deg, #f43f5e, #f97316);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-size: 1.05em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(244, 63, 94, 0.3);
+            white-space: nowrap;
+        }
+        .month-card.question-card .play-btn {
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+        }
+        .play-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(244, 63, 94, 0.4);
+        }
+        .play-btn.playing {
+            background: linear-gradient(135deg, #dc2626, #991b1b) !important;
+        }
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .volume-slider {
+            width: 100px;
+            height: 6px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: #e2e8f0;
+            border-radius: 5px;
+            outline: none;
+        }
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            background: #f43f5e;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+        .volume-slider::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            background: #f43f5e;
+            cursor: pointer;
+            border-radius: 50%;
+            border: none;
+        }
+        .section-heading {
+            font-size: 1.2em;
+            font-weight: 700;
+            color: #475569;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            padding: 10px 0 15px;
+            border-bottom: 2px solid #e2e8f0;
+            margin-bottom: 20px;
+            margin-top: 10px;
+        }
+        .info-box {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border: 2px solid #f59e0b;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2);
+        }
+        .info-box h3 { color: #92400e; margin-bottom: 12px; font-size: 1.3em; }
+        .info-box p { color: #92400e; line-height: 1.7; font-size: 1.05em; }
+        .footer-note {
+            background: linear-gradient(135deg, #f43f5e 0%, #f97316 100%);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            font-size: 1.1em;
+            margin-top: 30px;
+            border-radius: 15px;
+        }
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2em; }
+            .month-card { flex-direction: column; align-items: flex-start; gap: 15px; }
+            .audio-controls { width: 100%; }
+            .content { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📆 Japanese Months</h1>
+            <p>Learn the months of the year with audio pronunciation</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>💡 Did You Know?</h3>
+                <p>
+                    Japanese months are beautifully simple! They use numbers + <strong>月 (gatsu)</strong> meaning "month". 
+                    So January is literally <strong>"Month 1"</strong> (一月), February is <strong>"Month 2"</strong> (二月), and so on. 
+                    No need to memorise separate names like in English!
+                </p>
+            </div>
+
+            <div class="section-heading">❓ Useful Question</div>
+            <div id="question-section"></div>
+
+            <div class="section-heading">📅 The 12 Months</div>
+            <div id="months-section"></div>
+
+            <div class="footer-note">
+                💡 Click the play buttons to hear native-like pronunciation. Adjust volume with the sliders.<br>
+                Compatible with all modern web browsers that support Web Speech API.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const months = [
+            { english: "What month?",  japanese: "何月",   romaji: "Nan-gatsu",       icon: "❓", group: "question" },
+            { english: "January",      japanese: "一月",   romaji: "Ichi-gatsu",       icon: "🎍", group: "month" },
+            { english: "February",     japanese: "二月",   romaji: "Ni-gatsu",         icon: "🌸", group: "month" },
+            { english: "March",        japanese: "三月",   romaji: "San-gatsu",        icon: "🌼", group: "month" },
+            { english: "April",        japanese: "四月",   romaji: "Shi-gatsu",        icon: "🌷", group: "month" },
+            { english: "May",          japanese: "五月",   romaji: "Go-gatsu",         icon: "🎏", group: "month" },
+            { english: "June",         japanese: "六月",   romaji: "Roku-gatsu",       icon: "☔", group: "month" },
+            { english: "July",         japanese: "七月",   romaji: "Shichi-gatsu",     icon: "🎋", group: "month" },
+            { english: "August",       japanese: "八月",   romaji: "Hachi-gatsu",      icon: "🏖️", group: "month" },
+            { english: "September",    japanese: "九月",   romaji: "Ku-gatsu",         icon: "🍂", group: "month" },
+            { english: "October",      japanese: "十月",   romaji: "Jyuu-gatsu",       icon: "🎃", group: "month" },
+            { english: "November",     japanese: "十一月", romaji: "Jyuu-ichi-gatsu",  icon: "🍁", group: "month" },
+            { english: "December",     japanese: "十二月", romaji: "Jyuu-ni-gatsu",    icon: "🎄", group: "month" }
+        ];
+
+        let currentUtterance = null;
+        let currentPlayingIndex = null;
+
+        function createMonthCards() {
+            const questionSection = document.getElementById('question-section');
+            const monthsSection = document.getElementById('months-section');
+
+            months.forEach((item, index) => {
+                const card = document.createElement('div');
+                card.className = 'month-card' + (item.group === 'question' ? ' question-card' : '');
+                card.id = 'card' + index;
+
+                card.innerHTML = `
+                    <div class="month-badge">
+                        <div class="month-icon">${item.icon}</div>
+                        <div class="month-label">${item.english}</div>
+                    </div>
+                    <div class="word-content">
+                        <div class="japanese-text">${item.japanese}</div>
+                        <div class="romaji-text">${item.romaji}</div>
+                    </div>
+                    <div class="audio-controls">
+                        <button class="play-btn" id="btn${index}">
+                            <span id="icon${index}">🔊</span> Play
+                        </button>
+                        <div class="volume-control">
+                            <span>🔉</span>
+                            <input type="range" class="volume-slider" id="volume${index}"
+                                   min="0" max="100" value="80">
+                        </div>
+                    </div>
+                `;
+
+                if (item.group === 'question') {
+                    questionSection.appendChild(card);
+                } else {
+                    monthsSection.appendChild(card);
+                }
+
+                document.getElementById('btn' + index).addEventListener('click', function() {
+                    speakText(item.japanese, index);
+                });
+            });
+        }
+
+        function speakText(text, index) {
+            if ('speechSynthesis' in window) {
+                if (currentUtterance) {
+                    window.speechSynthesis.cancel();
+                    resetPlayingState();
+                }
+                if (currentPlayingIndex === index) {
+                    currentPlayingIndex = null;
+                    return;
+                }
+
+                const utterance = new SpeechSynthesisUtterance(text);
+                const voices = window.speechSynthesis.getVoices();
+                const japaneseVoice = voices.find(function(voice) {
+                    return voice.lang === 'ja-JP' || voice.lang.indexOf('ja') === 0;
+                });
+
+                if (japaneseVoice) utterance.voice = japaneseVoice;
+                utterance.lang = 'ja-JP';
+                utterance.rate = 0.85;
+                utterance.pitch = 1;
+
+                const volumeSlider = document.getElementById('volume' + index);
+                utterance.volume = volumeSlider.value / 100;
+
+                currentPlayingIndex = index;
+                document.getElementById('btn' + index).classList.add('playing');
+                document.getElementById('icon' + index).textContent = '⏸️';
+
+                utterance.onend = function() {
+                    resetPlayingState();
+                    currentPlayingIndex = null;
+                };
+                utterance.onerror = function() {
+                    resetPlayingState();
+                    currentPlayingIndex = null;
+                    alert('Unable to play audio. Please ensure your device has Japanese language support enabled.');
+                };
+
+                currentUtterance = utterance;
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert('Sorry, your browser does not support text-to-speech functionality.');
+            }
+        }
+
+        function resetPlayingState() {
+            document.querySelectorAll('.play-btn').forEach(function(btn) {
+                btn.classList.remove('playing');
+            });
+            months.forEach(function(_, index) {
+                const icon = document.getElementById('icon' + index);
+                if (icon) icon.textContent = '🔊';
+            });
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', createMonthCards);
+        } else {
+            createMonthCards();
+        }
+
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.getVoices();
+            window.speechSynthesis.onvoiceschanged = function() {
+                window.speechSynthesis.getVoices();
+            };
+        }
+
+        window.addEventListener('beforeunload', function() {
+            if (window.speechSynthesis) window.speechSynthesis.cancel();
+        });
+    </script>
+</body>
+</html>
