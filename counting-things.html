@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Counting Things in Japanese</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #92400e 0%, #d97706 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #92400e 0%, #d97706 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        .header p { font-size: 1.3em; opacity: 0.95; }
+        .content { padding: 40px; background: #f5f7fa; }
+        .thing-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px 35px;
+            margin-bottom: 20px;
+            border-left: 6px solid transparent;
+            border-image: linear-gradient(180deg, #92400e, #d97706, #fbbf24) 1;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        .thing-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+        .thing-card.question-card {
+            border-image: linear-gradient(180deg, #7c3aed, #db2777) 1;
+            background: #faf5ff;
+        }
+        .thing-card.special-card {
+            border-image: linear-gradient(180deg, #0f766e, #0891b2) 1;
+            background: #f0fdfa;
+        }
+        .count-badge {
+            background: linear-gradient(135deg, #92400e, #d97706);
+            color: white;
+            border-radius: 15px;
+            padding: 15px 20px;
+            text-align: center;
+            min-width: 90px;
+            flex-shrink: 0;
+        }
+        .thing-card.question-card .count-badge {
+            background: linear-gradient(135deg, #7c3aed, #db2777);
+        }
+        .thing-card.special-card .count-badge {
+            background: linear-gradient(135deg, #0f766e, #0891b2);
+        }
+        .count-icon { font-size: 2em; line-height: 1; }
+        .count-label {
+            font-size: 0.75em;
+            opacity: 0.9;
+            margin-top: 5px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .word-content { flex: 1; min-width: 200px; }
+        .english-text {
+            font-size: 1.6em;
+            color: #1e293b;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        .japanese-text {
+            font-size: 2.2em;
+            color: #92400e;
+            font-weight: bold;
+            margin-bottom: 6px;
+            line-height: 1.2;
+        }
+        .thing-card.question-card .japanese-text { color: #7c3aed; }
+        .thing-card.special-card .japanese-text { color: #0f766e; }
+        .romaji-text {
+            font-size: 1.2em;
+            color: #64748b;
+            font-style: italic;
+        }
+        .audio-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-shrink: 0;
+        }
+        .play-btn {
+            background: linear-gradient(135deg, #92400e, #d97706);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-size: 1.05em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(146, 64, 14, 0.3);
+            white-space: nowrap;
+        }
+        .thing-card.question-card .play-btn {
+            background: linear-gradient(135deg, #7c3aed, #db2777);
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+        }
+        .thing-card.special-card .play-btn {
+            background: linear-gradient(135deg, #0f766e, #0891b2);
+            box-shadow: 0 4px 12px rgba(15, 118, 110, 0.3);
+        }
+        .play-btn:hover { transform: translateY(-2px); }
+        .play-btn.playing {
+            background: linear-gradient(135deg, #dc2626, #991b1b) !important;
+        }
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .volume-slider {
+            width: 100px;
+            height: 6px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: #e2e8f0;
+            border-radius: 5px;
+            outline: none;
+        }
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            background: #d97706;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+        .volume-slider::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            background: #d97706;
+            cursor: pointer;
+            border-radius: 50%;
+            border: none;
+        }
+        .section-heading {
+            font-size: 1.2em;
+            font-weight: 700;
+            color: #475569;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            padding: 10px 0 15px;
+            border-bottom: 2px solid #e2e8f0;
+            margin-bottom: 20px;
+            margin-top: 10px;
+        }
+        .info-box {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border: 2px solid #f59e0b;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2);
+        }
+        .info-box h3 { color: #92400e; margin-bottom: 12px; font-size: 1.3em; }
+        .info-box p { color: #92400e; line-height: 1.7; font-size: 1.05em; }
+        .footer-note {
+            background: linear-gradient(135deg, #92400e 0%, #d97706 100%);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            font-size: 1.1em;
+            margin-top: 30px;
+            border-radius: 15px;
+        }
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2em; }
+            .thing-card { flex-direction: column; align-items: flex-start; gap: 15px; }
+            .audio-controls { width: 100%; }
+            .content { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📦 Counting Things in Japanese</h1>
+            <p>Learn how to count objects in Japanese with audio pronunciation</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>💡 Did You Know?</h3>
+                <p>
+                    Japanese uses native counting words called <strong>和語数詞 (wago-suushi)</strong> for 
+                    counting general objects from 1 to 10. These end in <strong>つ (tsu)</strong> for most numbers, 
+                    except <strong>10 (とお)</strong> which is irregular. Beyond 10, Japanese switches to 
+                    Chinese-derived numbers with specific counters. This set of words is one of the 
+                    most fundamental in everyday Japanese!
+                </p>
+            </div>
+
+            <div class="section-heading">❓ Useful Question</div>
+            <div id="question-section"></div>
+
+            <div class="section-heading">🔢 Counting 1 to 9</div>
+            <div id="regular-section"></div>
+
+            <div class="section-heading">⭐ Special Case</div>
+            <div id="special-section"></div>
+
+            <div class="footer-note">
+                💡 Click the play buttons to hear native-like pronunciation. Adjust volume with the sliders.<br>
+                Compatible with all modern web browsers that support Web Speech API.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const things = [
+            { english: "How many things?", japanese: "いくつ",   romaji: "Ikutsu",    icon: "❓", label: "Question",  group: "question" },
+            { english: "One thing",        japanese: "ひとつ",   romaji: "Hitotsu",   icon: "1️⃣", label: "1 Thing",   group: "regular"  },
+            { english: "Two things",       japanese: "ふたつ",   romaji: "Futatsu",   icon: "2️⃣", label: "2 Things",  group: "regular"  },
+            { english: "Three things",     japanese: "みっつ",   romaji: "Mittsu",    icon: "3️⃣", label: "3 Things",  group: "regular"  },
+            { english: "Four things",      japanese: "よっつ",   romaji: "Yottsu",    icon: "4️⃣", label: "4 Things",  group: "regular"  },
+            { english: "Five things",      japanese: "いつつ",   romaji: "Itsutsu",   icon: "5️⃣", label: "5 Things",  group: "regular"  },
+            { english: "Six things",       japanese: "むっつ",   romaji: "Muttsu",    icon: "6️⃣", label: "6 Things",  group: "regular"  },
+            { english: "Seven things",     japanese: "ななつ",   romaji: "Nanatsu",   icon: "7️⃣", label: "7 Things",  group: "regular"  },
+            { english: "Eight things",     japanese: "やっつ",   romaji: "Yattsu",    icon: "8️⃣", label: "8 Things",  group: "regular"  },
+            { english: "Nine things",      japanese: "ここのつ", romaji: "Kokonotsu", icon: "9️⃣", label: "9 Things",  group: "regular"  },
+            { english: "Ten things",       japanese: "とお",     romaji: "Too",       icon: "🔟", label: "10 Things", group: "special"  }
+        ];
+
+        let currentUtterance = null;
+        let currentPlayingIndex = null;
+
+        function createThingCards() {
+            const questionSection = document.getElementById('question-section');
+            const regularSection  = document.getElementById('regular-section');
+            const specialSection  = document.getElementById('special-section');
+
+            things.forEach((item, index) => {
+                const card = document.createElement('div');
+                card.className = 'thing-card' +
+                    (item.group === 'question' ? ' question-card' : '') +
+                    (item.group === 'special'  ? ' special-card'  : '');
+                card.id = 'card' + index;
+
+                card.innerHTML = `
+                    <div class="count-badge">
+                        <div class="count-icon">${item.icon}</div>
+                        <div class="count-label">${item.label}</div>
+                    </div>
+                    <div class="word-content">
+                        <div class="english-text">${item.english}</div>
+                        <div class="japanese-text">${item.japanese}</div>
+                        <div class="romaji-text">${item.romaji}</div>
+                    </div>
+                    <div class="audio-controls">
+                        <button class="play-btn" id="btn${index}">
+                            <span id="icon${index}">🔊</span> Play
+                        </button>
+                        <div class="volume-control">
+                            <span>🔉</span>
+                            <input type="range" class="volume-slider" id="volume${index}"
+                                   min="0" max="100" value="80">
+                        </div>
+                    </div>
+                `;
+
+                if (item.group === 'question')     questionSection.appendChild(card);
+                else if (item.group === 'special') specialSection.appendChild(card);
+                else                               regularSection.appendChild(card);
+
+                document.getElementById('btn' + index).addEventListener('click', function() {
+                    speakText(item.japanese, index);
+                });
+            });
+        }
+
+        function speakText(text, index) {
+            if ('speechSynthesis' in window) {
+                if (currentUtterance) {
+                    window.speechSynthesis.cancel();
+                    resetPlayingState();
+                }
+                if (currentPlayingIndex === index) {
+                    currentPlayingIndex = null;
+                    return;
+                }
+
+                const utterance = new SpeechSynthesisUtterance(text);
+                const voices = window.speechSynthesis.getVoices();
+                const japaneseVoice = voices.find(function(voice) {
+                    return voice.lang === 'ja-JP' || voice.lang.indexOf('ja') === 0;
+                });
+
+                if (japaneseVoice) utterance.voice = japaneseVoice;
+                utterance.lang = 'ja-JP';
+                utterance.rate = 0.85;
+                utterance.pitch = 1;
+
+                const volumeSlider = document.getElementById('volume' + index);
+                utterance.volume = volumeSlider.value / 100;
+
+                currentPlayingIndex = index;
+                document.getElementById('btn' + index).classList.add('playing');
+                document.getElementById('icon' + index).textContent = '⏸️';
+
+                utterance.onend = function() {
+                    resetPlayingState();
+                    currentPlayingIndex = null;
+                };
+                utterance.onerror = function() {
+                    resetPlayingState();
+                    currentPlayingIndex = null;
+                    alert('Unable to play audio. Please ensure your device has Japanese language support enabled.');
+                };
+
+                currentUtterance = utterance;
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert('Sorry, your browser does not support text-to-speech functionality.');
+            }
+        }
+
+        function resetPlayingState() {
+            document.querySelectorAll('.play-btn').forEach(function(btn) {
+                btn.classList.remove('playing');
+            });
+            things.forEach(function(_, index) {
+                const icon = document.getElementById('icon' + index);
+                if (icon) icon.textContent = '🔊';
+            });
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', createThingCards);
+        } else {
+            createThingCards();
+        }
+
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.getVoices();
+            window.speechSynthesis.onvoiceschanged = function() {
+                window.speechSynthesis.getVoices();
+            };
+        }
+
+        window.addEventListener('beforeunload', function() {
+            if (window.speechSynthesis) window.speechSynthesis.cancel();
+        });
+    </script>
+</body>
+</html>
