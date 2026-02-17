@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Japanese Family Structure</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #065f46 0%, #059669 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #065f46 0%, #059669 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        .header p { font-size: 1.3em; opacity: 0.95; }
+        .content { padding: 40px; background: #f5f7fa; }
+        .family-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-left: 6px solid transparent;
+            border-image: linear-gradient(180deg, #065f46, #059669, #34d399) 1;
+        }
+        .family-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f1f5f9;
+        }
+        .family-icon { font-size: 2.5em; }
+        .family-title {
+            font-size: 1.8em;
+            color: #1e293b;
+            font-weight: bold;
+        }
+        .readings-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .reading-box {
+            border-radius: 15px;
+            padding: 20px;
+        }
+        .reading-box.your-family {
+            background: #f0fdf4;
+            border: 2px solid #059669;
+        }
+        .reading-box.someones-family {
+            background: #eff6ff;
+            border: 2px solid #3b82f6;
+        }
+        .reading-label {
+            font-size: 0.85em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+        .reading-box.your-family .reading-label { color: #065f46; }
+        .reading-box.someones-family .reading-label { color: #1d4ed8; }
+        .reading-sublabel {
+            font-size: 0.8em;
+            margin-bottom: 10px;
+            font-style: italic;
+        }
+        .reading-box.your-family .reading-sublabel { color: #6b7280; }
+        .reading-box.someones-family .reading-sublabel { color: #6b7280; }
+        .japanese-text {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 6px;
+            line-height: 1.2;
+        }
+        .reading-box.your-family .japanese-text { color: #059669; }
+        .reading-box.someones-family .japanese-text { color: #3b82f6; }
+        .romaji-text {
+            font-size: 1.1em;
+            font-style: italic;
+            color: #64748b;
+            margin-bottom: 15px;
+        }
+        .play-btn {
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.95em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            white-space: nowrap;
+            width: fit-content;
+        }
+        .play-btn.your-btn {
+            background: linear-gradient(135deg, #065f46, #059669);
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+        }
+        .play-btn.someones-btn {
+            background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+        .play-btn:hover { transform: translateY(-2px); }
+        .play-btn.playing {
+            background: linear-gradient(135deg, #dc2626, #991b1b) !important;
+        }
+        .volume-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .volume-slider {
+            width: 90px;
+            height: 6px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: #e2e8f0;
+            border-radius: 5px;
+            outline: none;
+        }
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            background: #059669;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+        .volume-slider::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            background: #059669;
+            cursor: pointer;
+            border-radius: 50%;
+            border: none;
+        }
+        .section-heading {
+            font-size: 1.2em;
+            font-weight: 700;
+            color: #475569;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            padding: 10px 0 15px;
+            border-bottom: 2px solid #e2e8f0;
+            margin-bottom: 20px;
+            margin-top: 10px;
+        }
+        .info-box {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border: 2px solid #f59e0b;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2);
+        }
+        .info-box h3 { color: #92400e; margin-bottom: 12px; font-size: 1.3em; }
+        .info-box p { color: #92400e; line-height: 1.7; font-size: 1.05em; }
+        .legend {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1em;
+            font-weight: 600;
+        }
+        .legend-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .legend-dot.green { background: #059669; }
+        .legend-dot.blue { background: #3b82f6; }
+        .footer-note {
+            background: linear-gradient(135deg, #065f46 0%, #059669 100%);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            font-size: 1.1em;
+            margin-top: 30px;
+            border-radius: 15px;
+        }
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2em; }
+            .readings-grid { grid-template-columns: 1fr; }
+            .content { padding: 20px; }
+            .legend { flex-direction: column; gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>👨‍👩‍👧‍👦 Japanese Family Structure</h1>
+            <p>Learn how to refer to your own family and someone else's family in Japanese</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>💡 Did You Know?</h3>
+                <p>
+                    Japanese has <strong>two different sets of words</strong> for family members depending on 
+                    whose family you are talking about. When referring to <strong>your own family</strong>, 
+                    you use humble/plain words (e.g. ちち for father). When referring to 
+                    <strong>someone else's family</strong>, you use honorific words with さん (e.g. おとうさん). 
+                    Using the wrong set can sound impolite, so it's important to learn both!
+                </p>
+            </div>
+
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-dot green"></div>
+                    <span>Your own family (humble)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot blue"></div>
+                    <span>Someone else's family (honorific)</span>
+                </div>
+            </div>
+
+            <div class="section-heading">👴👵 Grandparents & Parents</div>
+            <div id="elders-section"></div>
+
+            <div class="section-heading">💑 Spouses</div>
+            <div id="spouses-section"></div>
+
+            <div class="section-heading">🧑‍🤝‍🧑 Siblings</div>
+            <div id="siblings-section"></div>
+
+            <div class="section-heading">👶 Children</div>
+            <div id="children-section"></div>
+
+            <div class="footer-note">
+                💡 Click the <strong style="color:#86efac">green</strong> button for your own family, 
+                and the <strong style="color:#93c5fd">blue</strong> button for someone else's family.<br>
+                Compatible with all modern web browsers that support Web Speech API.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const family = [
+            { word: "Grandfather",    yourJapanese: "そふ",     yourRomaji: "Sofu",      someoneJapanese: "おじいさん",   someoneRomaji: "Ojiisan",    icon: "👴", group: "elders"   },
+            { word: "Grandmother",    yourJapanese: "そぼ",     yourRomaji: "Sobo",      someoneJapanese: "おばあさん",   someoneRomaji: "Obaasan",    icon: "👵", group: "elders"   },
+            { word: "Father",         yourJapanese: "ちち",     yourRomaji: "Chichi",    someoneJapanese: "おとうさん",   someoneRomaji: "Otousan",    icon: "👨", group: "elders"   },
+            { word: "Mother",         yourJapanese: "はは",     yourRomaji: "Haha",      someoneJapanese: "おかあさん",   someoneRomaji: "Okaasan",    icon: "👩", group: "elders"   },
+            { word: "Uncle",          yourJapanese: "おじ",     yourRomaji: "Oji",       someoneJapanese: "おじさん",     someoneRomaji: "Ojisan",     icon: "🧑", group: "elders"   },
+            { word: "Aunt",           yourJapanese: "おば",     yourRomaji: "Oba",       someoneJapanese: "おばさん",     someoneRomaji: "Obasan",     icon: "👩", group: "elders"   },
+            { word: "Husband",        yourJapanese: "おっと",   yourRomaji: "Otto",      someoneJapanese: "ごしゅじん",   someoneRomaji: "Goshujin",   icon: "🤵", group: "spouses"  },
+            { word: "Wife",           yourJapanese: "つま",     yourRomaji: "Tsuma",     someoneJapanese: "おくさん",     someoneRomaji: "Okusan",     icon: "👰", group: "spouses"  },
+            { word: "Older Brother",  yourJapanese: "あに",     yourRomaji: "Ani",       someoneJapanese: "おにいさん",   someoneRomaji: "Oniisan",    icon: "👦", group: "siblings" },
+            { word: "Older Sister",   yourJapanese: "あね",     yourRomaji: "Ane",       someoneJapanese: "おねえさん",   someoneRomaji: "Oneesan",    icon: "👧", group: "siblings" },
+            { word: "Younger Brother",yourJapanese: "おとうと", yourRomaji: "Otouto",    someoneJapanese: "おとうとさん", someoneRomaji: "Otoutosan",  icon: "👦", group: "siblings" },
+            { word: "Younger Sister", yourJapanese: "いもうと", yourRomaji: "Imouto",    someoneJapanese: "いもうとさん", someoneRomaji: "Imoutosan",  icon: "👧", group: "siblings" },
+            { word: "Son",            yourJapanese: "むすこ",   yourRomaji: "Musuko",    someoneJapanese: "むすこさん",   someoneRomaji: "Musukosan",  icon: "👶", group: "children" },
+            { word: "Daughter",       yourJapanese: "むすめ",   yourRomaji: "Musume",    someoneJapanese: "むすめさん",   someoneRomaji: "Musumesan",  icon: "👶", group: "children" }
+        ];
+
+        let currentUtterance = null;
+        let currentPlayingBtn = null;
+
+        function createFamilyCards() {
+            const sections = {
+                elders:   document.getElementById('elders-section'),
+                spouses:  document.getElementById('spouses-section'),
+                siblings: document.getElementById('siblings-section'),
+                children: document.getElementById('children-section')
+            };
+
+            family.forEach((item, index) => {
+                const card = document.createElement('div');
+                card.className = 'family-card';
+                card.id = 'card' + index;
+
+                card.innerHTML = `
+                    <div class="card-header">
+                        <span class="family-icon">${item.icon}</span>
+                        <span class="family-title">${item.word}</span>
+                    </div>
+                    <div class="readings-grid">
+                        <div class="reading-box your-family">
+                            <div class="reading-label">🟢 Your Own Family</div>
+                            <div class="reading-sublabel">Humble / Plain form</div>
+                            <div class="japanese-text">${item.yourJapanese}</div>
+                            <div class="romaji-text">${item.yourRomaji}</div>
+                            <button class="play-btn your-btn" id="your-btn${index}">
+                                <span id="your-icon${index}">🔊</span> Play
+                            </button>
+                            <div class="volume-row">
+                                <span>🔉</span>
+                                <input type="range" class="volume-slider" id="your-vol${index}"
+                                       min="0" max="100" value="80">
+                            </div>
+                        </div>
+                        <div class="reading-box someones-family">
+                            <div class="reading-label">🔵 Someone Else's Family</div>
+                            <div class="reading-sublabel">Honorific form</div>
+                            <div class="japanese-text">${item.someoneJapanese}</div>
+                            <div class="romaji-text">${item.someoneRomaji}</div>
+                            <button class="play-btn someones-btn" id="some-btn${index}">
+                                <span id="some-icon${index}">🔊</span> Play
+                            </button>
+                            <div class="volume-row">
+                                <span>🔉</span>
+                                <input type="range" class="volume-slider" id="some-vol${index}"
+                                       min="0" max="100" value="80">
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                sections[item.group].appendChild(card);
+
+                document.getElementById('your-btn' + index).addEventListener('click', function() {
+                    speakText(item.yourJapanese, 'your-btn' + index, 'your-icon' + index, 'your-vol' + index);
+                });
+
+                document.getElementById('some-btn' + index).addEventListener('click', function() {
+                    speakText(item.someoneJapanese, 'some-btn' + index, 'some-icon' + index, 'some-vol' + index);
+                });
+            });
+        }
+
+        function speakText(text, btnId, iconId, volId) {
+            if ('speechSynthesis' in window) {
+                if (currentUtterance) {
+                    window.speechSynthesis.cancel();
+                    resetPlayingState();
+                }
+                if (currentPlayingBtn === btnId) {
+                    currentPlayingBtn = null;
+                    return;
+                }
+
+                const utterance = new SpeechSynthesisUtterance(text);
+                const voices = window.speechSynthesis.getVoices();
+                const japaneseVoice = voices.find(function(voice) {
+                    return voice.lang === 'ja-JP' || voice.lang.indexOf('ja') === 0;
+                });
+
+                if (japaneseVoice) utterance.voice = japaneseVoice;
+                utterance.lang = 'ja-JP';
+                utterance.rate = 0.85;
+                utterance.pitch = 1;
+
+                const volumeSlider = document.getElementById(volId);
+                utterance.volume = volumeSlider.value / 100;
+
+                currentPlayingBtn = btnId;
+                document.getElementById(btnId).classList.add('playing');
+                document.getElementById(iconId).textContent = '⏸️';
+
+                utterance.onend = function() {
+                    resetPlayingState();
+                    currentPlayingBtn = null;
+                };
+                utterance.onerror = function() {
+                    resetPlayingState();
+                    currentPlayingBtn = null;
+                    alert('Unable to play audio. Please ensure your device has Japanese language support enabled.');
+                };
+
+                currentUtterance = utterance;
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert('Sorry, your browser does not support text-to-speech functionality.');
+            }
+        }
+
+        function resetPlayingState() {
+            document.querySelectorAll('.play-btn').forEach(function(btn) {
+                btn.classList.remove('playing');
+            });
+            family.forEach(function(_, index) {
+                const yourIcon = document.getElementById('your-icon' + index);
+                const someIcon = document.getElementById('some-icon' + index);
+                if (yourIcon) yourIcon.textContent = '🔊';
+                if (someIcon) someIcon.textContent = '🔊';
+            });
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', createFamilyCards);
+        } else {
+            createFamilyCards();
+        }
+
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.getVoices();
+            window.speechSynthesis.onvoiceschanged = function() {
+                window.speechSynthesis.getVoices();
+            };
+        }
+
+        window.addEventListener('beforeunload', function() {
+            if (window.speechSynthesis) window.speechSynthesis.cancel();
+        });
+    </script>
+</body>
+</html>
