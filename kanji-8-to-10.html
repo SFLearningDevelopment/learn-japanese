@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kanji 8 to 10 & Large Numbers</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #b45309 0%, #d97706 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #b45309 0%, #d97706 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        .header p { font-size: 1.3em; opacity: 0.95; }
+        .content { padding: 40px; background: #f5f7fa; }
+        .kanji-card {
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            margin-bottom: 25px;
+            border-left: 6px solid transparent;
+            border-image: linear-gradient(180deg, #b45309, #d97706, #fbbf24) 1;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .kanji-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+        .card-top {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+        .kanji-character {
+            font-size: 6em;
+            color: #b45309;
+            font-weight: bold;
+            line-height: 1;
+            min-width: 120px;
+            text-align: center;
+            background: #fffbeb;
+            border-radius: 15px;
+            padding: 15px;
+            border: 3px solid #d97706;
+            flex-shrink: 0;
+        }
+        .kanji-info { flex: 1; min-width: 200px; }
+        .meaning {
+            font-size: 1.6em;
+            color: #1e293b;
+            font-weight: bold;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+        .readings-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        .reading-box {
+            border-radius: 12px;
+            padding: 18px;
+        }
+        .reading-box.kunyomi {
+            background: #f0fdf4;
+            border: 2px solid #10b981;
+        }
+        .reading-box.kunyomi.empty {
+            background: #f8fafc;
+            border: 2px dashed #cbd5e1;
+        }
+        .reading-box.onyomi {
+            background: #fff7ed;
+            border: 2px solid #f97316;
+        }
+        .reading-label {
+            font-size: 0.85em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+        .reading-box.kunyomi .reading-label { color: #059669; }
+        .reading-box.kunyomi.empty .reading-label { color: #94a3b8; }
+        .reading-box.onyomi .reading-label { color: #ea580c; }
+        .reading-text {
+            font-size: 1.8em;
+            font-weight: bold;
+            line-height: 1.3;
+            margin-bottom: 5px;
+        }
+        .reading-box.kunyomi .reading-text { color: #059669; }
+        .reading-box.kunyomi.empty .reading-text { color: #94a3b8; font-size: 1.1em; font-style: italic; }
+        .reading-box.onyomi .reading-text { color: #ea580c; }
+        .reading-sublabel {
+            font-size: 0.8em;
+            color: #94a3b8;
+            margin-top: 4px;
+        }
+        .audio-section {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 2px solid #f1f5f9;
+        }
+        .audio-section-label {
+            font-size: 0.95em;
+            font-weight: 600;
+            color: #64748b;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .audio-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .play-btn {
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-size: 1.05em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        .play-btn.kunyomi-btn {
+            background: linear-gradient(135deg, #059669, #10b981);
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+        }
+        .play-btn.onyomi-btn {
+            background: linear-gradient(135deg, #ea580c, #f97316);
+            box-shadow: 0 4px 12px rgba(234, 88, 12, 0.3);
+        }
+        .play-btn:hover { transform: translateY(-2px); }
+        .play-btn:disabled {
+            background: linear-gradient(135deg, #94a3b8, #cbd5e1) !important;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+            opacity: 0.7;
+        }
+        .play-btn.playing {
+            background: linear-gradient(135deg, #dc2626, #991b1b) !important;
+        }
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .volume-slider {
+            width: 100px;
+            height: 6px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: #e2e8f0;
+            border-radius: 5px;
+            outline: none;
+        }
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            background: #d97706;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+        .volume-slider::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            background: #d97706;
+            cursor: pointer;
+            border-radius: 50%;
+            border: none;
+        }
+        .section-heading {
+            font-size: 1.2em;
+            font-weight: 700;
+            color: #475569;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            padding: 10px 0 15px;
+            border-bottom: 2px solid #e2e8f0;
+            margin-bottom: 20px;
+            margin-top: 10px;
+        }
+        .info-box {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border: 2px solid #f59e0b;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2);
+        }
+        .info-box h3 { color: #92400e; margin-bottom: 12px; font-size: 1.3em; }
+        .info-box p { color: #92400e; line-height: 1.7; font-size: 1.05em; }
+        .footer-note {
+            background: linear-gradient(135deg, #b45309 0%, #d97706 100%);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            font-size: 1.1em;
+            margin-top: 30px;
+            border-radius: 15px;
+        }
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2em; }
+            .card-top { flex-direction: column; align-items: flex-start; }
+            .readings-grid { grid-template-columns: 1fr; }
+            .content { padding: 20px; }
+            .kanji-character { font-size: 4em; min-width: 90px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>漢字 Kanji 8 to 10 & Large Numbers</h1>
+            <p>Learn Kanji numbers with Kunyomi and Onyomi readings</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>💡 Kunyomi vs Onyomi</h3>
+                <p>
+                    Every Kanji has two types of readings:<br>
+                    <strong>訓読み Kunyomi (Japanese reading)</strong> — the native Japanese pronunciation,
+                    used when the Kanji appears alone or with hiragana.<br>
+                    <strong>音読み Onyomi (Chinese reading)</strong> — the Chinese-derived pronunciation,
+                    often used in compound words with other Kanji.<br>
+                    Note: <strong>百 (100)、千 (1,000) and 万 (10,000)</strong> have no Kunyomi — 
+                    they are always read using Onyomi.
+                </p>
+            </div>
+
+            <div class="section-heading">🔢 8 to 10</div>
+            <div id="basic-section"></div>
+
+            <div class="section-heading">🔢 Large Numbers</div>
+            <div id="large-section"></div>
+
+            <div class="footer-note">
+                💡 Click <strong>Kunyomi</strong> or <strong>Onyomi</strong> buttons to hear each reading.
+                Adjust volume with the slider.<br>
+                Compatible with all modern web browsers that support Web Speech API.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const kanjiList = [
+            {
+                kanji: "八",
+                meaning: "Eight",
+                kunyomi: "やっ・よう",
+                kunyomiSpeak: "やっつ",
+                onyomi: "ハチ・ハッ",
+                onyomiSpeak: "はち",
+                hasKunyomi: true,
+                group: "basic"
+            },
+            {
+                kanji: "九",
+                meaning: "Nine",
+                kunyomi: "ここの（つ）",
+                kunyomiSpeak: "ここのつ",
+                onyomi: "キュウ・ク",
+                onyomiSpeak: "きゅう",
+                hasKunyomi: true,
+                group: "basic"
+            },
+            {
+                kanji: "十",
+                meaning: "Ten",
+                kunyomi: "とお",
+                kunyomiSpeak: "とお",
+                onyomi: "ジュウ・ジュツ",
+                onyomiSpeak: "じゅう",
+                hasKunyomi: true,
+                group: "basic"
+            },
+            {
+                kanji: "百",
+                meaning: "Hundred",
+                kunyomi: null,
+                kunyomiSpeak: null,
+                onyomi: "ひゃく・ビャク・ピャク",
+                onyomiSpeak: "ひゃく",
+                hasKunyomi: false,
+                group: "large"
+            },
+            {
+                kanji: "千",
+                meaning: "Thousand",
+                kunyomi: null,
+                kunyomiSpeak: null,
+                onyomi: "セン・ゼン",
+                onyomiSpeak: "せん",
+                hasKunyomi: false,
+                group: "large"
+            },
+            {
+                kanji: "万",
+                meaning: "Ten Thousand",
+                kunyomi: null,
+                kunyomiSpeak: null,
+                onyomi: "マン",
+                onyomiSpeak: "まん",
+                hasKunyomi: false,
+                group: "large"
+            }
+        ];
+
+        let currentUtterance = null;
+        let currentPlayingBtn = null;
+
+        function createKanjiCards() {
+            const basicSection = document.getElementById('basic-section');
+            const largeSection = document.getElementById('large-section');
+
+            kanjiList.forEach((item, index) => {
+                const card = document.createElement('div');
+                card.className = 'kanji-card';
+                card.id = 'card' + index;
+
+                const kunyomiBoxClass = item.hasKunyomi ? 'reading-box kunyomi' : 'reading-box kunyomi empty';
+                const kunyomiText    = item.hasKunyomi ? item.kunyomi : 'No Kunyomi reading';
+                const kunBtnDisabled = item.hasKunyomi ? '' : 'disabled';
+
+                card.innerHTML = `
+                    <div class="card-top">
+                        <div class="kanji-character">${item.kanji}</div>
+                        <div class="kanji-info">
+                            <div class="meaning">${item.meaning}</div>
+                            <div class="readings-grid">
+                                <div class="${kunyomiBoxClass}">
+                                    <div class="reading-label">訓読み Kunyomi</div>
+                                    <div class="reading-text">${kunyomiText}</div>
+                                    <div class="reading-sublabel">Native Japanese reading</div>
+                                </div>
+                                <div class="reading-box onyomi">
+                                    <div class="reading-label">音読み Onyomi</div>
+                                    <div class="reading-text">${item.onyomi}</div>
+                                    <div class="reading-sublabel">Chinese-derived reading</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="audio-section">
+                        <div class="audio-section-label">🔊 Listen to Pronunciations</div>
+                        <div class="audio-buttons">
+                            <button class="play-btn kunyomi-btn" id="kun-btn${index}" ${kunBtnDisabled}>
+                                <span id="kun-icon${index}">${item.hasKunyomi ? '🔊' : '🚫'}</span> Kunyomi
+                            </button>
+                            <button class="play-btn onyomi-btn" id="on-btn${index}">
+                                <span id="on-icon${index}">🔊</span> Onyomi
+                            </button>
+                            <div class="volume-control">
+                                <span>🔉</span>
+                                <input type="range" class="volume-slider" id="volume${index}"
+                                       min="0" max="100" value="80">
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                if (item.group === 'basic') basicSection.appendChild(card);
+                else                        largeSection.appendChild(card);
+
+                if (item.hasKunyomi) {
+                    document.getElementById('kun-btn' + index).addEventListener('click', function() {
+                        speakText(item.kunyomiSpeak, 'kun-btn' + index, 'kun-icon' + index, index);
+                    });
+                }
+
+                document.getElementById('on-btn' + index).addEventListener('click', function() {
+                    speakText(item.onyomiSpeak, 'on-btn' + index, 'on-icon' + index, index);
+                });
+            });
+        }
+
+        function speakText(text, btnId, iconId, volIndex) {
+            if ('speechSynthesis' in window) {
+                if (currentUtterance) {
+                    window.speechSynthesis.cancel();
+                    resetPlayingState();
+                }
+                if (currentPlayingBtn === btnId) {
+                    currentPlayingBtn = null;
+                    return;
+                }
+
+                const utterance = new SpeechSynthesisUtterance(text);
+                const voices = window.speechSynthesis.getVoices();
+                const japaneseVoice = voices.find(function(voice) {
+                    return voice.lang === 'ja-JP' || voice.lang.indexOf('ja') === 0;
+                });
+
+                if (japaneseVoice) utterance.voice = japaneseVoice;
+                utterance.lang = 'ja-JP';
+                utterance.rate = 0.85;
+                utterance.pitch = 1;
+
+                const volumeSlider = document.getElementById('volume' + volIndex);
+                utterance.volume = volumeSlider.value / 100;
+
+                currentPlayingBtn = btnId;
+                document.getElementById(btnId).classList.add('playing');
+                document.getElementById(iconId).textContent = '⏸️';
+
+                utterance.onend = function() {
+                    resetPlayingState();
+                    currentPlayingBtn = null;
+                };
+                utterance.onerror = function() {
+                    resetPlayingState();
+                    currentPlayingBtn = null;
+                    alert('Unable to play audio. Please ensure your device has Japanese language support enabled.');
+                };
+
+                currentUtterance = utterance;
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert('Sorry, your browser does not support text-to-speech functionality.');
+            }
+        }
+
+        function resetPlayingState() {
+            document.querySelectorAll('.play-btn:not(:disabled)').forEach(function(btn) {
+                btn.classList.remove('playing');
+            });
+            kanjiList.forEach(function(item, index) {
+                const kunIcon = document.getElementById('kun-icon' + index);
+                const onIcon  = document.getElementById('on-icon'  + index);
+                if (kunIcon) kunIcon.textContent = item.hasKunyomi ? '🔊' : '🚫';
+                if (onIcon)  onIcon.textContent  = '🔊';
+            });
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', createKanjiCards);
+        } else {
+            createKanjiCards();
+        }
+
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.getVoices();
+            window.speechSynthesis.onvoiceschanged = function() {
+                window.speechSynthesis.getVoices();
+            };
+        }
+
+        window.addEventListener('beforeunload', function() {
+            if (window.speechSynthesis) window.speechSynthesis.cancel();
+        });
+    </script>
+</body>
+</html>
