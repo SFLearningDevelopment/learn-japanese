@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Days of the Month in Japanese</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #581c87 0%, #7e22ce 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #581c87 0%, #7e22ce 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        .header p { font-size: 1.3em; opacity: 0.95; }
+        .content { padding: 40px; background: #f5f7fa; }
+        .day-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px 35px;
+            margin-bottom: 20px;
+            border-left: 6px solid transparent;
+            border-image: linear-gradient(180deg, #581c87, #7e22ce, #a78bfa) 1;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .day-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+        .day-card.question-card {
+            border-image: linear-gradient(180deg, #f59e0b, #d97706) 1;
+            background: #fffbeb;
+        }
+        .day-card.irregular-card {
+            border-image: linear-gradient(180deg, #dc2626, #991b1b) 1;
+            background: #fef2f2;
+        }
+        .card-top {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .day-badge {
+            background: linear-gradient(135deg, #581c87, #7e22ce);
+            color: white;
+            border-radius: 15px;
+            padding: 15px 20px;
+            text-align: center;
+            min-width: 90px;
+            flex-shrink: 0;
+        }
+        .day-card.question-card .day-badge {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+        .day-card.irregular-card .day-badge {
+            background: linear-gradient(135deg, #dc2626, #991b1b);
+        }
+        .day-number {
+            font-size: 2.2em;
+            font-weight: bold;
+            line-height: 1;
+        }
+        .day-label {
+            font-size: 0.75em;
+            opacity: 0.9;
+            margin-top: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .word-content { flex: 1; min-width: 250px; }
+        .kanji-text {
+            font-size: 2.5em;
+            color: #581c87;
+            font-weight: bold;
+            margin-bottom: 8px;
+            line-height: 1;
+        }
+        .day-card.question-card .kanji-text { color: #d97706; }
+        .day-card.irregular-card .kanji-text { color: #dc2626; }
+        .japanese-text {
+            font-size: 1.8em;
+            color: #64748b;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        .meaning-text {
+            font-size: 1.1em;
+            color: #475569;
+            margin-bottom: 4px;
+        }
+        .romaji-text {
+            font-size: 1.05em;
+            color: #94a3b8;
+            font-style: italic;
+        }
+        .irregular-note {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 10px 15px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 12px;
+            font-size: 0.9em;
+            color: #92400e;
+        }
+        .audio-section {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 2px solid #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .play-btn {
+            background: linear-gradient(135deg, #581c87, #7e22ce);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-size: 1.05em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(88, 28, 135, 0.3);
+            white-space: nowrap;
+        }
+        .day-card.question-card .play-btn {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+        }
+        .day-card.irregular-card .play-btn {
+            background: linear-gradient(135deg, #dc2626, #991b1b);
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+        }
+        .play-btn:hover { transform: translateY(-2px); }
+        .play-btn.playing {
+            background: linear-gradient(135deg, #065f46, #047857) !important;
+        }
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .volume-slider {
+            width: 100px;
+            height: 6px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: #e2e8f0;
+            border-radius: 5px;
+            outline: none;
+        }
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            background: #7e22ce;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+        .volume-slider::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            background: #7e22ce;
+            cursor: pointer;
+            border-radius: 50%;
+            border: none;
+        }
+        .section-heading {
+            font-size: 1.2em;
+            font-weight: 700;
+            color: #475569;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            padding: 10px 0 15px;
+            border-bottom: 2px solid #e2e8f0;
+            margin-bottom: 20px;
+            margin-top: 10px;
+        }
+        .info-box {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border: 2px solid #f59e0b;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2);
+        }
+        .info-box h3 { color: #92400e; margin-bottom: 12px; font-size: 1.3em; }
+        .info-box p { color: #92400e; line-height: 1.7; font-size: 1.05em; }
+        .footer-note {
+            background: linear-gradient(135deg, #581c87 0%, #7e22ce 100%);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            font-size: 1.1em;
+            margin-top: 30px;
+            border-radius: 15px;
+        }
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2em; }
+            .card-top { flex-direction: column; align-items: flex-start; }
+            .audio-section { width: 100%; }
+            .content { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📅 Days of the Month in Japanese</h1>
+            <p>Learn how to say dates in Japanese with audio pronunciation</p>
+        </div>
+        <div class="content">
+            <div class="info-box">
+                <h3>💡 Did You Know?</h3>
+                <p>
+                    Japanese dates use special counters that are <strong>highly irregular</strong> from 1st to 10th! 
+                    The first day is <strong>ついたち (Tsuitachi)</strong>, not いちにち. Days 1–10, 14, 20, and 24 
+                    have unique readings derived from native Japanese numbers. Other dates follow a more regular pattern 
+                    using Sino-Japanese numbers + にち (nichi). This makes learning dates one of the trickiest parts of Japanese!
+                </p>
+            </div>
+
+            <div class="section-heading">❓ Question Word</div>
+            <div id="question-section"></div>
+
+            <div class="section-heading">🔴 Highly Irregular Days (1st — 10th)</div>
+            <div id="irregular-section"></div>
+
+            <div class="section-heading">📆 Special Days (14th, 20th, 24th)</div>
+            <div id="special-section"></div>
+
+            <div class="footer-note">
+                💡 Click the play buttons to hear native-like pronunciation. Adjust volume with the sliders.<br>
+                Compatible with all modern web browsers that support Web Speech API.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const days = [
+            { kanji: "何日", japanese: "なんにち", meaning: "Which day of the month, How many days", romaji: "Nan-nichi", dayNum: "❓", group: "question", isIrregular: false },
+            { kanji: "一日", japanese: "ついたち", meaning: "First day of the month", romaji: "Tsuitachi", dayNum: "1st", group: "irregular", isIrregular: true },
+            { kanji: "二日", japanese: "ふつか", meaning: "Second, two days", romaji: "Futsuka", dayNum: "2nd", group: "irregular", isIrregular: true },
+            { kanji: "三日", japanese: "みっか", meaning: "Third, three days", romaji: "Mikka", dayNum: "3rd", group: "irregular", isIrregular: true },
+            { kanji: "四日", japanese: "よっか", meaning: "Fourth, four days", romaji: "Yokka", dayNum: "4th", group: "irregular", isIrregular: true },
+            { kanji: "五日", japanese: "いつか", meaning: "Fifth, five days", romaji: "Itsuka", dayNum: "5th", group: "irregular", isIrregular: true },
+            { kanji: "六日", japanese: "むいか", meaning: "Sixth, six days", romaji: "Muika", dayNum: "6th", group: "irregular", isIrregular: true },
+            { kanji: "七日", japanese: "なのか", meaning: "Seventh, seven days", romaji: "Nanoka", dayNum: "7th", group: "irregular", isIrregular: true },
+            { kanji: "八日", japanese: "ようか", meaning: "Eighth, eight days", romaji: "Youka", dayNum: "8th", group: "irregular", isIrregular: true },
+            { kanji: "九日", japanese: "ここのか", meaning: "Ninth, nine days", romaji: "Kokonoka", dayNum: "9th", group: "irregular", isIrregular: true },
+            { kanji: "十日", japanese: "とおか", meaning: "Tenth, ten days", romaji: "Tooka", dayNum: "10th", group: "irregular", isIrregular: true },
+            { kanji: "十四日", japanese: "じゅうよっか", meaning: "Fourteenth, fourteen days", romaji: "Jyuu-yokka", dayNum: "14th", group: "special", isIrregular: true },
+            { kanji: "二十日", japanese: "はつか", meaning: "Twentieth, twenty days", romaji: "Hatsuka", dayNum: "20th", group: "special", isIrregular: true },
+            { kanji: "二十四日", japanese: "にじゅうよっか", meaning: "Twenty-fourth, twenty-four days", romaji: "Nijyuu-yokka", dayNum: "24th", group: "special", isIrregular: true }
+        ];
+
+        let currentUtterance = null;
+        let currentPlayingIndex = null;
+
+        function createDayCards() {
+            const sections = {
+                question: document.getElementById('question-section'),
+                irregular: document.getElementById('irregular-section'),
+                special: document.getElementById('special-section')
+            };
+
+            days.forEach((item, index) => {
+                const card = document.createElement('div');
+                const cardClass = item.group === 'question' ? 'day-card question-card' : 
+                                 item.isIrregular ? 'day-card irregular-card' : 'day-card';
+                card.className = cardClass;
+                card.id = 'card' + index;
+
+                const irregularNoteHTML = item.isIrregular && item.group !== 'question' ? 
+                    '<div class="irregular-note">⚠️ Irregular reading — must be memorized!</div>' : '';
+
+                card.innerHTML = `
+                    <div class="card-top">
+                        <div class="day-badge">
+                            <div class="day-number">${item.dayNum}</div>
+                            <div class="day-label">${item.group === 'question' ? 'Question' : 'Day'}</div>
+                        </div>
+                        <div class="word-content">
+                            <div class="kanji-text">${item.kanji}</div>
+                            <div class="japanese-text">${item.japanese}</div>
+                            <div class="meaning-text">${item.meaning}</div>
+                            <div class="romaji-text">${item.romaji}</div>
+                            ${irregularNoteHTML}
+                        </div>
+                    </div>
+                    <div class="audio-section">
+                        <button class="play-btn" id="btn${index}">
+                            <span id="icon${index}">🔊</span> Play
+                        </button>
+                        <div class="volume-control">
+                            <span>🔉</span>
+                            <input type="range" class="volume-slider" id="volume${index}"
+                                   min="0" max="100" value="80">
+                        </div>
+                    </div>
+                `;
+
+                sections[item.group].appendChild(card);
+
+                document.getElementById('btn' + index).addEventListener('click', function() {
+                    speakText(item.japanese, index);
+                });
+            });
+        }
+
+        function speakText(text, index) {
+            if ('speechSynthesis' in window) {
+                if (currentUtterance) {
+                    window.speechSynthesis.cancel();
+                    resetPlayingState();
+                }
+                if (currentPlayingIndex === index) {
+                    currentPlayingIndex = null;
+                    return;
+                }
+
+                const utterance = new SpeechSynthesisUtterance(text);
+                const voices = window.speechSynthesis.getVoices();
+                const japaneseVoice = voices.find(function(voice) {
+                    return voice.lang === 'ja-JP' || voice.lang.indexOf('ja') === 0;
+                });
+
+                if (japaneseVoice) utterance.voice = japaneseVoice;
+                utterance.lang = 'ja-JP';
+                utterance.rate = 0.85;
+                utterance.pitch = 1;
+
+                const volumeSlider = document.getElementById('volume' + index);
+                utterance.volume = volumeSlider.value / 100;
+
+                currentPlayingIndex = index;
+                document.getElementById('btn' + index).classList.add('playing');
+                document.getElementById('icon' + index).textContent = '⏸️';
+
+                utterance.onend = function() {
+                    resetPlayingState();
+                    currentPlayingIndex = null;
+                };
+                utterance.onerror = function() {
+                    resetPlayingState();
+                    currentPlayingIndex = null;
+                    alert('Unable to play audio. Please ensure your device has Japanese language support enabled.');
+                };
+
+                currentUtterance = utterance;
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert('Sorry, your browser does not support text-to-speech functionality.');
+            }
+        }
+
+        function resetPlayingState() {
+            document.querySelectorAll('.play-btn').forEach(function(btn) {
+                btn.classList.remove('playing');
+            });
+            days.forEach(function(_, index) {
+                const icon = document.getElementById('icon' + index);
+                if (icon) icon.textContent = '🔊';
+            });
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', createDayCards);
+        } else {
+            createDayCards();
+        }
+
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.getVoices();
+            window.speechSynthesis.onvoiceschanged = function() {
+                window.speechSynthesis.getVoices();
+            };
+        }
+
+        window.addEventListener('beforeunload', function() {
+            if (window.speechSynthesis) window.speechSynthesis.cancel();
+        });
+    </script>
+</body>
+</html>
