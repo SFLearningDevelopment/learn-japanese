@@ -214,20 +214,15 @@
 
     <script>
         const words = [
-            // Pronouns
             { japanese: "わたし", meaning: "I", romaji: "Watashi", group: "pronouns" },
             { japanese: "わたしたち", meaning: "We", romaji: "Watashitachi", group: "pronouns" },
             { japanese: "あなた", meaning: "You", romaji: "Anata", group: "pronouns" },
             { japanese: "あのひと", meaning: "That person, he, she", romaji: "Anohito", group: "pronouns" },
             { japanese: "みなさん", meaning: "Ladies and Gentlemen, All of you", romaji: "Minasan", group: "pronouns" },
-            
-            // Titles
             { japanese: "〜さん", meaning: "Mr, Ms (Title of respect added to a name)", romaji: "San", group: "titles" },
             { japanese: "〜ちゃん", meaning: "Added to a child's name", romaji: "Chan", group: "titles" },
             { japanese: "〜くん", meaning: "Added to a boy's name", romaji: "Kun", group: "titles" },
             { japanese: "〜人", meaning: "Suffix meaning 'A national of' (e.g., American)", romaji: "Jin", group: "titles" },
-            
-            // Occupations
             { japanese: "せんせい", meaning: "Teacher, Instructor (not used when referring to one's own job)", romaji: "Sensei", group: "occupations" },
             { japanese: "きょうし", meaning: "Teacher, Instructor", romaji: "Kyoushi", group: "occupations" },
             { japanese: "がくせい", meaning: "Student", romaji: "Gakusei", group: "occupations" },
@@ -237,13 +232,9 @@
             { japanese: "いしゃ", meaning: "Medical Doctor", romaji: "Isha", group: "occupations" },
             { japanese: "けんきゅうしゃ", meaning: "Researcher, Scholar", romaji: "Kenkyusha", group: "occupations" },
             { japanese: "エンジニア", meaning: "Engineer", romaji: "Enginia", group: "occupations" },
-            
-            // Places
             { japanese: "だいがく", meaning: "University", romaji: "Daigaku", group: "places" },
             { japanese: "びょういん", meaning: "Hospital", romaji: "Byouin", group: "places" },
             { japanese: "でんき", meaning: "Electricity, Light", romaji: "Denki", group: "places" },
-            
-            // Questions
             { japanese: "だれ（どなた）", meaning: "Who", romaji: "Dare (Donata)", group: "questions" },
             { japanese: "〜さい", meaning: "~ Year Old", romaji: "Sai", group: "questions" },
             { japanese: "なんさい", meaning: "How old", romaji: "Nansai", group: "questions" },
@@ -251,8 +242,6 @@
             { japanese: "いいえ", meaning: "No", romaji: "Iie", group: "questions" },
             { japanese: "しつれいですが", meaning: "Excuse me, but", romaji: "Shitsurei desu ga", group: "questions" },
             { japanese: "おなまえは？", meaning: "May I have your name?", romaji: "Onamae wa", group: "questions" },
-            
-            // Greetings
             { japanese: "はじめまして", meaning: "How do you do?", romaji: "Hajimemashite", group: "greetings" },
             { japanese: "どうぞよろしくおねがいします", meaning: "Pleased to meet you", romaji: "Douzo Yoroshiku Onegaishimasu", group: "greetings" },
             { japanese: "〜からきました", meaning: "I came from ~", romaji: "Kara Kimashita", group: "greetings" }
@@ -271,28 +260,25 @@
                 greetings: document.getElementById('greetings-section')
             };
 
-            words.forEach((item, index) => {
+            words.forEach(function(item, index) {
                 const card = document.createElement('div');
                 card.className = 'word-card';
                 card.id = 'card' + index;
 
-                card.innerHTML = `
-                    <div class="word-content">
-                        <div class="japanese-text">${item.japanese}</div>
-                        <div class="meaning-text">${item.meaning}</div>
-                        <div class="romaji-text">${item.romaji}</div>
-                    </div>
-                    <div class="audio-controls">
-                        <button class="play-btn" id="btn${index}">
-                            <span id="icon${index}">🔊</span> Play
-                        </button>
-                        <div class="volume-control">
-                            <span>🔉</span>
-                            <input type="range" class="volume-slider" id="volume${index}"
-                                   min="0" max="100" value="80">
-                        </div>
-                    </div>
-                `;
+                card.innerHTML = '<div class="word-content">' +
+                    '<div class="japanese-text">' + item.japanese + '</div>' +
+                    '<div class="meaning-text">' + item.meaning + '</div>' +
+                    '<div class="romaji-text">' + item.romaji + '</div>' +
+                    '</div>' +
+                    '<div class="audio-controls">' +
+                    '<button class="play-btn" id="btn' + index + '">' +
+                    '<span id="icon' + index + '">🔊</span> Play' +
+                    '</button>' +
+                    '<div class="volume-control">' +
+                    '<span>🔉</span>' +
+                    '<input type="range" class="volume-slider" id="volume' + index + '" min="0" max="100" value="80">' +
+                    '</div>' +
+                    '</div>';
 
                 sections[item.group].appendChild(card);
 
