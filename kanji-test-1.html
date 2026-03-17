@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kanji Test 1</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0e1a;
+            --surface: #111827;
+            --surface2: #1a2235;
+            --accent: #22c55e;
+            --accent2: #3b82f6;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --text: #e2e8f0;
+            --text-dim: #94a3b8;
+            --border: #1e2d45;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Space Mono', monospace;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 0 0 80px;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(34,197,94,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(34,197,94,0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ── HEADER ── */
+        .header {
+            position: relative;
+            padding: 50px 40px 40px;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+            background: linear-gradient(180deg, rgba(34,197,94,0.05) 0%, transparent 100%);
+            overflow: hidden;
+        }
+        .header::after {
+            content: '漢字';
+            position: absolute;
+            font-size: 18vw;
+            font-weight: 900;
+            color: rgba(34,197,94,0.03);
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Noto Sans JP', sans-serif;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+        .tag {
+            display: inline-block;
+            background: rgba(34,197,94,0.1);
+            border: 1px solid rgba(34,197,94,0.3);
+            color: var(--accent);
+            font-size: 0.68em;
+            padding: 4px 14px;
+            border-radius: 2px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 18px;
+        }
+        .header h1 {
+            font-family: 'Noto Sans JP', sans-serif;
+            font-size: clamp(1.6em, 3.5vw, 2.6em);
+            font-weight: 900;
+            line-height: 1.15;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .header-sub { color: #cbd5e1; font-size: 1.05em; letter-spacing: 0.05em; }
+
+        /* ── SCOREBOARD ── */
+        .scoreboard {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            padding: 18px 40px;
+            border-bottom: 1px solid var(--border);
+            background: var(--surface);
+            position: relative;
+            z-index: 1;
+        }
+        .score-item { text-align: center; }
+        .score-num { font-size: 1.5em; font-weight: 700; }
+        .score-num.green { color: var(--accent); }
+        .score-num.red   { color: var(--danger); }
+        .score-num.blue  { color: var(--accent2); }
+        .score-label { font-size: 0.75em; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 2px; }
+
+        /* ── PROGRESS ── */
+        .progress-wrap {
+            max-width: 900px;
+            margin: 20px auto 6px;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+        .progress-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8em;
+            color: var(--text-dim);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+        .progress-bar { height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent2), var(--accent));
+            border-radius: 2px;
+            transition: width 0.4s ease;
+            width: 0%;
+        }
+
+        /* ── CONTROLS ── */
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            padding: 20px 40px 10px;
+            position: relative;
+            z-index: 1;
+            flex-wrap: wrap;
+        }
+        .ctrl-btn {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            color: #cbd5e1;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.88em;
+            padding: 8px 20px;
+            border-radius: 2px;
+            cursor: pointer;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            transition: all 0.2s;
+        }
+        .ctrl-btn:hover {
+            border-color: var(--accent2);
+            color: var(--accent2);
+            background: rgba(59,130,246,0.05);
+        }
+        .ctrl-btn.primary {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: rgba(34,197,94,0.07);
+        }
+        .ctrl-btn.primary:hover {
+            background: rgba(34,197,94,0.15);
+            box-shadow: 0 0 14px rgba(34,197,94,0.2);
+        }
+
+        /* ── QUESTION CARD ── */
+        .question-area {
+            max-width: 900px;
+            margin: 20px auto 0;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .question-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            padding: 36px 36px 28px;
+            margin-bottom: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+        .question-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent2), var(--accent));
+        }
+
+        .q-meta {
+            font-size: 0.95em;
+            color: #cbd5e1;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .jp-word {
+            font-family: 'Noto Sans JP', sans-serif;
+            font-size: clamp(2.5em, 6vw, 4em);
+            font-weight: 900;
+            color: var(--accent2);
+            text-shadow: 0 0 24px rgba(59,130,246,0.3);
+            margin-bottom: 8px;
+            line-height: 1;
+        }
+
+        .q-instruction {
+            font-size: 1em;
+            color: #cbd5e1;
+            letter-spacing: 0.06em;
+            margin-top: 10px;
+        }
+
+        /* ── OPTIONS ── */
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 28px;
+        }
+
+        .option-btn {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-family: 'Noto Sans JP', sans-serif;
+            font-size: 1.05em;
+            padding: 16px 20px;
+            border-radius: 2px;
+            cursor: pointer;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.18s;
+            letter-spacing: 0.05em;
+            line-height: 1.4;
+        }
+        .option-btn:hover:not(:disabled) {
+            border-color: var(--accent2);
+            background: rgba(59,130,246,0.07);
+            transform: translateX(3px);
+        }
+        .option-btn:disabled { cursor: default; }
+
+        .option-key {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7em;
+            color: var(--text-dim);
+            min-width: 22px;
+            height: 22px;
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .option-btn.correct {
+            border-color: var(--accent);
+            background: rgba(34,197,94,0.1);
+            color: var(--accent);
+        }
+        .option-btn.correct .option-key {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        .option-btn.wrong {
+            border-color: var(--danger);
+            background: rgba(239,68,68,0.08);
+            color: var(--danger);
+        }
+        .option-btn.wrong .option-key {
+            border-color: var(--danger);
+            color: var(--danger);
+        }
+        .option-btn.reveal {
+            border-color: var(--accent);
+            background: rgba(34,197,94,0.06);
+            color: var(--accent);
+            opacity: 0.7;
+        }
+
+        /* ── FEEDBACK ── */
+        .feedback {
+            margin-top: 16px;
+            padding: 14px 20px;
+            border-radius: 2px;
+            font-size: 0.9em;
+            letter-spacing: 0.04em;
+            display: none;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Noto Sans JP', sans-serif;
+        }
+        .feedback.show { display: flex; }
+        .feedback.correct-fb {
+            background: rgba(34,197,94,0.08);
+            border: 1px solid rgba(34,197,94,0.25);
+            color: var(--accent);
+        }
+        .feedback.wrong-fb {
+            background: rgba(239,68,68,0.08);
+            border: 1px solid rgba(239,68,68,0.25);
+            color: var(--danger);
+        }
+
+        /* ── NEXT BUTTON ── */
+        .next-wrap {
+            display: none;
+            justify-content: flex-end;
+            margin-top: 12px;
+        }
+        .next-wrap.show { display: flex; }
+        .next-btn {
+            background: rgba(59,130,246,0.1);
+            border: 1px solid rgba(59,130,246,0.3);
+            color: var(--accent2);
+            font-family: 'Space Mono', monospace;
+            font-size: 0.72em;
+            padding: 10px 24px;
+            border-radius: 2px;
+            cursor: pointer;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            transition: all 0.2s;
+        }
+        .next-btn:hover {
+            background: rgba(59,130,246,0.18);
+            box-shadow: 0 0 14px rgba(59,130,246,0.2);
+        }
+
+        /* ── RESULTS SCREEN ── */
+        .results-screen {
+            display: none;
+            max-width: 700px;
+            margin: 40px auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+        .results-screen.show { display: block; }
+
+        .results-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 50px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        .results-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent2), var(--accent));
+        }
+
+        .result-grade {
+            font-size: 5em;
+            font-weight: 900;
+            font-family: 'Noto Sans JP', sans-serif;
+            margin-bottom: 10px;
+        }
+        .result-grade.grade-s { color: var(--accent); text-shadow: 0 0 30px rgba(34,197,94,0.4); }
+        .result-grade.grade-a { color: #60a5fa; text-shadow: 0 0 30px rgba(96,165,250,0.4); }
+        .result-grade.grade-b { color: var(--warning); text-shadow: 0 0 30px rgba(245,158,11,0.4); }
+        .result-grade.grade-c { color: var(--danger); text-shadow: 0 0 30px rgba(239,68,68,0.4); }
+
+        .result-score-label {
+            font-size: 0.8em;
+            color: var(--text-dim);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+        }
+
+        .result-breakdown {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1px;
+            background: var(--border);
+            margin: 30px 0;
+        }
+        .rb-item {
+            background: var(--surface2);
+            padding: 20px;
+            text-align: center;
+        }
+        .rb-num { font-size: 1.8em; font-weight: 700; }
+        .rb-num.g { color: var(--accent); }
+        .rb-num.r { color: var(--danger); }
+        .rb-num.b { color: var(--accent2); }
+        .rb-label { font-size: 0.75em; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 4px; }
+
+        /* ── REVIEW TABLE ── */
+        .review-section { margin-top: 30px; text-align: left; }
+        .review-title {
+            font-size: 0.8em;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border);
+        }
+        .review-row {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr 1.5fr 40px;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.85em;
+            align-items: center;
+            font-family: 'Noto Sans JP', sans-serif;
+        }
+        .review-row .jp { font-size: 1.2em; color: var(--accent2); }
+        .review-row .ans-correct { color: var(--accent); }
+        .review-row .ans-wrong { color: var(--danger); text-decoration: line-through; opacity: 0.7; }
+        .review-row .tick { color: var(--accent); font-size: 1em; text-align: right; }
+        .review-row .cross { color: var(--danger); font-size: 1em; text-align: right; }
+        .review-row .col-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.72em;
+            color: var(--text-dim);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .disclaimer {
+            max-width: 900px;
+            margin: 40px auto 0;
+            padding: 16px 24px;
+            border: 1px solid var(--border);
+            font-size: 0.65em;
+            color: var(--text-dim);
+            line-height: 1.8;
+            letter-spacing: 0.03em;
+            position: relative;
+            z-index: 1;
+        }
+
+        @media (max-width: 600px) {
+            .header { padding: 36px 20px 28px; }
+            .scoreboard { gap: 20px; padding: 14px 20px; }
+            .options-grid { grid-template-columns: 1fr; }
+            .question-card { padding: 24px 20px 20px; }
+            .review-row { grid-template-columns: 0.8fr 1fr 1.2fr 30px; font-size: 0.75em; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="tag">Test · Kanji · Readings</div>
+    <h1>漢字テスト１<br><span style="font-size:0.55em; opacity:0.7;">Kanji Test 1</span></h1>
+    <p class="header-sub">Match each Kanji to its correct Hiragana reading</p>
+</div>
+
+<div class="scoreboard">
+    <div class="score-item">
+        <div class="score-num blue" id="scoreQ">0 / 8</div>
+        <div class="score-label">Question</div>
+    </div>
+    <div class="score-item">
+        <div class="score-num green" id="scoreC">0</div>
+        <div class="score-label">Correct</div>
+    </div>
+    <div class="score-item">
+        <div class="score-num red" id="scoreW">0</div>
+        <div class="score-label">Wrong</div>
+    </div>
+</div>
+
+<div class="progress-wrap">
+    <div class="progress-meta">
+        <span>Progress</span>
+        <span id="progressText">0 of 8</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+</div>
+
+<div class="controls">
+    <button class="ctrl-btn" onclick="restartTest()">↺ Restart</button>
+    <button class="ctrl-btn" onclick="shuffleAndRestart()">⇄ Shuffle &amp; Restart</button>
+</div>
+
+<!-- Question Area -->
+<div class="question-area" id="questionArea">
+    <div class="question-card" id="questionCard">
+        <div class="q-meta" id="qMeta">Question 1 of 8</div>
+        <div class="jp-word" id="jpWord">—</div>
+        <div class="q-instruction">Select the correct Hiragana reading ↓</div>
+        <div class="options-grid" id="optionsGrid"></div>
+        <div class="feedback" id="feedback"></div>
+        <div class="next-wrap" id="nextWrap">
+            <button class="next-btn" onclick="nextQuestion()">Next →</button>
+        </div>
+    </div>
+</div>
+
+<!-- Results Screen -->
+<div class="results-screen" id="resultsScreen">
+    <div class="results-card">
+        <div class="result-grade" id="resultGrade">S</div>
+        <div class="result-score-label" id="resultLabel">8 / 8 Correct</div>
+        <div class="result-breakdown">
+            <div class="rb-item"><div class="rb-num g" id="rbCorrect">0</div><div class="rb-label">Correct</div></div>
+            <div class="rb-item"><div class="rb-num r" id="rbWrong">0</div><div class="rb-label">Wrong</div></div>
+            <div class="rb-item"><div class="rb-num b" id="rbPct">0%</div><div class="rb-label">Score</div></div>
+        </div>
+        <div style="display:flex; gap:10px; justify-content:center; margin-bottom:10px; flex-wrap:wrap;">
+            <button class="ctrl-btn primary" onclick="restartTest()">↺ Try Again</button>
+            <button class="ctrl-btn" onclick="shuffleAndRestart()">⇄ Shuffle &amp; Retry</button>
+        </div>
+        <div class="review-section" id="reviewSection"></div>
+    </div>
+</div>
+
+<div class="disclaimer">
+    ⚠️ AI-Generated Content — Reviewed by subject matter experts for accuracy.<br>
+    For questions, contact your Learning &amp; Development team. &nbsp;|&nbsp; Last Updated: March 2026 · Version 1.0
+</div>
+
+<script>
+    const MASTER = [
+        { jp: "八月八日",   correct: "はちがつようか" },
+        { jp: "三千冊",     correct: "さんぜんさつ"   },
+        { jp: "十日",       correct: "とうか"         },
+        { jp: "一万えん",   correct: "いちまんえん"   },
+        { jp: "おんなの人", correct: "おんなのひと"   },
+        { jp: "上下",       correct: "じょうげ"       },
+        { jp: "九じ",       correct: "くじ"           },
+        { jp: "二つ",       correct: "ふたつ"         },
+    ];
+
+    const ALL_ANSWERS = MASTER.map(q => q.correct);
+
+    let questions = [];
+    let currentIndex = 0;
+    let correctCount = 0;
+    let wrongCount = 0;
+    let answered = false;
+    let userAnswers = [];
+
+    function shuffle(arr) {
+        const a = [...arr];
+        for (let i = a.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [a[i], a[j]] = [a[j], a[i]];
+        }
+        return a;
+    }
+
+    function buildOptions(correctAnswer) {
+        const distractors = shuffle(ALL_ANSWERS.filter(a => a !== correctAnswer)).slice(0, 3);
+        return shuffle([correctAnswer, ...distractors]);
+    }
+
+    function initQuestions(doShuffle) {
+        questions = doShuffle ? shuffle([...MASTER]) : [...MASTER];
+        currentIndex = 0;
+        correctCount = 0;
+        wrongCount = 0;
+        userAnswers = [];
+    }
+
+    function renderQuestion() {
+        const total = questions.length;
+        const q = questions[currentIndex];
+        answered = false;
+
+        document.getElementById('scoreQ').textContent = `${currentIndex + 1} / ${total}`;
+        document.getElementById('scoreC').textContent = correctCount;
+        document.getElementById('scoreW').textContent = wrongCount;
+
+        const pct = Math.round((currentIndex / total) * 100);
+        document.getElementById('progressFill').style.width = pct + '%';
+        document.getElementById('progressText').textContent = `${currentIndex} of ${total}`;
+
+        document.getElementById('qMeta').textContent = `Question ${currentIndex + 1} of ${total}`;
+        document.getElementById('jpWord').textContent = q.jp;
+
+        const opts = buildOptions(q.correct);
+        const keys = ['A', 'B', 'C', 'D'];
+        const grid = document.getElementById('optionsGrid');
+        grid.innerHTML = '';
+        opts.forEach((opt, i) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerHTML = `<span class="option-key">${keys[i]}</span> ${opt}`;
+            btn.onclick = () => selectAnswer(opt, q.correct);
+            grid.appendChild(btn);
+        });
+
+        const fb = document.getElementById('feedback');
+        fb.className = 'feedback';
+        fb.textContent = '';
+        document.getElementById('nextWrap').className = 'next-wrap';
+
+        document.getElementById('questionArea').style.display = 'block';
+        document.getElementById('resultsScreen').className = 'results-screen';
+    }
+
+    function selectAnswer(chosen, correct) {
+        if (answered) return;
+        answered = true;
+
+        const isCorrect = chosen === correct;
+        if (isCorrect) correctCount++; else wrongCount++;
+
+        userAnswers.push({ jp: questions[currentIndex].jp, correct, chosen, wasCorrect: isCorrect });
+
+        document.getElementById('scoreC').textContent = correctCount;
+        document.getElementById('scoreW').textContent = wrongCount;
+
+        const btns = document.querySelectorAll('.option-btn');
+        btns.forEach(btn => {
+            btn.disabled = true;
+            // Extract text after the key badge (A/B/C/D)
+            const label = btn.childNodes[1] ? btn.childNodes[1].textContent.trim() : '';
+            if (label === correct && !isCorrect) btn.classList.add('reveal');
+            if (label === chosen && isCorrect)   btn.classList.add('correct');
+            if (label === chosen && !isCorrect)  btn.classList.add('wrong');
+        });
+
+        const fb = document.getElementById('feedback');
+        if (isCorrect) {
+            fb.className = 'feedback correct-fb show';
+            fb.textContent = '✓ 正解！ — ' + correct;
+        } else {
+            fb.className = 'feedback wrong-fb show';
+            fb.textContent = `✗ 「${chosen}」は違います。正解: ${correct}`;
+        }
+
+        const nextWrap = document.getElementById('nextWrap');
+        nextWrap.className = 'next-wrap show';
+        const nextBtn = nextWrap.querySelector('.next-btn');
+        nextBtn.textContent = (currentIndex + 1 >= questions.length) ? 'See Results →' : 'Next →';
+    }
+
+    function nextQuestion() {
+        currentIndex++;
+        if (currentIndex >= questions.length) {
+            showResults();
+        } else {
+            renderQuestion();
+        }
+    }
+
+    function showResults() {
+        document.getElementById('questionArea').style.display = 'none';
+        document.getElementById('resultsScreen').className = 'results-screen show';
+
+        const total = questions.length;
+        const pct = Math.round((correctCount / total) * 100);
+
+        let grade, gradeClass;
+        if (pct === 100)    { grade = 'S'; gradeClass = 'grade-s'; }
+        else if (pct >= 80) { grade = 'A'; gradeClass = 'grade-a'; }
+        else if (pct >= 60) { grade = 'B'; gradeClass = 'grade-b'; }
+        else                { grade = 'C'; gradeClass = 'grade-c'; }
+
+        document.getElementById('resultGrade').textContent = grade;
+        document.getElementById('resultGrade').className = 'result-grade ' + gradeClass;
+        document.getElementById('resultLabel').textContent = `${correctCount} / ${total} Correct`;
+        document.getElementById('rbCorrect').textContent = correctCount;
+        document.getElementById('rbWrong').textContent = wrongCount;
+        document.getElementById('rbPct').textContent = pct + '%';
+
+        document.getElementById('progressFill').style.width = '100%';
+        document.getElementById('progressText').textContent = `${total} of ${total}`;
+        document.getElementById('scoreQ').textContent = `${total} / ${total}`;
+
+        const rev = document.getElementById('reviewSection');
+        let html = `<div class="review-title">Answer Review</div>`;
+        html += `<div class="review-row">
+            <span class="col-label">Kanji</span>
+            <span class="col-label">Your Answer</span>
+            <span class="col-label">Correct Reading</span>
+            <span></span>
+        </div>`;
+        userAnswers.forEach(r => {
+            const ansHtml = r.wasCorrect
+                ? `<span class="ans-correct">${r.chosen}</span>`
+                : `<span class="ans-wrong">${r.chosen}</span>`;
+            const mark = r.wasCorrect
+                ? `<span class="tick">✓</span>`
+                : `<span class="cross">✗</span>`;
+            html += `<div class="review-row">
+                <span class="jp">${r.jp}</span>
+                ${ansHtml}
+                <span class="ans-correct">${r.correct}</span>
+                ${mark}
+            </div>`;
+        });
+        rev.innerHTML = html;
+    }
+
+    function restartTest() {
+        initQuestions(false);
+        renderQuestion();
+    }
+
+    function shuffleAndRestart() {
+        initQuestions(true);
+        renderQuestion();
+    }
+
+    initQuestions(false);
+    renderQuestion();
+</script>
+</body>
+</html>
