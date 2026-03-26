@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT Related Vocabulary 3</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0e1a;
+            --surface: #111827;
+            --surface2: #1a2235;
+            --accent: #38bdf8;
+            --accent2: #6366f1;
+            --accent3: #10b981;
+            --text: #e2e8f0;
+            --text-dim: #94a3b8;
+            --border: #1e2d45;
+            --card-glow: 0 0 30px rgba(56, 189, 248, 0.08);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Space Mono', monospace;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 0 0 60px;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(56,189,248,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(56,189,248,0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ── HEADER ── */
+        .header {
+            position: relative;
+            padding: 60px 40px 50px;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+            background: linear-gradient(180deg, rgba(56,189,248,0.06) 0%, transparent 100%);
+            overflow: hidden;
+        }
+        .header::after {
+            content: 'IT';
+            position: absolute;
+            font-size: 20vw;
+            font-weight: 900;
+            color: rgba(56,189,248,0.03);
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Noto Sans JP', sans-serif;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+        .tag {
+            display: inline-block;
+            background: rgba(56,189,248,0.1);
+            border: 1px solid rgba(56,189,248,0.3);
+            color: var(--accent);
+            font-size: 0.68em;
+            padding: 4px 14px;
+            border-radius: 2px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 18px;
+        }
+        .header h1 {
+            font-family: 'Noto Sans JP', sans-serif;
+            font-size: clamp(1.8em, 4vw, 3em);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #ffffff 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .header-sub { color: #cbd5e1; font-size: 1.05em; letter-spacing: 0.05em; }
+
+        /* ── STATS BAR ── */
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            padding: 20px 40px;
+            border-bottom: 1px solid var(--border);
+            background: var(--surface);
+            position: relative;
+            z-index: 1;
+        }
+        .stat { text-align: center; }
+        .stat-num { font-size: 1.4em; font-weight: 700; color: var(--accent); }
+        .stat-label { font-size: 0.75em; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 2px; }
+
+        /* ── INFO BOX ── */
+        .info-box {
+            max-width: 1400px;
+            margin: 20px auto 4px;
+            padding: 16px 28px;
+            background: rgba(56,189,248,0.05);
+            border: 1px solid rgba(56,189,248,0.15);
+            border-radius: 2px;
+            font-size: 0.75em;
+            color: #7dd3fc;
+            letter-spacing: 0.05em;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ── PROGRESS ── */
+        .progress-wrap {
+            max-width: 1400px;
+            margin: 0 auto 20px;
+            padding: 0 2px;
+            position: relative;
+            z-index: 1;
+        }
+        .progress-label {
+            font-size: 0.8em;
+            color: var(--text-dim);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+            padding: 0 4px;
+        }
+        .progress-bar { height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent2), var(--accent));
+            border-radius: 2px;
+            transition: width 0.4s ease;
+            width: 0%;
+        }
+
+        /* ── CONTROLS ── */
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            padding: 20px 40px;
+            position: relative;
+            z-index: 1;
+            flex-wrap: wrap;
+        }
+        .control-btn {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            color: #cbd5e1;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.78em;
+            padding: 8px 18px;
+            border-radius: 2px;
+            cursor: pointer;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            transition: all 0.2s;
+        }
+        .control-btn:hover, .control-btn.active {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: rgba(56,189,248,0.05);
+        }
+        .control-btn.active { box-shadow: 0 0 12px rgba(56,189,248,0.15); }
+
+        /* ── GROUP DIVIDER ── */
+        .group-label {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 10px 4px 6px;
+            font-size: 0.65em;
+            color: var(--accent);
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            border-bottom: 1px solid rgba(56,189,248,0.15);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ── GRID ── */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2px;
+            padding: 2px;
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* ── CARD ── */
+        .vocab-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 24px 26px 20px;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .vocab-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent2), var(--accent));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+        .vocab-card:hover::before,
+        .vocab-card.playing::before { transform: scaleX(1); }
+        .vocab-card:hover {
+            background: var(--surface2);
+            border-color: rgba(56,189,248,0.2);
+            box-shadow: var(--card-glow);
+            transform: translateY(-2px);
+        }
+        .vocab-card.playing {
+            background: rgba(56,189,248,0.05);
+            border-color: rgba(56,189,248,0.4);
+            box-shadow: 0 0 30px rgba(56,189,248,0.15);
+        }
+        .vocab-card.known { border-color: rgba(16,185,129,0.3); }
+        .vocab-card.known::after {
+            content: '✓';
+            position: absolute;
+            top: 12px; right: 14px;
+            color: var(--accent3);
+            font-size: 0.9em;
+        }
+
+        .badge-katakana {
+            display: inline-block;
+            font-size: 0.58em;
+            padding: 2px 8px;
+            background: rgba(99,102,241,0.12);
+            border: 1px solid rgba(99,102,241,0.25);
+            color: #a5b4fc;
+            border-radius: 2px;
+            letter-spacing: 0.05em;
+            font-family: 'Space Mono', monospace;
+            margin-top: 2px;
+            width: fit-content;
+        }
+
+        .card-index { font-size: 0.65em; color: var(--text-dim); letter-spacing: 0.1em; }
+
+        .eng-meaning {
+            font-size: 1em;
+            font-weight: 700;
+            color: var(--text);
+            letter-spacing: 0.03em;
+        }
+
+        .jp-char {
+            font-family: 'Noto Sans JP', sans-serif;
+            font-size: 1.7em;
+            font-weight: 700;
+            color: var(--accent);
+            line-height: 1.2;
+            text-shadow: 0 0 16px rgba(56,189,248,0.3);
+        }
+
+        .romaji {
+            font-size: 0.78em;
+            color: var(--text-dim);
+            letter-spacing: 0.08em;
+        }
+
+        .card-divider { width: 24px; height: 1px; background: var(--border); margin: 2px 0; }
+
+        /* Sound wave */
+        .card-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 4px; }
+        .sound-icon { display: flex; align-items: center; gap: 3px; }
+        .sound-icon span {
+            width: 3px;
+            background: var(--text-dim);
+            border-radius: 2px;
+            transition: background 0.2s;
+        }
+        .sound-icon span:nth-child(1) { height: 6px; }
+        .sound-icon span:nth-child(2) { height: 10px; }
+        .sound-icon span:nth-child(3) { height: 14px; }
+        .sound-icon span:nth-child(4) { height: 10px; }
+        .sound-icon span:nth-child(5) { height: 6px; }
+        .vocab-card.playing .sound-icon span {
+            background: var(--accent);
+            animation: wave 0.6s ease-in-out infinite;
+        }
+        .vocab-card.playing .sound-icon span:nth-child(2) { animation-delay: 0.1s; }
+        .vocab-card.playing .sound-icon span:nth-child(3) { animation-delay: 0.2s; }
+        .vocab-card.playing .sound-icon span:nth-child(4) { animation-delay: 0.1s; }
+        @keyframes wave {
+            0%, 100% { transform: scaleY(1); }
+            50% { transform: scaleY(2); }
+        }
+
+        .mark-btn {
+            font-size: 0.6em;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-family: 'Space Mono', monospace;
+            padding: 4px 0;
+            transition: color 0.2s;
+        }
+        .mark-btn:hover { color: var(--accent3); }
+        .vocab-card.known .mark-btn { color: var(--accent3); }
+
+        /* ── DISCLAIMER ── */
+        .disclaimer {
+            max-width: 1400px;
+            margin: 40px auto 0;
+            padding: 20px 28px;
+            border: 1px solid var(--border);
+            font-size: 0.68em;
+            color: var(--text-dim);
+            line-height: 1.8;
+            letter-spacing: 0.03em;
+            position: relative;
+            z-index: 1;
+        }
+
+        @media (max-width: 600px) {
+            .header { padding: 40px 20px 30px; }
+            .stats-bar { gap: 20px; padding: 16px 20px; }
+            .controls { padding: 16px 20px; }
+            .grid { grid-template-columns: 1fr 1fr; }
+            .vocab-card { padding: 16px 14px; }
+            .jp-char { font-size: 1.3em; }
+        }
+        @media (max-width: 400px) {
+            .grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="tag">Vocabulary · IT &amp; Technology · Vol. 3</div>
+    <h1>IT関連語彙３<br><span style="font-size:0.55em; opacity:0.7;">IT Related Vocabulary 3</span></h1>
+    <p class="header-sub">Operations, monitoring, support and infrastructure terms</p>
+</div>
+
+<div class="stats-bar">
+    <div class="stat">
+        <div class="stat-num" id="totalCount">0</div>
+        <div class="stat-label">Words</div>
+    </div>
+    <div class="stat">
+        <div class="stat-num" id="knownCount">0</div>
+        <div class="stat-label">Learned</div>
+    </div>
+    <div class="stat">
+        <div class="stat-num" id="pctCount">0%</div>
+        <div class="stat-label">Progress</div>
+    </div>
+</div>
+
+<div class="info-box">
+    🔊 Click any card to hear pronunciation &nbsp;·&nbsp; ✓ Mark words you've learned &nbsp;·&nbsp;
+    <span style="color:#a5b4fc">カタカナ</span> badge marks loanwords written in katakana
+</div>
+
+<div class="progress-wrap">
+    <div class="progress-label">Learning Progress</div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+</div>
+
+<div class="controls">
+    <button class="control-btn active" id="btnAll"     onclick="filterCards('all')">All Words</button>
+    <button class="control-btn"        id="btnUnknown" onclick="filterCards('unknown')">Not Learned</button>
+    <button class="control-btn"        id="btnKnown"   onclick="filterCards('known')">Learned</button>
+    <button class="control-btn"                        onclick="resetProgress()">Reset Progress</button>
+</div>
+
+<div id="vocabRoot"></div>
+
+<div class="disclaimer">
+    ⚠️ AI-Generated Content — Reviewed by subject matter experts for accuracy.<br>
+    For questions, contact your Learning &amp; Development team. &nbsp;|&nbsp; Last Updated: March 2026 · Version 1.0
+</div>
+
+<script>
+    // katakana: true = loanword written in katakana
+    const vocab = [
+        // ── Bookings & Scheduling ──
+        { eng: "Reservation / Book",       jp: "予約",           romaji: "Yoyaku",          group: "📅  Bookings & Scheduling",      katakana: false },
+        { eng: "Reservation List",         jp: "予約一覧",        romaji: "Yoyaku Ichiran",   group: "📅  Bookings & Scheduling",      katakana: false },
+        { eng: "Time Slot",                jp: "時間帯",          romaji: "Jikantai",         group: "📅  Bookings & Scheduling",      katakana: false },
+        { eng: "Availability",             jp: "可用性",          romaji: "Kayōsei",          group: "📅  Bookings & Scheduling",      katakana: false },
+        { eng: "Confirmation Email",       jp: "確認メール",      romaji: "Kakunin Meru",     group: "📅  Bookings & Scheduling",      katakana: false },
+        { eng: "Confirm",                  jp: "確認する",        romaji: "Kakunin suru",     group: "📅  Bookings & Scheduling",      katakana: false },
+        { eng: "Store / Branch",           jp: "店舗",            romaji: "Tenpo",            group: "📅  Bookings & Scheduling",      katakana: false },
+        { eng: "Customer",                 jp: "お客さま",        romaji: "Okyakusama",       group: "📅  Bookings & Scheduling",      katakana: false },
+        { eng: "Client",                   jp: "顧客",            romaji: "Kokyaku",          group: "📅  Bookings & Scheduling",      katakana: false },
+
+        // ── Status & Workflow ──
+        { eng: "Completed",                jp: "完了",            romaji: "Kanryou",          group: "🔄  Status & Workflow",          katakana: false },
+        { eng: "In Progress",              jp: "進行中",          romaji: "Shinkouchuu",      group: "🔄  Status & Workflow",          katakana: false },
+        { eng: "Status",                   jp: "ステータス",      romaji: "Sutetatsu",        group: "🔄  Status & Workflow",          katakana: true  },
+        { eng: "Process",                  jp: "プロセス",        romaji: "Purosesu",         group: "🔄  Status & Workflow",          katakana: true  },
+        { eng: "Flow",                     jp: "流れ",            romaji: "Nagare",           group: "🔄  Status & Workflow",          katakana: false },
+        { eng: "Call Flows",               jp: "コールフロー",    romaji: "Kōrufurō",         group: "🔄  Status & Workflow",          katakana: true  },
+        { eng: "Tickets",                  jp: "チケット",        romaji: "Chiketto",         group: "🔄  Status & Workflow",          katakana: true  },
+        { eng: "Incident",                 jp: "事件",            romaji: "Jiken",            group: "🔄  Status & Workflow",          katakana: false },
+        { eng: "Issue / Problem",          jp: "問題",            romaji: "Mondai",           group: "🔄  Status & Workflow",          katakana: false },
+        { eng: "Challenge",                jp: "課題",            romaji: "Kadai",            group: "🔄  Status & Workflow",          katakana: false },
+        { eng: "Fail",                     jp: "失敗",            romaji: "Shippai",          group: "🔄  Status & Workflow",          katakana: false },
+        { eng: "Pass",                     jp: "合格",            romaji: "Gokaku",           group: "🔄  Status & Workflow",          katakana: false },
+
+        // ── Infrastructure & Systems ──
+        { eng: "Database",                 jp: "データベース",    romaji: "Dētabēsu",         group: "🖥️  Infrastructure & Systems",   katakana: true  },
+        { eng: "Memory",                   jp: "メモリ",          romaji: "Memori",           group: "🖥️  Infrastructure & Systems",   katakana: true  },
+        { eng: "Install",                  jp: "インストール",    romaji: "Insutoru",         group: "🖥️  Infrastructure & Systems",   katakana: true  },
+        { eng: "Source",                   jp: "ソース",          romaji: "Sōsu",             group: "🖥️  Infrastructure & Systems",   katakana: true  },
+        { eng: "Structure / Config",       jp: "構成",            romaji: "Kousei",           group: "🖥️  Infrastructure & Systems",   katakana: false },
+        { eng: "Infrastructure",           jp: "インフラ",        romaji: "Infura",           group: "🖥️  Infrastructure & Systems",   katakana: true  },
+        { eng: "Environment",              jp: "環境",            romaji: "Kankyou",          group: "🖥️  Infrastructure & Systems",   katakana: false },
+        { eng: "Services",                 jp: "サービス",        romaji: "Sabisu",           group: "🖥️  Infrastructure & Systems",   katakana: true  },
+        { eng: "Browser",                  jp: "ブラウザ",        romaji: "Burauza",          group: "🖥️  Infrastructure & Systems",   katakana: true  },
+        { eng: "Construct / Build",        jp: "構築する",        romaji: "Kōchiku suru",     group: "🖥️  Infrastructure & Systems",   katakana: false },
+        { eng: "Migration / Transfer",     jp: "移行",            romaji: "Ikkou",            group: "🖥️  Infrastructure & Systems",   katakana: false },
+
+        // ── Monitoring & Alerts ──
+        { eng: "Monitoring",               jp: "監視",            romaji: "Kanshi",           group: "📊  Monitoring & Alerts",        katakana: false },
+        { eng: "Alert",                    jp: "アラート",        romaji: "Arāto",            group: "📊  Monitoring & Alerts",        katakana: true  },
+        { eng: "Dashboard",                jp: "ダッシュボード",  romaji: "Dasshubo-do",      group: "📊  Monitoring & Alerts",        katakana: true  },
+        { eng: "Logs",                     jp: "ログ",            romaji: "Rogu",             group: "📊  Monitoring & Alerts",        katakana: true  },
+        { eng: "Error",                    jp: "エラー",          romaji: "Erā",              group: "📊  Monitoring & Alerts",        katakana: true  },
+        { eng: "Warn",                     jp: "警告する",        romaji: "Keikoku suru",     group: "📊  Monitoring & Alerts",        katakana: false },
+        { eng: "Response Time",            jp: "応答時間",        romaji: "Taiou Jikan",      group: "📊  Monitoring & Alerts",        katakana: false },
+        { eng: "Impact",                   jp: "影響",            romaji: "Eikyou",           group: "📊  Monitoring & Alerts",        katakana: false },
+
+        // ── Communication ──
+        { eng: "Receive",                  jp: "受信",            romaji: "Jushin",           group: "💬  Communication",              katakana: false },
+        { eng: "Send",                     jp: "送信・送ります",  romaji: "Soushin / Okurimasu", group: "💬  Communication",            katakana: false },
+        { eng: "Reply",                    jp: "返事",            romaji: "Henji",            group: "💬  Communication",              katakana: false },
+        { eng: "Escalate",                 jp: "エスカレート",    romaji: "Esukareto",        group: "💬  Communication",              katakana: true  },
+        { eng: "Use",                      jp: "利用",            romaji: "Riyou",            group: "💬  Communication",              katakana: false },
+
+        // ── Support & Admin ──
+        { eng: "Help Desk",                jp: "ヘルプデスク",    romaji: "Herupu desuku",    group: "🛠️  Support & Admin",            katakana: true  },
+        { eng: "Support",                  jp: "サポート",        romaji: "Sapōto",           group: "🛠️  Support & Admin",            katakana: true  },
+        { eng: "Admin",                    jp: "管理者",          romaji: "Kanrisha",         group: "🛠️  Support & Admin",            katakana: false },
+        { eng: "Users",                    jp: "ユーザー",        romaji: "Yūzā",             group: "🛠️  Support & Admin",            katakana: true  },
+    ];
+
+    const knownSet = new Set(JSON.parse(localStorage.getItem('it-vocab3-known') || '[]'));
+    let currentFilter = 'all';
+    let currentUtterance = null;
+    let currentPlayingIndex = null;
+
+    function saveKnown() {
+        localStorage.setItem('it-vocab3-known', JSON.stringify([...knownSet]));
+    }
+
+    function updateStats() {
+        const known = knownSet.size;
+        const total = vocab.length;
+        const pct = Math.round((known / total) * 100);
+        document.getElementById('totalCount').textContent = total;
+        document.getElementById('knownCount').textContent = known;
+        document.getElementById('pctCount').textContent = pct + '%';
+        document.getElementById('progressFill').style.width = pct + '%';
+    }
+
+    function buildGrid() {
+        const root = document.getElementById('vocabRoot');
+        root.innerHTML = '';
+
+        const groupOrder = [
+            "📅  Bookings & Scheduling",
+            "🔄  Status & Workflow",
+            "🖥️  Infrastructure & Systems",
+            "📊  Monitoring & Alerts",
+            "💬  Communication",
+            "🛠️  Support & Admin",
+        ];
+
+        let currentGroup = null;
+        let currentGrid = null;
+
+        groupOrder.forEach(groupName => {
+            vocab.forEach((item, i) => {
+                if (item.group !== groupName) return;
+                if (currentFilter === 'known'   && !knownSet.has(i)) return;
+                if (currentFilter === 'unknown' &&  knownSet.has(i)) return;
+
+                if (item.group !== currentGroup) {
+                    currentGroup = item.group;
+                    const label = document.createElement('div');
+                    label.className = 'group-label';
+                    label.textContent = groupName;
+                    root.appendChild(label);
+                    currentGrid = document.createElement('div');
+                    currentGrid.className = 'grid';
+                    root.appendChild(currentGrid);
+                }
+
+                const card = document.createElement('div');
+                card.className = 'vocab-card' + (knownSet.has(i) ? ' known' : '');
+                card.id = 'card' + i;
+
+                const badge = item.katakana
+                    ? `<span class="badge-katakana">カタカナ</span>`
+                    : '';
+
+                card.innerHTML = `
+                    <div class="card-index">${String(i + 1).padStart(2, '0')} / ${vocab.length}</div>
+                    <div class="eng-meaning">${item.eng}</div>
+                    <div class="card-divider"></div>
+                    <div class="jp-char">${item.jp}</div>
+                    ${badge}
+                    <div class="romaji">${item.romaji}</div>
+                    <div class="card-footer">
+                        <div class="sound-icon">
+                            <span></span><span></span><span></span><span></span><span></span>
+                        </div>
+                        <button class="mark-btn" onclick="toggleKnown(event,${i})">${knownSet.has(i) ? '✓ Learned' : 'Mark Learned'}</button>
+                    </div>
+                `;
+
+                card.addEventListener('click', e => {
+                    if (e.target.classList.contains('mark-btn')) return;
+                    speakCharacter(item.jp, i);
+                });
+
+                currentGrid.appendChild(card);
+            });
+        });
+    }
+
+    function toggleKnown(e, index) {
+        e.stopPropagation();
+        if (knownSet.has(index)) knownSet.delete(index);
+        else knownSet.add(index);
+        saveKnown();
+        updateStats();
+        buildGrid();
+    }
+
+    function filterCards(type) {
+        currentFilter = type;
+        ['btnAll', 'btnUnknown', 'btnKnown'].forEach(id =>
+            document.getElementById(id).classList.remove('active'));
+        const map = { all: 'btnAll', unknown: 'btnUnknown', known: 'btnKnown' };
+        document.getElementById(map[type]).classList.add('active');
+        buildGrid();
+    }
+
+    function resetProgress() {
+        knownSet.clear();
+        saveKnown();
+        updateStats();
+        buildGrid();
+    }
+
+    function speakCharacter(text, index) {
+        if (!('speechSynthesis' in window)) {
+            alert('Your browser does not support text-to-speech.');
+            return;
+        }
+        if (currentUtterance) {
+            window.speechSynthesis.cancel();
+            resetPlayingState();
+        }
+        if (currentPlayingIndex === index) {
+            currentPlayingIndex = null;
+            return;
+        }
+
+        const utterance = new SpeechSynthesisUtterance(text);
+        const voices = window.speechSynthesis.getVoices();
+        const jpVoice = voices.find(v => v.lang === 'ja-JP' || v.lang.startsWith('ja'));
+        if (jpVoice) utterance.voice = jpVoice;
+        utterance.lang = 'ja-JP';
+        utterance.rate = 0.8;
+        utterance.pitch = 1;
+
+        currentPlayingIndex = index;
+        const card = document.getElementById('card' + index);
+        if (card) card.classList.add('playing');
+
+        utterance.onend  = () => { resetPlayingState(); currentPlayingIndex = null; };
+        utterance.onerror = () => { resetPlayingState(); currentPlayingIndex = null; };
+
+        currentUtterance = utterance;
+        window.speechSynthesis.speak(utterance);
+    }
+
+    function resetPlayingState() {
+        document.querySelectorAll('.vocab-card').forEach(c => c.classList.remove('playing'));
+    }
+
+    buildGrid();
+    updateStats();
+
+    if ('speechSynthesis' in window) {
+        window.speechSynthesis.getVoices();
+        window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+    }
+    window.addEventListener('beforeunload', () => {
+        if (window.speechSynthesis) window.speechSynthesis.cancel();
+    });
+</script>
+</body>
+</html>
