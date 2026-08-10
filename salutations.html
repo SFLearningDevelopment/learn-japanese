@@ -142,7 +142,8 @@
         .control-group {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 15px;
+            flex-wrap: wrap;
         }
 
         .volume-control {
@@ -155,6 +156,14 @@
             display: flex;
             align-items: center;
             gap: 8px;
+        }
+
+        .speed-label {
+            font-size: 0.85em;
+            font-weight: 600;
+            color: #ff6b6b;
+            min-width: 35px;
+            text-align: center;
         }
 
         .volume-slider {
@@ -262,7 +271,8 @@
                         </div>
                         <div class="speed-control">
                             <span>⚡</span>
-                            <input type="range" class="speed-slider" min="0.5" max="2" step="0.1" value="0.8" onchange="setSpeed(this.value)">
+                            <input type="range" class="speed-slider" min="0.3" max="2.5" step="0.1" value="0.8" onchange="setSpeed(this.value)">
+                            <span class="speed-label" id="speed-label-1">0.8x</span>
                         </div>
                     </div>
                     <div class="status" id="status-1"></div>
@@ -285,7 +295,8 @@
                         </div>
                         <div class="speed-control">
                             <span>⚡</span>
-                            <input type="range" class="speed-slider" min="0.5" max="2" step="0.1" value="0.8" onchange="setSpeed(this.value)">
+                            <input type="range" class="speed-slider" min="0.3" max="2.5" step="0.1" value="0.8" onchange="setSpeed(this.value)">
+                            <span class="speed-label" id="speed-label-2">0.8x</span>
                         </div>
                     </div>
                     <div class="status" id="status-2"></div>
@@ -308,7 +319,8 @@
                         </div>
                         <div class="speed-control">
                             <span>⚡</span>
-                            <input type="range" class="speed-slider" min="0.5" max="2" step="0.1" value="0.8" onchange="setSpeed(this.value)">
+                            <input type="range" class="speed-slider" min="0.3" max="2.5" step="0.1" value="0.8" onchange="setSpeed(this.value)">
+                            <span class="speed-label" id="speed-label-3">0.8x</span>
                         </div>
                     </div>
                     <div class="status" id="status-3"></div>
@@ -331,7 +343,8 @@
                         </div>
                         <div class="speed-control">
                             <span>⚡</span>
-                            <input type="range" class="speed-slider" min="0.5" max="2" step="0.1" value="0.8" onchange="setSpeed(this.value)">
+                            <input type="range" class="speed-slider" min="0.3" max="2.5" step="0.1" value="0.8" onchange="setSpeed(this.value)">
+                            <span class="speed-label" id="speed-label-4">0.8x</span>
                         </div>
                     </div>
                     <div class="status" id="status-4"></div>
@@ -354,7 +367,8 @@
                         </div>
                         <div class="speed-control">
                             <span>⚡</span>
-                            <input type="range" class="speed-slider" min="0.5" max="2" step="0.1" value="0.8" onchange="setSpeed(this.value)">
+                            <input type="range" class="speed-slider" min="0.3" max="2.5" step="0.1" value="0.8" onchange="setSpeed(this.value)">
+                            <span class="speed-label" id="speed-label-5">0.8x</span>
                         </div>
                     </div>
                     <div class="status" id="status-5"></div>
@@ -377,7 +391,8 @@
                         </div>
                         <div class="speed-control">
                             <span>⚡</span>
-                            <input type="range" class="speed-slider" min="0.5" max="2" step="0.1" value="0.8" onchange="setSpeed(this.value)">
+                            <input type="range" class="speed-slider" min="0.3" max="2.5" step="0.1" value="0.8" onchange="setSpeed(this.value)">
+                            <span class="speed-label" id="speed-label-6">0.8x</span>
                         </div>
                     </div>
                     <div class="status" id="status-6"></div>
@@ -400,7 +415,8 @@
                         </div>
                         <div class="speed-control">
                             <span>⚡</span>
-                            <input type="range" class="speed-slider" min="0.5" max="2" step="0.1" value="0.8" onchange="setSpeed(this.value)">
+                            <input type="range" class="speed-slider" min="0.3" max="2.5" step="0.1" value="0.8" onchange="setSpeed(this.value)">
+                            <span class="speed-label" id="speed-label-7">0.8x</span>
                         </div>
                     </div>
                     <div class="status" id="status-7"></div>
@@ -423,7 +439,8 @@
                         </div>
                         <div class="speed-control">
                             <span>⚡</span>
-                            <input type="range" class="speed-slider" min="0.5" max="2" step="0.1" value="0.8" onchange="setSpeed(this.value)">
+                            <input type="range" class="speed-slider" min="0.3" max="2.5" step="0.1" value="0.8" onchange="setSpeed(this.value)">
+                            <span class="speed-label" id="speed-label-8">0.8x</span>
                         </div>
                     </div>
                     <div class="status" id="status-8"></div>
@@ -444,7 +461,8 @@
                         </div>
                         <div class="speed-control">
                             <span>⚡</span>
-                            <input type="range" class="speed-slider" min="0.5" max="2" step="0.1" value="0.8" onchange="setSpeed(this.value)">
+                            <input type="range" class="speed-slider" min="0.3" max="2.5" step="0.1" value="0.8" onchange="setSpeed(this.value)">
+                            <span class="speed-label" id="speed-label-9">0.8x</span>
                         </div>
                     </div>
                     <div class="status" id="status-9"></div>
@@ -465,7 +483,8 @@
                         </div>
                         <div class="speed-control">
                             <span>⚡</span>
-                            <input type="range" class="speed-slider" min="0.5" max="2" step="0.1" value="0.8" onchange="setSpeed(this.value)">
+                            <input type="range" class="speed-slider" min="0.3" max="2.5" step="0.1" value="0.8" onchange="setSpeed(this.value)">
+                            <span class="speed-label" id="speed-label-10">0.8x</span>
                         </div>
                     </div>
                     <div class="status" id="status-10"></div>
@@ -475,7 +494,7 @@
         
         <div class="footer">
             <p>💡 Click the play buttons to hear native-like pronunciation. Adjust volume (🔈) and speed (⚡) with the sliders.</p>
-            <p>Compatible with all modern web browsers that support Web Speech API.</p>
+            <p>Speed range: 0.3x (very slow) to 2.5x (very fast). Compatible with all modern web browsers that support Web Speech API.</p>
         </div>
     </div>
 
@@ -493,9 +512,11 @@
 
         function setSpeed(speed) {
             currentSpeed = parseFloat(speed);
-            // Update all speed sliders to the same value
+            // Update all speed sliders and labels to the same value
             const sliders = document.querySelectorAll('.speed-slider');
+            const labels = document.querySelectorAll('.speed-label');
             sliders.forEach(slider => slider.value = speed);
+            labels.forEach(label => label.textContent = currentSpeed.toFixed(1) + 'x');
         }
 
         function speak(text, lang) {
@@ -562,8 +583,10 @@
         document.addEventListener('DOMContentLoaded', function() {
             const volumeSliders = document.querySelectorAll('.volume-slider');
             const speedSliders = document.querySelectorAll('.speed-slider');
+            const speedLabels = document.querySelectorAll('.speed-label');
             volumeSliders.forEach(slider => slider.value = currentVolume);
             speedSliders.forEach(slider => slider.value = currentSpeed);
+            speedLabels.forEach(label => label.textContent = currentSpeed.toFixed(1) + 'x');
         });
     </script>
 </body>
