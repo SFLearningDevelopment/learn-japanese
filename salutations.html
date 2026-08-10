@@ -112,6 +112,7 @@
             display: flex;
             gap: 10px;
             align-items: center;
+            flex-wrap: wrap;
         }
 
         .play-btn {
@@ -138,11 +139,22 @@
             transform: scale(0.95);
         }
 
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
         .volume-control {
             display: flex;
             align-items: center;
             gap: 8px;
-            margin-left: 15px;
+        }
+
+        .speed-control {
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .volume-slider {
@@ -160,6 +172,24 @@
             height: 15px;
             border-radius: 50%;
             background: #4ecdc4;
+            cursor: pointer;
+        }
+
+        .speed-slider {
+            width: 80px;
+            height: 5px;
+            border-radius: 5px;
+            background: #ddd;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .speed-slider::-webkit-slider-thumb {
+            appearance: none;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: #ff6b6b;
             cursor: pointer;
         }
 
@@ -192,7 +222,16 @@
                 align-items: stretch;
             }
             
+            .control-group {
+                justify-content: center;
+            }
+
             .volume-control {
+                margin-left: 0;
+                justify-content: center;
+            }
+
+            .speed-control {
                 margin-left: 0;
                 justify-content: center;
             }
@@ -216,9 +255,15 @@
                     <button class="play-btn" onclick="speak('おはよう', 'ja-JP')">
                         🔊 Play
                     </button>
-                    <div class="volume-control">
-                        <span>🔈</span>
-                        <input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" onchange="setVolume(this.value)">
+                    <div class="control-group">
+                        <div class="volume-control">
+                            <span>🔈</span>
+                            <input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" onchange="setVolume(this.value)">
+                        </div>
+                        <div class="speed-control">
+                            <span>⚡</span>
+                            <input type="range" class="speed-slider" min="0.5" max="2" step="0.1" value="0.8" onchange="setSpeed(this.value)">
+                        </div>
                     </div>
                     <div class="status" id="status-1"></div>
                 </div>
@@ -233,9 +278,15 @@
                     <button class="play-btn" onclick="speak('おはようございます', 'ja-JP')">
                         🔊 Play
                     </button>
-                    <div class="volume-control">
-                        <span>🔈</span>
-                        <input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" onchange="setVolume(this.value)">
+                    <div class="control-group">
+                        <div class="volume-control">
+                            <span>🔈</span>
+                            <input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" onchange="setVolume(this.value)">
+                        </div>
+                        <div class="speed-control">
+                            <span>⚡</span>
+                            <input type="range" class="speed-slider" min="0.5" max="2" step="0.1" value="0.8" onchange="setSpeed(this.value)">
+                        </div>
                     </div>
                     <div class="status" id="status-2"></div>
                 </div>
@@ -250,9 +301,15 @@
                     <button class="play-btn" onclick="speak('こんにちは', 'ja-JP')">
                         🔊 Play
                     </button>
-                    <div class="volume-control">
-                        <span>🔈</span>
-                        <input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" onchange="setVolume(this.value)">
+                    <div class="control-group">
+                        <div class="volume-control">
+                            <span>🔈</span>
+                            <input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" onchange="setVolume(this.value)">
+                        </div>
+                        <div class="speed-control">
+                            <span>⚡</span>
+                            <input type="range" class="speed-slider" min="0.5" max="2" step="0.1" value="0.8" onchange="setSpeed(this.value)">
+                        </div>
                     </div>
                     <div class="status" id="status-3"></div>
                 </div>
@@ -267,9 +324,15 @@
                     <button class="play-btn" onclick="speak('こんばんは', 'ja-JP')">
                         🔊 Play
                     </button>
-                    <div class="volume-control">
-                        <span>🔈</span>
-                        <input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" onchange="setVolume(this.value)">
+                    <div class="control-group">
+                        <div class="volume-control">
+                            <span>🔈</span>
+                            <input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" onchange="setVolume(this.value)">
+                        </div>
+                        <div class="speed-control">
+                            <span>⚡</span>
+                            <input type="range" class="speed-slider" min="0.5" max="2" step="0.1" value="0.8" onchange="setSpeed(this.value)">
+                        </div>
                     </div>
                     <div class="status" id="status-4"></div>
                 </div>
@@ -284,9 +347,15 @@
                     <button class="play-btn" onclick="speak('さようなら', 'ja-JP')">
                         🔊 Play
                     </button>
-                    <div class="volume-control">
-                        <span>🔈</span>
-                        <input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" onchange="setVolume(this.value)">
+                    <div class="control-group">
+                        <div class="volume-control">
+                            <span>🔈</span>
+                            <input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" onchange="setVolume(this.value)">
+                        </div>
+                        <div class="speed-control">
+                            <span>⚡</span>
+                            <input type="range" class="speed-slider" min="0.5" max="2" step="0.1" value="0.8" onchange="setSpeed(this.value)">
+                        </div>
                     </div>
                     <div class="status" id="status-5"></div>
                 </div>
@@ -301,9 +370,15 @@
                     <button class="play-btn" onclick="speak('また明日', 'ja-JP')">
                         🔊 Play
                     </button>
-                    <div class="volume-control">
-                        <span>🔈</span>
-                        <input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" onchange="setVolume(this.value)">
+                    <div class="control-group">
+                        <div class="volume-control">
+                            <span>🔈</span>
+                            <input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" onchange="setVolume(this.value)">
+                        </div>
+                        <div class="speed-control">
+                            <span>⚡</span>
+                            <input type="range" class="speed-slider" min="0.5" max="2" step="0.1" value="0.8" onchange="setSpeed(this.value)">
+                        </div>
                     </div>
                     <div class="status" id="status-6"></div>
                 </div>
@@ -318,9 +393,15 @@
                     <button class="play-btn" onclick="speak('はじめまして', 'ja-JP')">
                         🔊 Play
                     </button>
-                    <div class="volume-control">
-                        <span>🔈</span>
-                        <input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" onchange="setVolume(this.value)">
+                    <div class="control-group">
+                        <div class="volume-control">
+                            <span>🔈</span>
+                            <input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" onchange="setVolume(this.value)">
+                        </div>
+                        <div class="speed-control">
+                            <span>⚡</span>
+                            <input type="range" class="speed-slider" min="0.5" max="2" step="0.1" value="0.8" onchange="setSpeed(this.value)">
+                        </div>
                     </div>
                     <div class="status" id="status-7"></div>
                 </div>
@@ -335,9 +416,15 @@
                     <button class="play-btn" onclick="speak('お疲れ様', 'ja-JP')">
                         🔊 Play
                     </button>
-                    <div class="volume-control">
-                        <span>🔈</span>
-                        <input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" onchange="setVolume(this.value)">
+                    <div class="control-group">
+                        <div class="volume-control">
+                            <span>🔈</span>
+                            <input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" onchange="setVolume(this.value)">
+                        </div>
+                        <div class="speed-control">
+                            <span>⚡</span>
+                            <input type="range" class="speed-slider" min="0.5" max="2" step="0.1" value="0.8" onchange="setSpeed(this.value)">
+                        </div>
                     </div>
                     <div class="status" id="status-8"></div>
                 </div>
@@ -350,9 +437,15 @@
                     <button class="play-btn" onclick="speak('しつれいします', 'ja-JP')">
                         🔊 Play
                     </button>
-                    <div class="volume-control">
-                        <span>🔈</span>
-                        <input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" onchange="setVolume(this.value)">
+                    <div class="control-group">
+                        <div class="volume-control">
+                            <span>🔈</span>
+                            <input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" onchange="setVolume(this.value)">
+                        </div>
+                        <div class="speed-control">
+                            <span>⚡</span>
+                            <input type="range" class="speed-slider" min="0.5" max="2" step="0.1" value="0.8" onchange="setSpeed(this.value)">
+                        </div>
                     </div>
                     <div class="status" id="status-9"></div>
                 </div>
@@ -365,9 +458,15 @@
                     <button class="play-btn" onclick="speak('すみません', 'ja-JP')">
                         🔊 Play
                     </button>
-                    <div class="volume-control">
-                        <span>🔈</span>
-                        <input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" onchange="setVolume(this.value)">
+                    <div class="control-group">
+                        <div class="volume-control">
+                            <span>🔈</span>
+                            <input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" onchange="setVolume(this.value)">
+                        </div>
+                        <div class="speed-control">
+                            <span>⚡</span>
+                            <input type="range" class="speed-slider" min="0.5" max="2" step="0.1" value="0.8" onchange="setSpeed(this.value)">
+                        </div>
                     </div>
                     <div class="status" id="status-10"></div>
                 </div>
@@ -375,13 +474,14 @@
         </div>
         
         <div class="footer">
-            <p>💡 Click the play buttons to hear native-like pronunciation. Adjust volume with the sliders.</p>
+            <p>💡 Click the play buttons to hear native-like pronunciation. Adjust volume (🔈) and speed (⚡) with the sliders.</p>
             <p>Compatible with all modern web browsers that support Web Speech API.</p>
         </div>
     </div>
 
     <script>
         let currentVolume = 0.8;
+        let currentSpeed = 0.8;
         let currentUtterance = null;
 
         function setVolume(volume) {
@@ -389,6 +489,13 @@
             // Update all volume sliders to the same value
             const sliders = document.querySelectorAll('.volume-slider');
             sliders.forEach(slider => slider.value = volume);
+        }
+
+        function setSpeed(speed) {
+            currentSpeed = parseFloat(speed);
+            // Update all speed sliders to the same value
+            const sliders = document.querySelectorAll('.speed-slider');
+            sliders.forEach(slider => slider.value = speed);
         }
 
         function speak(text, lang) {
@@ -407,7 +514,7 @@
             currentUtterance = new SpeechSynthesisUtterance(text);
             currentUtterance.lang = lang;
             currentUtterance.volume = currentVolume;
-            currentUtterance.rate = 0.8; // Slightly slower for learning
+            currentUtterance.rate = currentSpeed;
             currentUtterance.pitch = 1;
 
             // Try to use a Japanese voice if available
@@ -451,12 +558,12 @@
             // Voices are now loaded
         };
 
-        // Initialize volume sliders
+        // Initialize sliders
         document.addEventListener('DOMContentLoaded', function() {
-            const sliders = document.querySelectorAll('.volume-slider');
-            sliders.forEach(slider => {
-                slider.value = currentVolume;
-            });
+            const volumeSliders = document.querySelectorAll('.volume-slider');
+            const speedSliders = document.querySelectorAll('.speed-slider');
+            volumeSliders.forEach(slider => slider.value = currentVolume);
+            speedSliders.forEach(slider => slider.value = currentSpeed);
         });
     </script>
 </body>
