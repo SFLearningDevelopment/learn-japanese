@@ -348,6 +348,8 @@
         let currentVolume = 0.8;
         let currentSpeed = 0.8;
         let currentUtterance = null;
+        let currentText = null;
+        let currentLang = null;
 
         function setVolume(volume) {
             currentVolume = parseFloat(volume);
@@ -361,24 +363,38 @@
             const labels = document.querySelectorAll('.speed-label');
             sliders.forEach(slider => slider.value = speed);
             labels.forEach(label => label.textContent = currentSpeed.toFixed(1) + 'x');
+            
+            // If something is currently playing, restart it with the new speed
+            if (currentUtterance && speechSynthesis.speaking) {
+                speechSynthesis.cancel();
+                speak(currentText, currentLang);
+            }
         }
 
         function speak(text, lang) {
+            // Store current text and language for speed adjustment
+            currentText = text;
+            currentLang = lang;
+            
+            // Stop any currently playing speech
             if (currentUtterance) {
                 speechSynthesis.cancel();
             }
 
+            // Check if speech synthesis is supported
             if (!('speechSynthesis' in window)) {
                 alert('Sorry, your browser does not support text-to-speech.');
                 return;
             }
 
+            // Create new utterance
             currentUtterance = new SpeechSynthesisUtterance(text);
             currentUtterance.lang = lang;
             currentUtterance.volume = currentVolume;
             currentUtterance.rate = currentSpeed;
             currentUtterance.pitch = 1;
 
+            // Try to use a Japanese voice if available
             const voices = speechSynthesis.getVoices();
             const japaneseVoice = voices.find(voice => 
                 voice.lang.includes('ja') || voice.name.includes('Japanese')
@@ -388,6 +404,7 @@
                 currentUtterance.voice = japaneseVoice;
             }
 
+            // Event listeners
             currentUtterance.onstart = function() {
                 updateStatus('Playing...');
             };
@@ -402,6 +419,7 @@
                 currentUtterance = null;
             };
 
+            // Speak the text
             speechSynthesis.speak(currentUtterance);
         }
 
@@ -412,10 +430,12 @@
             });
         }
 
+        // Load voices when they become available
         speechSynthesis.onvoiceschanged = function() {
             // Voices are now loaded
         };
 
+        // Initialize sliders
         document.addEventListener('DOMContentLoaded', function() {
             const volumeSliders = document.querySelectorAll('.volume-slider');
             const speedSliders = document.querySelectorAll('.speed-slider');
