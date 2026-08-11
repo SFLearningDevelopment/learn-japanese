@@ -149,10 +149,10 @@
         }
 
         .speed-label {
-            font-size: 0.85em;
-            font-weight: 600;
-            color: #667eea;
-            min-width: 35px;
+            font-size: 0.9em;
+            font-weight: 700;
+            color: #e63946;
+            min-width: 40px;
             text-align: center;
         }
 
@@ -175,21 +175,32 @@
         }
 
         .speed-slider {
-            width: 80px;
-            height: 5px;
+            width: 120px;
+            height: 8px;
             border-radius: 5px;
-            background: #ddd;
+            background: #ffd6d6;
             outline: none;
             cursor: pointer;
         }
 
         .speed-slider::-webkit-slider-thumb {
             appearance: none;
-            width: 15px;
-            height: 15px;
+            width: 20px;
+            height: 20px;
             border-radius: 50%;
-            background: #667eea;
+            background: #e63946;
             cursor: pointer;
+            border: 2px solid #fff;
+            box-shadow: 0 0 4px rgba(230,57,70,0.6);
+        }
+
+        .speed-slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #e63946;
+            cursor: pointer;
+            border: 2px solid #fff;
         }
 
         .status {
@@ -256,12 +267,13 @@
                     <div class="control-group">
                         <div class="volume-control">
                             <span>🔈</span>
-                            <input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" onchange="setVolume(this.value)">
+                            <input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" oninput="setVolume(this.value)">
                         </div>
                         <div class="speed-control">
-                            <span>⚡</span>
-                            <input type="range" class="speed-slider" min="0.3" max="2.5" step="0.1" value="0.8" onchange="setSpeed(this.value)">
-                            <span class="speed-label" id="speed-label-1">0.8x</span>
+                            <span>🐢</span>
+                            <input type="range" class="speed-slider" min="0.1" max="2" step="0.1" value="1" oninput="setSpeed(this.value)">
+                            <span>🐇</span>
+                            <span class="speed-label" id="speed-label-1">1.0x</span>
                         </div>
                     </div>
                     <div class="status" id="status-1"></div>
@@ -279,12 +291,13 @@
                     <div class="control-group">
                         <div class="volume-control">
                             <span>🔈</span>
-                            <input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" onchange="setVolume(this.value)">
+                            <input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" oninput="setVolume(this.value)">
                         </div>
                         <div class="speed-control">
-                            <span>⚡</span>
-                            <input type="range" class="speed-slider" min="0.3" max="2.5" step="0.1" value="0.8" onchange="setSpeed(this.value)">
-                            <span class="speed-label" id="speed-label-2">0.8x</span>
+                            <span>🐢</span>
+                            <input type="range" class="speed-slider" min="0.1" max="2" step="0.1" value="1" oninput="setSpeed(this.value)">
+                            <span>🐇</span>
+                            <span class="speed-label" id="speed-label-2">1.0x</span>
                         </div>
                     </div>
                     <div class="status" id="status-2"></div>
@@ -302,12 +315,13 @@
                     <div class="control-group">
                         <div class="volume-control">
                             <span>🔈</span>
-                            <input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" onchange="setVolume(this.value)">
+                            <input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" oninput="setVolume(this.value)">
                         </div>
                         <div class="speed-control">
-                            <span>⚡</span>
-                            <input type="range" class="speed-slider" min="0.3" max="2.5" step="0.1" value="0.8" onchange="setSpeed(this.value)">
-                            <span class="speed-label" id="speed-label-3">0.8x</span>
+                            <span>🐢</span>
+                            <input type="range" class="speed-slider" min="0.1" max="2" step="0.1" value="1" oninput="setSpeed(this.value)">
+                            <span>🐇</span>
+                            <span class="speed-label" id="speed-label-3">1.0x</span>
                         </div>
                     </div>
                     <div class="status" id="status-3"></div>
@@ -325,12 +339,13 @@
                     <div class="control-group">
                         <div class="volume-control">
                             <span>🔈</span>
-                            <input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" onchange="setVolume(this.value)">
+                            <input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" oninput="setVolume(this.value)">
                         </div>
                         <div class="speed-control">
-                            <span>⚡</span>
-                            <input type="range" class="speed-slider" min="0.3" max="2.5" step="0.1" value="0.8" onchange="setSpeed(this.value)">
-                            <span class="speed-label" id="speed-label-4">0.8x</span>
+                            <span>🐢</span>
+                            <input type="range" class="speed-slider" min="0.1" max="2" step="0.1" value="1" oninput="setSpeed(this.value)">
+                            <span>🐇</span>
+                            <span class="speed-label" id="speed-label-4">1.0x</span>
                         </div>
                     </div>
                     <div class="status" id="status-4"></div>
@@ -339,110 +354,78 @@
         </div>
         
         <div class="footer">
-            <p>💡 Click the play buttons to hear native-like pronunciation. Adjust volume (🔈) and speed (⚡) with the sliders.</p>
-            <p>Speed range: 0.3x (very slow) to 2.5x (very fast). Compatible with all modern web browsers that support Web Speech API.</p>
+            <p>💡 Set the speed with the red slider (🐢 slow ↔ 🐇 fast), THEN click Play to hear it at that speed.</p>
+            <p>Speed range: 0.1x (very slow) to 2.0x (fast). Compatible with modern browsers supporting the Web Speech API.</p>
         </div>
     </div>
 
     <script>
         let currentVolume = 0.8;
-        let currentSpeed = 0.8;
+        let currentSpeed = 1.0;
         let currentUtterance = null;
         let currentText = null;
         let currentLang = null;
 
         function setVolume(volume) {
             currentVolume = parseFloat(volume);
-            const sliders = document.querySelectorAll('.volume-slider');
-            sliders.forEach(slider => slider.value = volume);
+            document.querySelectorAll('.volume-slider').forEach(slider => slider.value = volume);
         }
 
         function setSpeed(speed) {
             currentSpeed = parseFloat(speed);
-            const sliders = document.querySelectorAll('.speed-slider');
-            const labels = document.querySelectorAll('.speed-label');
-            sliders.forEach(slider => slider.value = speed);
-            labels.forEach(label => label.textContent = currentSpeed.toFixed(1) + 'x');
-            
-            // If something is currently playing, restart it with the new speed
-            if (currentUtterance && speechSynthesis.speaking) {
-                speechSynthesis.cancel();
-                speak(currentText, currentLang);
-            }
+            document.querySelectorAll('.speed-slider').forEach(slider => slider.value = speed);
+            document.querySelectorAll('.speed-label').forEach(label => label.textContent = currentSpeed.toFixed(1) + 'x');
         }
 
         function speak(text, lang) {
-            // Store current text and language for speed adjustment
             currentText = text;
             currentLang = lang;
-            
-            // Stop any currently playing speech
-            if (currentUtterance) {
-                speechSynthesis.cancel();
-            }
 
-            // Check if speech synthesis is supported
+            // Always cancel any ongoing/queued speech first
+            speechSynthesis.cancel();
+
             if (!('speechSynthesis' in window)) {
                 alert('Sorry, your browser does not support text-to-speech.');
                 return;
             }
 
-            // Create new utterance
-            currentUtterance = new SpeechSynthesisUtterance(text);
-            currentUtterance.lang = lang;
-            currentUtterance.volume = currentVolume;
-            currentUtterance.rate = currentSpeed;
-            currentUtterance.pitch = 1;
+            // Small delay ensures cancel() fully clears the queue before we speak again
+            setTimeout(function() {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = lang;
+                utterance.volume = currentVolume;
+                utterance.rate = currentSpeed;   // rate is applied here, at creation
+                utterance.pitch = 1;
 
-            // Try to use a Japanese voice if available
-            const voices = speechSynthesis.getVoices();
-            const japaneseVoice = voices.find(voice => 
-                voice.lang.includes('ja') || voice.name.includes('Japanese')
-            );
-            
-            if (japaneseVoice) {
-                currentUtterance.voice = japaneseVoice;
-            }
+                const voices = speechSynthesis.getVoices();
+                const japaneseVoice = voices.find(voice =>
+                    voice.lang.includes('ja') || voice.name.includes('Japanese')
+                );
+                if (japaneseVoice) {
+                    utterance.voice = japaneseVoice;
+                }
 
-            // Event listeners
-            currentUtterance.onstart = function() {
-                updateStatus('Playing...');
-            };
+                utterance.onstart = function() { updateStatus('Playing at ' + currentSpeed.toFixed(1) + 'x...'); };
+                utterance.onend = function() { updateStatus(''); currentUtterance = null; };
+                utterance.onerror = function() { updateStatus(''); currentUtterance = null; };
 
-            currentUtterance.onend = function() {
-                updateStatus('');
-                currentUtterance = null;
-            };
-
-            currentUtterance.onerror = function(event) {
-                updateStatus('Error playing audio');
-                currentUtterance = null;
-            };
-
-            // Speak the text
-            speechSynthesis.speak(currentUtterance);
+                currentUtterance = utterance;
+                speechSynthesis.speak(utterance);
+            }, 60);
         }
 
         function updateStatus(message) {
-            const statusElements = document.querySelectorAll('[id^="status-"]');
-            statusElements.forEach(element => {
+            document.querySelectorAll('[id^="status-"]').forEach(element => {
                 element.textContent = message;
             });
         }
 
-        // Load voices when they become available
-        speechSynthesis.onvoiceschanged = function() {
-            // Voices are now loaded
-        };
+        speechSynthesis.onvoiceschanged = function() { /* voices loaded */ };
 
-        // Initialize sliders
         document.addEventListener('DOMContentLoaded', function() {
-            const volumeSliders = document.querySelectorAll('.volume-slider');
-            const speedSliders = document.querySelectorAll('.speed-slider');
-            const speedLabels = document.querySelectorAll('.speed-label');
-            volumeSliders.forEach(slider => slider.value = currentVolume);
-            speedSliders.forEach(slider => slider.value = currentSpeed);
-            speedLabels.forEach(label => label.textContent = currentSpeed.toFixed(1) + 'x');
+            document.querySelectorAll('.volume-slider').forEach(slider => slider.value = currentVolume);
+            document.querySelectorAll('.speed-slider').forEach(slider => slider.value = currentSpeed);
+            document.querySelectorAll('.speed-label').forEach(label => label.textContent = currentSpeed.toFixed(1) + 'x');
         });
     </script>
 </body>
