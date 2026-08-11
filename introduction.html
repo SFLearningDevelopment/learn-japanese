@@ -271,7 +271,7 @@
                         </div>
                         <div class="speed-control">
                             <span>🐢</span>
-                            <input type="range" class="speed-slider" min="0.1" max="2" step="0.1" value="1" oninput="setSpeed(this.value)">
+                            <input type="range" class="speed-slider" min="0.5" max="1.5" step="0.1" value="1" oninput="setSpeed(this.value)">
                             <span>🐇</span>
                             <span class="speed-label" id="speed-label-1">1.0x</span>
                         </div>
@@ -295,7 +295,7 @@
                         </div>
                         <div class="speed-control">
                             <span>🐢</span>
-                            <input type="range" class="speed-slider" min="0.1" max="2" step="0.1" value="1" oninput="setSpeed(this.value)">
+                            <input type="range" class="speed-slider" min="0.5" max="1.5" step="0.1" value="1" oninput="setSpeed(this.value)">
                             <span>🐇</span>
                             <span class="speed-label" id="speed-label-2">1.0x</span>
                         </div>
@@ -319,7 +319,7 @@
                         </div>
                         <div class="speed-control">
                             <span>🐢</span>
-                            <input type="range" class="speed-slider" min="0.1" max="2" step="0.1" value="1" oninput="setSpeed(this.value)">
+                            <input type="range" class="speed-slider" min="0.5" max="1.5" step="0.1" value="1" oninput="setSpeed(this.value)">
                             <span>🐇</span>
                             <span class="speed-label" id="speed-label-3">1.0x</span>
                         </div>
@@ -343,7 +343,7 @@
                         </div>
                         <div class="speed-control">
                             <span>🐢</span>
-                            <input type="range" class="speed-slider" min="0.1" max="2" step="0.1" value="1" oninput="setSpeed(this.value)">
+                            <input type="range" class="speed-slider" min="0.5" max="1.5" step="0.1" value="1" oninput="setSpeed(this.value)">
                             <span>🐇</span>
                             <span class="speed-label" id="speed-label-4">1.0x</span>
                         </div>
@@ -354,17 +354,14 @@
         </div>
         
         <div class="footer">
-            <p>💡 Set the speed with the red slider (🐢 slow ↔ 🐇 fast), THEN click Play to hear it at that speed.</p>
-            <p>Speed range: 0.1x (very slow) to 2.0x (fast). Compatible with modern browsers supporting the Web Speech API.</p>
+            <p>💡 Set the speed with the red slider (🐢 slow ↔ 🐇 fast), then click Play to hear it at that speed.</p>
+            <p>Works across browsers and operating systems using the Web Speech API.</p>
         </div>
     </div>
 
     <script>
         let currentVolume = 0.8;
         let currentSpeed = 1.0;
-        let currentUtterance = null;
-        let currentText = null;
-        let currentLang = null;
 
         function setVolume(volume) {
             currentVolume = parseFloat(volume);
@@ -378,23 +375,20 @@
         }
 
         function speak(text, lang) {
-            currentText = text;
-            currentLang = lang;
-
-            // Always cancel any ongoing/queued speech first
-            speechSynthesis.cancel();
-
             if (!('speechSynthesis' in window)) {
                 alert('Sorry, your browser does not support text-to-speech.');
                 return;
             }
 
-            // Small delay ensures cancel() fully clears the queue before we speak again
+            // Clear any ongoing/queued speech first
+            speechSynthesis.cancel();
+
+            // Short delay lets the queue clear so rate is honored (Chrome quirk)
             setTimeout(function() {
                 const utterance = new SpeechSynthesisUtterance(text);
                 utterance.lang = lang;
                 utterance.volume = currentVolume;
-                utterance.rate = currentSpeed;   // rate is applied here, at creation
+                utterance.rate = currentSpeed;
                 utterance.pitch = 1;
 
                 const voices = speechSynthesis.getVoices();
@@ -406,10 +400,9 @@
                 }
 
                 utterance.onstart = function() { updateStatus('Playing at ' + currentSpeed.toFixed(1) + 'x...'); };
-                utterance.onend = function() { updateStatus(''); currentUtterance = null; };
-                utterance.onerror = function() { updateStatus(''); currentUtterance = null; };
+                utterance.onend = function() { updateStatus(''); };
+                utterance.onerror = function() { updateStatus(''); };
 
-                currentUtterance = utterance;
                 speechSynthesis.speak(utterance);
             }, 60);
         }
