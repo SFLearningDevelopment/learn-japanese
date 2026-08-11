@@ -3,119 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Speech Rate Diagnostic</title>
+    <title>Japanese Introduction with Audio Pronunciation</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; padding: 20px; max-width: 700px; margin: 0 auto; }
-        .card { background: #fff; border-radius: 12px; padding: 24px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
-        h1 { color: #333; margin-bottom: 8px; }
-        .phrase { font-size: 2em; margin-bottom: 12px; }
-        button { background: #667eea; color: #fff; border: none; padding: 12px 24px; border-radius: 20px; font-size: 1em; cursor: pointer; margin-right: 8px; }
-        button:hover { background: #556; }
-        .speed-row { display: flex; align-items: center; gap: 12px; margin: 16px 0; }
-        input[type=range] { width: 200px; height: 8px; }
-        .big-label { font-size: 1.3em; font-weight: 700; color: #e63946; min-width: 60px; }
-        #diag { background: #1e1e2e; color: #a6e3a1; font-family: monospace; font-size: 0.85em; padding: 16px; border-radius: 8px; white-space: pre-wrap; line-height: 1.5; }
-        .voice-list { max-height: 120px; overflow-y: auto; background: #f8f9fa; padding: 10px; border-radius: 6px; font-size: 0.85em; margin-top: 8px; }
-        .warn { background: #fff3cd; color: #856404; padding: 12px; border-radius: 8px; margin-top: 12px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: rgba(255,255,255,0.95); border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 2.5em; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        .header p { font-size: 1.1em; opacity: 0.9; }
+        .voice-picker { background: #eef0ff; padding: 16px 30px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; border-bottom: 1px solid #dfe3ff; }
+        .voice-picker label { font-weight: 600; color: #4a4a6a; }
+        .voice-picker select { padding: 8px 12px; border-radius: 8px; border: 1px solid #c3c8f0; font-size: 0.95em; flex: 1; min-width: 200px; }
+        .content { padding: 30px; }
+        .introduction-card { background: white; border-radius: 15px; padding: 25px; margin-bottom: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); border-left: 5px solid #667eea; transition: all 0.3s ease; position: relative; overflow: hidden; }
+        .introduction-card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0,0,0,0.15); }
+        .introduction-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: linear-gradient(90deg, #667eea, #764ba2, #4ecdc4); }
+        .japanese-text { font-size: 2em; font-weight: bold; color: #2c3e50; margin-bottom: 10px; font-family: 'Hiragino Kaku Gothic Pro', 'Yu Gothic', sans-serif; }
+        .romanji { font-size: 1.3em; color: #7f8c8d; font-style: italic; margin-bottom: 8px; }
+        .english { font-size: 1.2em; color: #667eea; font-weight: 600; margin-bottom: 15px; }
+        .audio-controls { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+        .play-btn { background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; padding: 12px 20px; border-radius: 25px; cursor: pointer; font-size: 1em; font-weight: 600; transition: all 0.3s ease; display: flex; align-items: center; gap: 8px; }
+        .play-btn:hover { background: linear-gradient(135deg, #764ba2, #667eea); transform: scale(1.05); }
+        .play-btn:active { transform: scale(0.95); }
+        .control-group { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
+        .volume-control, .speed-control { display: flex; align-items: center; gap: 8px; }
+        .speed-label { font-size: 0.9em; font-weight: 700; color: #e63946; min-width: 40px; text-align: center; }
+        .volume-slider { width: 80px; height: 5px; border-radius: 5px; background: #ddd; outline: none; cursor: pointer; }
+        .volume-slider::-webkit-slider-thumb { appearance: none; width: 15px; height: 15px; border-radius: 50%; background: #4ecdc4; cursor: pointer; }
+        .speed-slider { width: 120px; height: 8px; border-radius: 5px; background: #ffd6d6; outline: none; cursor: pointer; }
+        .speed-slider::-webkit-slider-thumb { appearance: none; width: 20px; height: 20px; border-radius: 50%; background: #e63946; cursor: pointer; border: 2px solid #fff; box-shadow: 0 0 4px rgba(230,57,70,0.6); }
+        .speed-slider::-moz-range-thumb { width: 20px; height: 20px; border-radius: 50%; background: #e63946; cursor: pointer; border: 2px solid #fff; }
+        .status { font-size: 0.9em; color: #7f8c8d; margin-left: auto; font-style: italic; }
+        .footer { text-align: center; padding: 20px; background: #f8f9fa; color: #666; font-size: 0.9em; }
+        @media (max-width: 600px) {
+            .header h1 { font-size: 2em; }
+            .japanese-text { font-size: 1.5em; }
+            .audio-controls { flex-direction: column; align-items: stretch; }
+            .control-group { justify-content: center; }
+            .volume-control, .speed-control { margin-left: 0; justify-content: center; }
+        }
     </style>
 </head>
 <body>
-    <div class="card">
-        <h1>🔬 Speech Rate Diagnostic</h1>
-        <p>This page tests whether your browser actually changes speech speed. Set the slider, then press a Play button. Watch the diagnostic box at the bottom.</p>
-    </div>
-
-    <div class="card">
-        <div class="phrase">はじめまして</div>
-        <div class="speed-row">
-            <span>🐢 Slow</span>
-            <input type="range" id="speed" min="0.5" max="2" step="0.1" value="1" oninput="updateLabel(this.value)">
-            <span>🐇 Fast</span>
-            <span class="big-label" id="label">1.0x</span>
-        </div>
-        <button onclick="testSpeak('はじめまして')">🔊 Play Japanese</button>
-        <button onclick="testSpeak('It was a dark and stormy night in Tokyo.')">🔊 Play English (control test)</button>
-        <div id="voiceWarn"></div>
-    </div>
-
-    <div class="card">
-        <strong>Diagnostic output:</strong>
-        <div id="diag" style="margin-top:8px;">Waiting for first play...</div>
-        <strong style="display:block; margin-top:16px;">Available voices on this device:</strong>
-        <div class="voice-list" id="voiceList">Loading...</div>
-    </div>
-
-    <script>
-        let currentSpeed = 1.0;
-        const synth = window.speechSynthesis;
-
-        function updateLabel(v) {
-            currentSpeed = parseFloat(v);
-            document.getElementById('label').textContent = currentSpeed.toFixed(1) + 'x';
-        }
-
-        function log(msg) {
-            document.getElementById('diag').textContent = msg;
-        }
-
-        function listVoices() {
-            const voices = synth.getVoices();
-            const jaVoices = voices.filter(v => v.lang.toLowerCase().includes('ja'));
-            document.getElementById('voiceList').innerHTML = voices.length
-                ? voices.map(v => `${v.name} — ${v.lang}${v.lang.toLowerCase().includes('ja') ? ' ✅ (Japanese)' : ''}`).join('<br>')
-                : 'No voices reported yet.';
-
-            const warnEl = document.getElementById('voiceWarn');
-            if (voices.length && jaVoices.length === 0) {
-                warnEl.innerHTML = '<div class="warn">⚠️ No Japanese voice is installed on this device. The browser will fall back to a default voice that often ignores the rate setting. This is the most common reason speed changes have no effect. Install a Japanese language pack in your OS settings to fix it.</div>';
-            } else {
-                warnEl.innerHTML = '';
-            }
-        }
-
-        function testSpeak(text) {
-            if (!('speechSynthesis' in window)) { log('speechSynthesis NOT supported in this browser.'); return; }
-            synth.cancel();
-
-            setTimeout(function() {
-                const u = new SpeechSynthesisUtterance(text);
-                u.rate = currentSpeed;
-                u.pitch = 1;
-                u.volume = 1;
-
-                const voices = synth.getVoices();
-                const isJa = /[ぁ-んァ-ン一-龯]/.test(text);
-                let chosen = null;
-                if (isJa) {
-                    chosen = voices.find(v => v.lang.toLowerCase().includes('ja'));
-                }
-                if (chosen) { u.voice = chosen; u.lang = chosen.lang; }
-                else if (isJa) { u.lang = 'ja-JP'; }
-
-                const startTime = performance.now();
-                u.onstart = function() {
-                    log('▶ STARTED\n' +
-                        'Requested rate: ' + currentSpeed.toFixed(1) + 'x\n' +
-                        'utterance.rate actually set to: ' + u.rate + '\n' +
-                        'Voice used: ' + (u.voice ? u.voice.name + ' (' + u.voice.lang + ')' : 'DEFAULT / browser-picked') + '\n' +
-                        'Text: ' + text);
-                };
-                u.onend = function() {
-                    const dur = ((performance.now() - startTime) / 1000).toFixed(2);
-                    log(document.getElementById('diag').textContent +
-                        '\n\n■ FINISHED in ' + dur + ' seconds.\n' +
-                        '(Slower rate should take MORE seconds. Compare 0.5x vs 2.0x durations.)');
-                };
-                u.onerror = function(e) {
-                    log('❌ ERROR: ' + e.error + '\nThis voice may not support the requested settings.');
-                };
-
-                synth.speak(u);
-            }, 80);
-        }
-
-        if ('onvoiceschanged' in synth) { synth.onvoiceschanged = listVoices; }
-        setTimeout(listVoices, 300);
-    </script>
-</body>
-</html>
+    <div class="container">
+        <div class="header">
