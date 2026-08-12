@@ -5,245 +5,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Japanese Salutations with Audio Pronunciation</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-        }
-
-        .header {
-            background: linear-gradient(135deg, #ff6b6b, #ffa500);
-            color: white;
-            padding: 30px;
-            text-align: center;
-        }
-
-        .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-        }
-
-        .header p {
-            font-size: 1.1em;
-            opacity: 0.9;
-        }
-
-        .content {
-            padding: 30px;
-        }
-
-        .salutation-card {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 20px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-            border-left: 5px solid #ff6b6b;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .salutation-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
-        }
-
-        .salutation-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: linear-gradient(90deg, #ff6b6b, #ffa500, #4ecdc4);
-        }
-
-        .japanese-text {
-            font-size: 2em;
-            font-weight: bold;
-            color: #2c3e50;
-            margin-bottom: 10px;
-            font-family: 'Hiragino Kaku Gothic Pro', 'Yu Gothic', sans-serif;
-        }
-
-        .romanji {
-            font-size: 1.3em;
-            color: #7f8c8d;
-            font-style: italic;
-            margin-bottom: 8px;
-        }
-
-        .english {
-            font-size: 1.2em;
-            color: #27ae60;
-            font-weight: 600;
-            margin-bottom: 15px;
-        }
-
-        .context {
-            font-size: 0.95em;
-            color: #666;
-            background: #f8f9fa;
-            padding: 10px 15px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            border-left: 3px solid #4ecdc4;
-        }
-
-        .audio-controls {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .play-btn {
-            background: linear-gradient(135deg, #4ecdc4, #44a08d);
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 1em;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .play-btn:hover {
-            background: linear-gradient(135deg, #44a08d, #4ecdc4);
-            transform: scale(1.05);
-        }
-
-        .play-btn:active {
-            transform: scale(0.95);
-        }
-
-        .control-group {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
-        .volume-control {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .speed-control {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .speed-label {
-            font-size: 0.85em;
-            font-weight: 600;
-            color: #ff6b6b;
-            min-width: 35px;
-            text-align: center;
-        }
-
-        .volume-slider {
-            width: 80px;
-            height: 5px;
-            border-radius: 5px;
-            background: #ddd;
-            outline: none;
-            cursor: pointer;
-        }
-
-        .volume-slider::-webkit-slider-thumb {
-            appearance: none;
-            width: 15px;
-            height: 15px;
-            border-radius: 50%;
-            background: #4ecdc4;
-            cursor: pointer;
-        }
-
-        .speed-slider {
-            width: 80px;
-            height: 5px;
-            border-radius: 5px;
-            background: #ddd;
-            outline: none;
-            cursor: pointer;
-        }
-
-        .speed-slider::-webkit-slider-thumb {
-            appearance: none;
-            width: 15px;
-            height: 15px;
-            border-radius: 50%;
-            background: #ff6b6b;
-            cursor: pointer;
-        }
-
-        .status {
-            font-size: 0.9em;
-            color: #7f8c8d;
-            margin-left: auto;
-            font-style: italic;
-        }
-
-        .footer {
-            text-align: center;
-            padding: 20px;
-            background: #f8f9fa;
-            color: #666;
-            font-size: 0.9em;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: rgba(255,255,255,0.95); border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #ff6b6b, #ffa500); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 2.5em; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        .header p { font-size: 1.1em; opacity: 0.9; }
+        .voice-picker { background: #fff0e8; padding: 16px 30px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; border-bottom: 1px solid #ffe0d0; }
+        .voice-picker label { font-weight: 600; color: #a15a2a; }
+        .voice-picker select { padding: 8px 12px; border-radius: 8px; border: 1px solid #ffd0b3; font-size: 0.95em; flex: 1; min-width: 200px; }
+        .content { padding: 30px; }
+        .salutation-card { background: white; border-radius: 15px; padding: 25px; margin-bottom: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); border-left: 5px solid #ff6b6b; transition: all 0.3s ease; position: relative; overflow: hidden; }
+        .salutation-card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0,0,0,0.15); }
+        .salutation-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: linear-gradient(90deg, #ff6b6b, #ffa500, #4ecdc4); }
+        .japanese-text { font-size: 2em; font-weight: bold; color: #2c3e50; margin-bottom: 10px; font-family: 'Hiragino Kaku Gothic Pro', 'Yu Gothic', sans-serif; }
+        .romanji { font-size: 1.3em; color: #7f8c8d; font-style: italic; margin-bottom: 8px; }
+        .english { font-size: 1.2em; color: #27ae60; font-weight: 600; margin-bottom: 15px; }
+        .context { font-size: 0.95em; color: #666; background: #f8f9fa; padding: 10px 15px; border-radius: 8px; margin-bottom: 15px; border-left: 3px solid #4ecdc4; }
+        .audio-controls { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+        .play-btn { background: linear-gradient(135deg, #4ecdc4, #44a08d); color: white; border: none; padding: 12px 20px; border-radius: 25px; cursor: pointer; font-size: 1em; font-weight: 600; transition: all 0.3s ease; display: flex; align-items: center; gap: 8px; }
+        .play-btn:hover { background: linear-gradient(135deg, #44a08d, #4ecdc4); transform: scale(1.05); }
+        .play-btn:active { transform: scale(0.95); }
+        .control-group { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
+        .volume-control, .speed-control { display: flex; align-items: center; gap: 8px; }
+        .speed-label { font-size: 0.9em; font-weight: 700; color: #e63946; min-width: 40px; text-align: center; }
+        .volume-slider { width: 80px; height: 5px; border-radius: 5px; background: #ddd; outline: none; cursor: pointer; }
+        .volume-slider::-webkit-slider-thumb { appearance: none; width: 15px; height: 15px; border-radius: 50%; background: #4ecdc4; cursor: pointer; }
+        .speed-slider { width: 120px; height: 8px; border-radius: 5px; background: #ffd6d6; outline: none; cursor: pointer; }
+        .speed-slider::-webkit-slider-thumb { appearance: none; width: 20px; height: 20px; border-radius: 50%; background: #e63946; cursor: pointer; border: 2px solid #fff; box-shadow: 0 0 4px rgba(230,57,70,0.6); }
+        .speed-slider::-moz-range-thumb { width: 20px; height: 20px; border-radius: 50%; background: #e63946; cursor: pointer; border: 2px solid #fff; }
+        .status { font-size: 0.9em; color: #7f8c8d; margin-left: auto; font-style: italic; }
+        .footer { text-align: center; padding: 20px; background: #f8f9fa; color: #666; font-size: 0.9em; }
         @media (max-width: 600px) {
-            .header h1 {
-                font-size: 2em;
-            }
-            
-            .japanese-text {
-                font-size: 1.5em;
-            }
-            
-            .audio-controls {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            
-            .control-group {
-                justify-content: center;
-            }
-
-            .volume-control {
-                margin-left: 0;
-                justify-content: center;
-            }
-
-            .speed-control {
-                margin-left: 0;
-                justify-content: center;
-            }
+            .header h1 { font-size: 2em; }
+            .japanese-text { font-size: 1.5em; }
+            .audio-controls { flex-direction: column; align-items: stretch; }
+            .control-group { justify-content: center; }
+            .volume-control, .speed-control { margin-left: 0; justify-content: center; }
         }
     </style>
 </head>
@@ -253,7 +51,12 @@
             <h1>🇯🇵 Japanese Salutations</h1>
             <p>Learn basic greetings with audio pronunciation</p>
         </div>
-        
+
+        <div class="voice-picker">
+            <label for="voiceSelect">🗣 Voice:</label>
+            <select id="voiceSelect" onchange="onVoicePick()"></select>
+        </div>
+
         <div class="content">
             <div class="salutation-card">
                 <div class="japanese-text">おはよう</div>
@@ -261,19 +64,10 @@
                 <div class="english">Good morning (casual)</div>
                 <div class="context">Used with friends, family, or people of similar age/status. Informal morning greeting.</div>
                 <div class="audio-controls">
-                    <button class="play-btn" onclick="speak('おはよう', 'ja-JP')">
-                        🔊 Play
-                    </button>
+                    <button class="play-btn" onclick="speak('おはよう')">🔊 Play</button>
                     <div class="control-group">
-                        <div class="volume-control">
-                            <span>🔈</span>
-                            <input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" onchange="setVolume(this.value)">
-                        </div>
-                        <div class="speed-control">
-                            <span>⚡</span>
-                            <input type="range" class="speed-slider" min="0.3" max="2.5" step="0.1" value="0.8" onchange="setSpeed(this.value)">
-                            <span class="speed-label" id="speed-label-1">0.8x</span>
-                        </div>
+                        <div class="volume-control"><span>🔈</span><input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" oninput="setVolume(this.value)"></div>
+                        <div class="speed-control"><span>🐢</span><input type="range" class="speed-slider" min="0.5" max="1.5" step="0.1" value="1" oninput="setSpeed(this.value)"><span>🐇</span><span class="speed-label" id="speed-label-1">1.0x</span></div>
                     </div>
                     <div class="status" id="status-1"></div>
                 </div>
@@ -285,19 +79,10 @@
                 <div class="english">Good morning (polite)</div>
                 <div class="context">Formal morning greeting used in professional settings or with people you don't know well.</div>
                 <div class="audio-controls">
-                    <button class="play-btn" onclick="speak('おはようございます', 'ja-JP')">
-                        🔊 Play
-                    </button>
+                    <button class="play-btn" onclick="speak('おはようございます')">🔊 Play</button>
                     <div class="control-group">
-                        <div class="volume-control">
-                            <span>🔈</span>
-                            <input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" onchange="setVolume(this.value)">
-                        </div>
-                        <div class="speed-control">
-                            <span>⚡</span>
-                            <input type="range" class="speed-slider" min="0.3" max="2.5" step="0.1" value="0.8" onchange="setSpeed(this.value)">
-                            <span class="speed-label" id="speed-label-2">0.8x</span>
-                        </div>
+                        <div class="volume-control"><span>🔈</span><input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" oninput="setVolume(this.value)"></div>
+                        <div class="speed-control"><span>🐢</span><input type="range" class="speed-slider" min="0.5" max="1.5" step="0.1" value="1" oninput="setSpeed(this.value)"><span>🐇</span><span class="speed-label" id="speed-label-2">1.0x</span></div>
                     </div>
                     <div class="status" id="status-2"></div>
                 </div>
@@ -309,19 +94,10 @@
                 <div class="english">Hello / Good afternoon</div>
                 <div class="context">Universal greeting used from late morning through afternoon. Appropriate in most situations.</div>
                 <div class="audio-controls">
-                    <button class="play-btn" onclick="speak('こんにちは', 'ja-JP')">
-                        🔊 Play
-                    </button>
+                    <button class="play-btn" onclick="speak('こんにちは')">🔊 Play</button>
                     <div class="control-group">
-                        <div class="volume-control">
-                            <span>🔈</span>
-                            <input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" onchange="setVolume(this.value)">
-                        </div>
-                        <div class="speed-control">
-                            <span>⚡</span>
-                            <input type="range" class="speed-slider" min="0.3" max="2.5" step="0.1" value="0.8" onchange="setSpeed(this.value)">
-                            <span class="speed-label" id="speed-label-3">0.8x</span>
-                        </div>
+                        <div class="volume-control"><span>🔈</span><input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" oninput="setVolume(this.value)"></div>
+                        <div class="speed-control"><span>🐢</span><input type="range" class="speed-slider" min="0.5" max="1.5" step="0.1" value="1" oninput="setSpeed(this.value)"><span>🐇</span><span class="speed-label" id="speed-label-3">1.0x</span></div>
                     </div>
                     <div class="status" id="status-3"></div>
                 </div>
@@ -333,19 +109,10 @@
                 <div class="english">Good evening</div>
                 <div class="context">Evening greeting used from around 6 PM onwards. Suitable for both formal and informal situations.</div>
                 <div class="audio-controls">
-                    <button class="play-btn" onclick="speak('こんばんは', 'ja-JP')">
-                        🔊 Play
-                    </button>
+                    <button class="play-btn" onclick="speak('こんばんは')">🔊 Play</button>
                     <div class="control-group">
-                        <div class="volume-control">
-                            <span>🔈</span>
-                            <input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" onchange="setVolume(this.value)">
-                        </div>
-                        <div class="speed-control">
-                            <span>⚡</span>
-                            <input type="range" class="speed-slider" min="0.3" max="2.5" step="0.1" value="0.8" onchange="setSpeed(this.value)">
-                            <span class="speed-label" id="speed-label-4">0.8x</span>
-                        </div>
+                        <div class="volume-control"><span>🔈</span><input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" oninput="setVolume(this.value)"></div>
+                        <div class="speed-control"><span>🐢</span><input type="range" class="speed-slider" min="0.5" max="1.5" step="0.1" value="1" oninput="setSpeed(this.value)"><span>🐇</span><span class="speed-label" id="speed-label-4">1.0x</span></div>
                     </div>
                     <div class="status" id="status-4"></div>
                 </div>
@@ -357,19 +124,10 @@
                 <div class="english">Goodbye (formal)</div>
                 <div class="context">Formal farewell, often implies you won't see the person for a while. Less commonly used in casual conversation.</div>
                 <div class="audio-controls">
-                    <button class="play-btn" onclick="speak('さようなら', 'ja-JP')">
-                        🔊 Play
-                    </button>
+                    <button class="play-btn" onclick="speak('さようなら')">🔊 Play</button>
                     <div class="control-group">
-                        <div class="volume-control">
-                            <span>🔈</span>
-                            <input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" onchange="setVolume(this.value)">
-                        </div>
-                        <div class="speed-control">
-                            <span>⚡</span>
-                            <input type="range" class="speed-slider" min="0.3" max="2.5" step="0.1" value="0.8" onchange="setSpeed(this.value)">
-                            <span class="speed-label" id="speed-label-5">0.8x</span>
-                        </div>
+                        <div class="volume-control"><span>🔈</span><input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" oninput="setVolume(this.value)"></div>
+                        <div class="speed-control"><span>🐢</span><input type="range" class="speed-slider" min="0.5" max="1.5" step="0.1" value="1" oninput="setSpeed(this.value)"><span>🐇</span><span class="speed-label" id="speed-label-5">1.0x</span></div>
                     </div>
                     <div class="status" id="status-5"></div>
                 </div>
@@ -381,19 +139,10 @@
                 <div class="english">See you tomorrow</div>
                 <div class="context">Casual way to say goodbye when you'll see the person the next day. Common among friends and colleagues.</div>
                 <div class="audio-controls">
-                    <button class="play-btn" onclick="speak('また明日', 'ja-JP')">
-                        🔊 Play
-                    </button>
+                    <button class="play-btn" onclick="speak('また明日')">🔊 Play</button>
                     <div class="control-group">
-                        <div class="volume-control">
-                            <span>🔈</span>
-                            <input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" onchange="setVolume(this.value)">
-                        </div>
-                        <div class="speed-control">
-                            <span>⚡</span>
-                            <input type="range" class="speed-slider" min="0.3" max="2.5" step="0.1" value="0.8" onchange="setSpeed(this.value)">
-                            <span class="speed-label" id="speed-label-6">0.8x</span>
-                        </div>
+                        <div class="volume-control"><span>🔈</span><input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" oninput="setVolume(this.value)"></div>
+                        <div class="speed-control"><span>🐢</span><input type="range" class="speed-slider" min="0.5" max="1.5" step="0.1" value="1" oninput="setSpeed(this.value)"><span>🐇</span><span class="speed-label" id="speed-label-6">1.0x</span></div>
                     </div>
                     <div class="status" id="status-6"></div>
                 </div>
@@ -405,19 +154,10 @@
                 <div class="english">Nice to meet you</div>
                 <div class="context">Used when meeting someone for the first time. Often followed by "よろしくお願いします" (yoroshiku onegaishimasu).</div>
                 <div class="audio-controls">
-                    <button class="play-btn" onclick="speak('はじめまして', 'ja-JP')">
-                        🔊 Play
-                    </button>
+                    <button class="play-btn" onclick="speak('はじめまして')">🔊 Play</button>
                     <div class="control-group">
-                        <div class="volume-control">
-                            <span>🔈</span>
-                            <input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" onchange="setVolume(this.value)">
-                        </div>
-                        <div class="speed-control">
-                            <span>⚡</span>
-                            <input type="range" class="speed-slider" min="0.3" max="2.5" step="0.1" value="0.8" onchange="setSpeed(this.value)">
-                            <span class="speed-label" id="speed-label-7">0.8x</span>
-                        </div>
+                        <div class="volume-control"><span>🔈</span><input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" oninput="setVolume(this.value)"></div>
+                        <div class="speed-control"><span>🐢</span><input type="range" class="speed-slider" min="0.5" max="1.5" step="0.1" value="1" oninput="setSpeed(this.value)"><span>🐇</span><span class="speed-label" id="speed-label-7">1.0x</span></div>
                     </div>
                     <div class="status" id="status-7"></div>
                 </div>
@@ -429,19 +169,10 @@
                 <div class="english">Thank you for your hard work</div>
                 <div class="context">Versatile greeting/farewell used in workplace settings. Acknowledges someone's effort or hard work.</div>
                 <div class="audio-controls">
-                    <button class="play-btn" onclick="speak('お疲れ様', 'ja-JP')">
-                        🔊 Play
-                    </button>
+                    <button class="play-btn" onclick="speak('お疲れ様')">🔊 Play</button>
                     <div class="control-group">
-                        <div class="volume-control">
-                            <span>🔈</span>
-                            <input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" onchange="setVolume(this.value)">
-                        </div>
-                        <div class="speed-control">
-                            <span>⚡</span>
-                            <input type="range" class="speed-slider" min="0.3" max="2.5" step="0.1" value="0.8" onchange="setSpeed(this.value)">
-                            <span class="speed-label" id="speed-label-8">0.8x</span>
-                        </div>
+                        <div class="volume-control"><span>🔈</span><input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" oninput="setVolume(this.value)"></div>
+                        <div class="speed-control"><span>🐢</span><input type="range" class="speed-slider" min="0.5" max="1.5" step="0.1" value="1" oninput="setSpeed(this.value)"><span>🐇</span><span class="speed-label" id="speed-label-8">1.0x</span></div>
                     </div>
                     <div class="status" id="status-8"></div>
                 </div>
@@ -451,19 +182,10 @@
                 <div class="english">Excuse me しつれいします</div>
                 <div class="romanji">Shitsurei shimasu</div>
                 <div class="audio-controls">
-                    <button class="play-btn" onclick="speak('しつれいします', 'ja-JP')">
-                        🔊 Play
-                    </button>
+                    <button class="play-btn" onclick="speak('しつれいします')">🔊 Play</button>
                     <div class="control-group">
-                        <div class="volume-control">
-                            <span>🔈</span>
-                            <input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" onchange="setVolume(this.value)">
-                        </div>
-                        <div class="speed-control">
-                            <span>⚡</span>
-                            <input type="range" class="speed-slider" min="0.3" max="2.5" step="0.1" value="0.8" onchange="setSpeed(this.value)">
-                            <span class="speed-label" id="speed-label-9">0.8x</span>
-                        </div>
+                        <div class="volume-control"><span>🔈</span><input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" oninput="setVolume(this.value)"></div>
+                        <div class="speed-control"><span>🐢</span><input type="range" class="speed-slider" min="0.5" max="1.5" step="0.1" value="1" oninput="setSpeed(this.value)"><span>🐇</span><span class="speed-label" id="speed-label-9">1.0x</span></div>
                     </div>
                     <div class="status" id="status-9"></div>
                 </div>
@@ -473,120 +195,92 @@
                 <div class="english">Sorry すみません</div>
                 <div class="romanji">Sumimasen</div>
                 <div class="audio-controls">
-                    <button class="play-btn" onclick="speak('すみません', 'ja-JP')">
-                        🔊 Play
-                    </button>
+                    <button class="play-btn" onclick="speak('すみません')">🔊 Play</button>
                     <div class="control-group">
-                        <div class="volume-control">
-                            <span>🔈</span>
-                            <input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" onchange="setVolume(this.value)">
-                        </div>
-                        <div class="speed-control">
-                            <span>⚡</span>
-                            <input type="range" class="speed-slider" min="0.3" max="2.5" step="0.1" value="0.8" onchange="setSpeed(this.value)">
-                            <span class="speed-label" id="speed-label-10">0.8x</span>
-                        </div>
+                        <div class="volume-control"><span>🔈</span><input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" oninput="setVolume(this.value)"></div>
+                        <div class="speed-control"><span>🐢</span><input type="range" class="speed-slider" min="0.5" max="1.5" step="0.1" value="1" oninput="setSpeed(this.value)"><span>🐇</span><span class="speed-label" id="speed-label-10">1.0x</span></div>
                     </div>
                     <div class="status" id="status-10"></div>
                 </div>
             </div>
         </div>
-        
+
         <div class="footer">
-            <p>💡 Click the play buttons to hear native-like pronunciation. Adjust volume (🔈) and speed (⚡) with the sliders.</p>
-            <p>Speed range: 0.3x (very slow) to 2.5x (very fast). Compatible with all modern web browsers that support Web Speech API.</p>
+            <p>💡 Pick "Kyoko" or "Google 日本語" from the Voice menu, set the red speed slider, then press Play.</p>
+            <p>Compatible with all modern web browsers that support the Web Speech API.</p>
         </div>
     </div>
 
     <script>
         let currentVolume = 0.8;
-        let currentSpeed = 0.8;
-        let currentUtterance = null;
+        let currentSpeed = 1.0;
+        let selectedVoice = null;
+        const synth = window.speechSynthesis;
 
-        function setVolume(volume) {
-            currentVolume = parseFloat(volume);
-            // Update all volume sliders to the same value
-            const sliders = document.querySelectorAll('.volume-slider');
-            sliders.forEach(slider => slider.value = volume);
+        function populateVoices() {
+            const voices = synth.getVoices();
+            const ja = voices.filter(v => v.lang.toLowerCase().includes('ja'));
+            if (!ja.length) return;
+            ja.sort((a, b) => {
+                const rank = n => /kyoko/i.test(n) ? 0 : /google/i.test(n) ? 1 : 2;
+                return rank(a.name) - rank(b.name);
+            });
+            const select = document.getElementById('voiceSelect');
+            select.innerHTML = '';
+            ja.forEach(v => {
+                const opt = document.createElement('option');
+                opt.value = v.name;
+                opt.textContent = v.name + ' (' + v.lang + ')';
+                select.appendChild(opt);
+            });
+            selectedVoice = ja[0];
+            select.value = selectedVoice.name;
         }
 
-        function setSpeed(speed) {
-            currentSpeed = parseFloat(speed);
-            // Update all speed sliders and labels to the same value
-            const sliders = document.querySelectorAll('.speed-slider');
-            const labels = document.querySelectorAll('.speed-label');
-            sliders.forEach(slider => slider.value = speed);
-            labels.forEach(label => label.textContent = currentSpeed.toFixed(1) + 'x');
+        function onVoicePick() {
+            const name = document.getElementById('voiceSelect').value;
+            selectedVoice = synth.getVoices().find(v => v.name === name) || null;
         }
 
-        function speak(text, lang) {
-            // Stop any currently playing speech
-            if (currentUtterance) {
-                speechSynthesis.cancel();
-            }
+        function setVolume(v) {
+            currentVolume = parseFloat(v);
+            document.querySelectorAll('.volume-slider').forEach(s => s.value = v);
+        }
 
-            // Check if speech synthesis is supported
-            if (!('speechSynthesis' in window)) {
-                alert('Sorry, your browser does not support text-to-speech.');
-                return;
-            }
+        function setSpeed(v) {
+            currentSpeed = parseFloat(v);
+            document.querySelectorAll('.speed-slider').forEach(s => s.value = v);
+            document.querySelectorAll('.speed-label').forEach(l => l.textContent = currentSpeed.toFixed(1) + 'x');
+        }
 
-            // Create new utterance
-            currentUtterance = new SpeechSynthesisUtterance(text);
-            currentUtterance.lang = lang;
-            currentUtterance.volume = currentVolume;
-            currentUtterance.rate = currentSpeed;
-            currentUtterance.pitch = 1;
-
-            // Try to use a Japanese voice if available
-            const voices = speechSynthesis.getVoices();
-            const japaneseVoice = voices.find(voice => 
-                voice.lang.includes('ja') || voice.name.includes('Japanese')
-            );
-            
-            if (japaneseVoice) {
-                currentUtterance.voice = japaneseVoice;
-            }
-
-            // Event listeners
-            currentUtterance.onstart = function() {
-                updateStatus('Playing...');
-            };
-
-            currentUtterance.onend = function() {
-                updateStatus('');
-                currentUtterance = null;
-            };
-
-            currentUtterance.onerror = function(event) {
-                updateStatus('Error playing audio');
-                currentUtterance = null;
-            };
-
-            // Speak the text
-            speechSynthesis.speak(currentUtterance);
+        function speak(text) {
+            if (!('speechSynthesis' in window)) { alert('Sorry, your browser does not support text-to-speech.'); return; }
+            synth.cancel();
+            setTimeout(function() {
+                const u = new SpeechSynthesisUtterance(text);
+                u.rate = currentSpeed;
+                u.volume = currentVolume;
+                u.pitch = 1;
+                if (selectedVoice) { u.voice = selectedVoice; u.lang = selectedVoice.lang; }
+                else { u.lang = 'ja-JP'; }
+                u.onstart = () => updateStatus('Playing at ' + currentSpeed.toFixed(1) + 'x...');
+                u.onend = () => updateStatus('');
+                u.onerror = () => updateStatus('');
+                synth.speak(u);
+            }, 60);
         }
 
         function updateStatus(message) {
-            const statusElements = document.querySelectorAll('[id^="status-"]');
-            statusElements.forEach(element => {
-                element.textContent = message;
-            });
+            document.querySelectorAll('[id^="status-"]').forEach(e => e.textContent = message);
         }
 
-        // Load voices when they become available
-        speechSynthesis.onvoiceschanged = function() {
-            // Voices are now loaded
-        };
+        if ('onvoiceschanged' in synth) synth.onvoiceschanged = populateVoices;
+        setTimeout(populateVoices, 300);
 
-        // Initialize sliders
         document.addEventListener('DOMContentLoaded', function() {
-            const volumeSliders = document.querySelectorAll('.volume-slider');
-            const speedSliders = document.querySelectorAll('.speed-slider');
-            const speedLabels = document.querySelectorAll('.speed-label');
-            volumeSliders.forEach(slider => slider.value = currentVolume);
-            speedSliders.forEach(slider => slider.value = currentSpeed);
-            speedLabels.forEach(label => label.textContent = currentSpeed.toFixed(1) + 'x');
+            document.querySelectorAll('.volume-slider').forEach(s => s.value = currentVolume);
+            document.querySelectorAll('.speed-slider').forEach(s => s.value = currentSpeed);
+            document.querySelectorAll('.speed-label').forEach(l => l.textContent = currentSpeed.toFixed(1) + 'x');
         });
     </script>
 </body>
