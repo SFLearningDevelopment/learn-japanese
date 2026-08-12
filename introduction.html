@@ -5,246 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Japanese Introduction with Audio Pronunciation</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-        }
-
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 30px;
-            text-align: center;
-        }
-
-        .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-        }
-
-        .header p {
-            font-size: 1.1em;
-            opacity: 0.9;
-        }
-
-        .content {
-            padding: 30px;
-        }
-
-        .introduction-card {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 20px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-            border-left: 5px solid #667eea;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .introduction-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
-        }
-
-        .introduction-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: linear-gradient(90deg, #667eea, #764ba2, #4ecdc4);
-        }
-
-        .japanese-text {
-            font-size: 2em;
-            font-weight: bold;
-            color: #2c3e50;
-            margin-bottom: 10px;
-            font-family: 'Hiragino Kaku Gothic Pro', 'Yu Gothic', sans-serif;
-        }
-
-        .romanji {
-            font-size: 1.3em;
-            color: #7f8c8d;
-            font-style: italic;
-            margin-bottom: 8px;
-        }
-
-        .english {
-            font-size: 1.2em;
-            color: #667eea;
-            font-weight: 600;
-            margin-bottom: 15px;
-        }
-
-        .audio-controls {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .play-btn {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 1em;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .play-btn:hover {
-            background: linear-gradient(135deg, #764ba2, #667eea);
-            transform: scale(1.05);
-        }
-
-        .play-btn:active {
-            transform: scale(0.95);
-        }
-
-        .control-group {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
-        .volume-control {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .speed-control {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .speed-label {
-            font-size: 0.9em;
-            font-weight: 700;
-            color: #e63946;
-            min-width: 40px;
-            text-align: center;
-        }
-
-        .volume-slider {
-            width: 80px;
-            height: 5px;
-            border-radius: 5px;
-            background: #ddd;
-            outline: none;
-            cursor: pointer;
-        }
-
-        .volume-slider::-webkit-slider-thumb {
-            appearance: none;
-            width: 15px;
-            height: 15px;
-            border-radius: 50%;
-            background: #4ecdc4;
-            cursor: pointer;
-        }
-
-        .speed-slider {
-            width: 120px;
-            height: 8px;
-            border-radius: 5px;
-            background: #ffd6d6;
-            outline: none;
-            cursor: pointer;
-        }
-
-        .speed-slider::-webkit-slider-thumb {
-            appearance: none;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: #e63946;
-            cursor: pointer;
-            border: 2px solid #fff;
-            box-shadow: 0 0 4px rgba(230,57,70,0.6);
-        }
-
-        .speed-slider::-moz-range-thumb {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: #e63946;
-            cursor: pointer;
-            border: 2px solid #fff;
-        }
-
-        .status {
-            font-size: 0.9em;
-            color: #7f8c8d;
-            margin-left: auto;
-            font-style: italic;
-        }
-
-        .footer {
-            text-align: center;
-            padding: 20px;
-            background: #f8f9fa;
-            color: #666;
-            font-size: 0.9em;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: rgba(255,255,255,0.95); border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 2.5em; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        .header p { font-size: 1.1em; opacity: 0.9; }
+        .voice-picker { background: #eef0ff; padding: 16px 30px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; border-bottom: 1px solid #dfe3ff; }
+        .voice-picker label { font-weight: 600; color: #4a4a6a; }
+        .voice-picker select { padding: 8px 12px; border-radius: 8px; border: 1px solid #c3c8f0; font-size: 0.95em; flex: 1; min-width: 200px; }
+        .content { padding: 30px; }
+        .introduction-card { background: white; border-radius: 15px; padding: 25px; margin-bottom: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); border-left: 5px solid #667eea; transition: all 0.3s ease; position: relative; overflow: hidden; }
+        .introduction-card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0,0,0,0.15); }
+        .introduction-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: linear-gradient(90deg, #667eea, #764ba2, #4ecdc4); }
+        .japanese-text { font-size: 2em; font-weight: bold; color: #2c3e50; margin-bottom: 10px; font-family: 'Hiragino Kaku Gothic Pro', 'Yu Gothic', sans-serif; }
+        .romanji { font-size: 1.3em; color: #7f8c8d; font-style: italic; margin-bottom: 8px; }
+        .english { font-size: 1.2em; color: #667eea; font-weight: 600; margin-bottom: 15px; }
+        .audio-controls { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+        .play-btn { background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; padding: 12px 20px; border-radius: 25px; cursor: pointer; font-size: 1em; font-weight: 600; transition: all 0.3s ease; display: flex; align-items: center; gap: 8px; }
+        .play-btn:hover { background: linear-gradient(135deg, #764ba2, #667eea); transform: scale(1.05); }
+        .play-btn:active { transform: scale(0.95); }
+        .control-group { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
+        .volume-control, .speed-control { display: flex; align-items: center; gap: 8px; }
+        .speed-label { font-size: 0.9em; font-weight: 700; color: #e63946; min-width: 40px; text-align: center; }
+        .volume-slider { width: 80px; height: 5px; border-radius: 5px; background: #ddd; outline: none; cursor: pointer; }
+        .volume-slider::-webkit-slider-thumb { appearance: none; width: 15px; height: 15px; border-radius: 50%; background: #4ecdc4; cursor: pointer; }
+        .speed-slider { width: 120px; height: 8px; border-radius: 5px; background: #ffd6d6; outline: none; cursor: pointer; }
+        .speed-slider::-webkit-slider-thumb { appearance: none; width: 20px; height: 20px; border-radius: 50%; background: #e63946; cursor: pointer; border: 2px solid #fff; box-shadow: 0 0 4px rgba(230,57,70,0.6); }
+        .speed-slider::-moz-range-thumb { width: 20px; height: 20px; border-radius: 50%; background: #e63946; cursor: pointer; border: 2px solid #fff; }
+        .status { font-size: 0.9em; color: #7f8c8d; margin-left: auto; font-style: italic; }
+        .footer { text-align: center; padding: 20px; background: #f8f9fa; color: #666; font-size: 0.9em; }
         @media (max-width: 600px) {
-            .header h1 {
-                font-size: 2em;
-            }
-            
-            .japanese-text {
-                font-size: 1.5em;
-            }
-            
-            .audio-controls {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            
-            .control-group {
-                justify-content: center;
-            }
-
-            .volume-control {
-                margin-left: 0;
-                justify-content: center;
-            }
-
-            .speed-control {
-                margin-left: 0;
-                justify-content: center;
-            }
+            .header h1 { font-size: 2em; }
+            .japanese-text { font-size: 1.5em; }
+            .audio-controls { flex-direction: column; align-items: stretch; }
+            .control-group { justify-content: center; }
+            .volume-control, .speed-control { margin-left: 0; justify-content: center; }
         }
     </style>
 </head>
@@ -254,27 +50,22 @@
             <h1>🇯🇵 Japanese Introduction</h1>
             <p>Learn how to introduce yourself in Japanese</p>
         </div>
-        
+
+        <div class="voice-picker">
+            <label for="voiceSelect">🗣 Voice:</label>
+            <select id="voiceSelect" onchange="onVoicePick()"></select>
+        </div>
+
         <div class="content">
             <div class="introduction-card">
                 <div class="english">How do you do</div>
                 <div class="japanese-text">はじめまして</div>
                 <div class="romanji">Hajimemashite</div>
                 <div class="audio-controls">
-                    <button class="play-btn" onclick="speak('はじめまして', 'ja-JP')">
-                        🔊 Play
-                    </button>
+                    <button class="play-btn" onclick="speak('はじめまして')">🔊 Play</button>
                     <div class="control-group">
-                        <div class="volume-control">
-                            <span>🔈</span>
-                            <input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" oninput="setVolume(this.value)">
-                        </div>
-                        <div class="speed-control">
-                            <span>🐢</span>
-                            <input type="range" class="speed-slider" min="0.5" max="1.5" step="0.1" value="1" oninput="setSpeed(this.value)">
-                            <span>🐇</span>
-                            <span class="speed-label" id="speed-label-1">1.0x</span>
-                        </div>
+                        <div class="volume-control"><span>🔈</span><input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" oninput="setVolume(this.value)"></div>
+                        <div class="speed-control"><span>🐢</span><input type="range" class="speed-slider" min="0.5" max="1.5" step="0.1" value="1" oninput="setSpeed(this.value)"><span>🐇</span><span class="speed-label" id="speed-label-1">1.0x</span></div>
                     </div>
                     <div class="status" id="status-1"></div>
                 </div>
@@ -285,20 +76,10 @@
                 <div class="japanese-text">わたしは「なまえ」です。</div>
                 <div class="romanji">Watashi wa [Your Name] Desu</div>
                 <div class="audio-controls">
-                    <button class="play-btn" onclick="speak('わたしはジョンです', 'ja-JP')">
-                        🔊 Play
-                    </button>
+                    <button class="play-btn" onclick="speak('わたしはジョンです')">🔊 Play</button>
                     <div class="control-group">
-                        <div class="volume-control">
-                            <span>🔈</span>
-                            <input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" oninput="setVolume(this.value)">
-                        </div>
-                        <div class="speed-control">
-                            <span>🐢</span>
-                            <input type="range" class="speed-slider" min="0.5" max="1.5" step="0.1" value="1" oninput="setSpeed(this.value)">
-                            <span>🐇</span>
-                            <span class="speed-label" id="speed-label-2">1.0x</span>
-                        </div>
+                        <div class="volume-control"><span>🔈</span><input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" oninput="setVolume(this.value)"></div>
+                        <div class="speed-control"><span>🐢</span><input type="range" class="speed-slider" min="0.5" max="1.5" step="0.1" value="1" oninput="setSpeed(this.value)"><span>🐇</span><span class="speed-label" id="speed-label-2">1.0x</span></div>
                     </div>
                     <div class="status" id="status-2"></div>
                 </div>
@@ -309,20 +90,10 @@
                 <div class="japanese-text">「くにのなまえ」からきました。</div>
                 <div class="romanji">[Country Name] Kara Kimashita.</div>
                 <div class="audio-controls">
-                    <button class="play-btn" onclick="speak('アメリカからきました', 'ja-JP')">
-                        🔊 Play
-                    </button>
+                    <button class="play-btn" onclick="speak('アメリカからきました')">🔊 Play</button>
                     <div class="control-group">
-                        <div class="volume-control">
-                            <span>🔈</span>
-                            <input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" oninput="setVolume(this.value)">
-                        </div>
-                        <div class="speed-control">
-                            <span>🐢</span>
-                            <input type="range" class="speed-slider" min="0.5" max="1.5" step="0.1" value="1" oninput="setSpeed(this.value)">
-                            <span>🐇</span>
-                            <span class="speed-label" id="speed-label-3">1.0x</span>
-                        </div>
+                        <div class="volume-control"><span>🔈</span><input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" oninput="setVolume(this.value)"></div>
+                        <div class="speed-control"><span>🐢</span><input type="range" class="speed-slider" min="0.5" max="1.5" step="0.1" value="1" oninput="setSpeed(this.value)"><span>🐇</span><span class="speed-label" id="speed-label-3">1.0x</span></div>
                     </div>
                     <div class="status" id="status-3"></div>
                 </div>
@@ -333,28 +104,18 @@
                 <div class="japanese-text">どうぞよろしくおねがいします。</div>
                 <div class="romanji">Douzo Yoroshiku Onegaiishimasu</div>
                 <div class="audio-controls">
-                    <button class="play-btn" onclick="speak('どうぞよろしくおねがいします', 'ja-JP')">
-                        🔊 Play
-                    </button>
+                    <button class="play-btn" onclick="speak('どうぞよろしくおねがいします')">🔊 Play</button>
                     <div class="control-group">
-                        <div class="volume-control">
-                            <span>🔈</span>
-                            <input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" oninput="setVolume(this.value)">
-                        </div>
-                        <div class="speed-control">
-                            <span>🐢</span>
-                            <input type="range" class="speed-slider" min="0.5" max="1.5" step="0.1" value="1" oninput="setSpeed(this.value)">
-                            <span>🐇</span>
-                            <span class="speed-label" id="speed-label-4">1.0x</span>
-                        </div>
+                        <div class="volume-control"><span>🔈</span><input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" oninput="setVolume(this.value)"></div>
+                        <div class="speed-control"><span>🐢</span><input type="range" class="speed-slider" min="0.5" max="1.5" step="0.1" value="1" oninput="setSpeed(this.value)"><span>🐇</span><span class="speed-label" id="speed-label-4">1.0x</span></div>
                     </div>
                     <div class="status" id="status-4"></div>
                 </div>
             </div>
         </div>
-        
+
         <div class="footer">
-            <p>💡 Set the speed with the red slider (🐢 slow ↔ 🐇 fast), then click Play to hear it at that speed.</p>
+            <p>💡 Pick "Kyoko" or "Google 日本語" from the Voice menu, set the red speed slider, then press Play.</p>
             <p>Works across browsers and operating systems using the Web Speech API.</p>
         </div>
     </div>
@@ -362,63 +123,73 @@
     <script>
         let currentVolume = 0.8;
         let currentSpeed = 1.0;
+        let selectedVoice = null;
+        const synth = window.speechSynthesis;
 
-        function setVolume(volume) {
-            currentVolume = parseFloat(volume);
-            document.querySelectorAll('.volume-slider').forEach(slider => slider.value = volume);
+        function populateVoices() {
+            const voices = synth.getVoices();
+            const ja = voices.filter(v => v.lang.toLowerCase().includes('ja'));
+            if (!ja.length) return;
+            ja.sort((a, b) => {
+                const rank = n => /kyoko/i.test(n) ? 0 : /google/i.test(n) ? 1 : 2;
+                return rank(a.name) - rank(b.name);
+            });
+            const select = document.getElementById('voiceSelect');
+            select.innerHTML = '';
+            ja.forEach(v => {
+                const opt = document.createElement('option');
+                opt.value = v.name;
+                opt.textContent = v.name + ' (' + v.lang + ')';
+                select.appendChild(opt);
+            });
+            selectedVoice = ja[0];
+            select.value = selectedVoice.name;
         }
 
-        function setSpeed(speed) {
-            currentSpeed = parseFloat(speed);
-            document.querySelectorAll('.speed-slider').forEach(slider => slider.value = speed);
-            document.querySelectorAll('.speed-label').forEach(label => label.textContent = currentSpeed.toFixed(1) + 'x');
+        function onVoicePick() {
+            const name = document.getElementById('voiceSelect').value;
+            selectedVoice = synth.getVoices().find(v => v.name === name) || null;
         }
 
-        function speak(text, lang) {
-            if (!('speechSynthesis' in window)) {
-                alert('Sorry, your browser does not support text-to-speech.');
-                return;
-            }
+        function setVolume(v) {
+            currentVolume = parseFloat(v);
+            document.querySelectorAll('.volume-slider').forEach(s => s.value = v);
+        }
 
-            // Clear any ongoing/queued speech first
-            speechSynthesis.cancel();
+        function setSpeed(v) {
+            currentSpeed = parseFloat(v);
+            document.querySelectorAll('.speed-slider').forEach(s => s.value = v);
+            document.querySelectorAll('.speed-label').forEach(l => l.textContent = currentSpeed.toFixed(1) + 'x');
+        }
 
-            // Short delay lets the queue clear so rate is honored (Chrome quirk)
+        function speak(text) {
+            if (!('speechSynthesis' in window)) { alert('Sorry, your browser does not support text-to-speech.'); return; }
+            synth.cancel();
             setTimeout(function() {
-                const utterance = new SpeechSynthesisUtterance(text);
-                utterance.lang = lang;
-                utterance.volume = currentVolume;
-                utterance.rate = currentSpeed;
-                utterance.pitch = 1;
-
-                const voices = speechSynthesis.getVoices();
-                const japaneseVoice = voices.find(voice =>
-                    voice.lang.includes('ja') || voice.name.includes('Japanese')
-                );
-                if (japaneseVoice) {
-                    utterance.voice = japaneseVoice;
-                }
-
-                utterance.onstart = function() { updateStatus('Playing at ' + currentSpeed.toFixed(1) + 'x...'); };
-                utterance.onend = function() { updateStatus(''); };
-                utterance.onerror = function() { updateStatus(''); };
-
-                speechSynthesis.speak(utterance);
+                const u = new SpeechSynthesisUtterance(text);
+                u.rate = currentSpeed;
+                u.volume = currentVolume;
+                u.pitch = 1;
+                if (selectedVoice) { u.voice = selectedVoice; u.lang = selectedVoice.lang; }
+                else { u.lang = 'ja-JP'; }
+                u.onstart = () => updateStatus('Playing at ' + currentSpeed.toFixed(1) + 'x...');
+                u.onend = () => updateStatus('');
+                u.onerror = () => updateStatus('');
+                synth.speak(u);
             }, 60);
         }
 
         function updateStatus(message) {
-            document.querySelectorAll('[id^="status-"]').forEach(element => {
-                element.textContent = message;
-            });
+            document.querySelectorAll('[id^="status-"]').forEach(e => e.textContent = message);
         }
 
-        speechSynthesis.onvoiceschanged = function() { /* voices loaded */ };
+        if ('onvoiceschanged' in synth) synth.onvoiceschanged = populateVoices;
+        setTimeout(populateVoices, 300);
 
         document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('.volume-slider').forEach(slider => slider.value = currentVolume);
-            document.querySelectorAll('.speed-slider').forEach(slider => slider.value = currentSpeed);
-            document.querySelectorAll('.speed-label').forEach(label => label.textContent = currentSpeed.toFixed(1) + 'x');
+            document.querySelectorAll('.volume-slider').forEach(s => s.value = currentVolume);
+            document.querySelectorAll('.speed-slider').forEach(s => s.value = currentSpeed);
+            document.querySelectorAll('.speed-label').forEach(l => l.textContent = currentSpeed.toFixed(1) + 'x');
         });
     </script>
 </body>
