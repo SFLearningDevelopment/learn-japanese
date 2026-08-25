@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practice Phrases in Japanese</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: rgba(255,255,255,0.95); border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 2.5em; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        .header p { font-size: 1.1em; opacity: 0.9; }
+        .voice-picker { background: #e8fbf2; padding: 16px 30px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; border-bottom: 1px solid #d0f5e4; }
+        .voice-picker label { font-weight: 600; color: #1f7a55; }
+        .voice-picker select { padding: 8px 12px; border-radius: 8px; border: 1px solid #b0e8cf; font-size: 0.95em; flex: 1; min-width: 200px; }
+        .content { padding: 30px; }
+        .section-title { font-size: 1.3em; font-weight: 700; color: #1f7a55; margin: 10px 0 18px; padding-bottom: 8px; border-bottom: 2px solid #d0f5e4; }
+        .phrase-card { background: white; border-radius: 15px; padding: 25px; margin-bottom: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); border-left: 5px solid #43e97b; transition: all 0.3s ease; position: relative; overflow: hidden; }
+        .phrase-card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0,0,0,0.15); }
+        .phrase-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: linear-gradient(90deg, #43e97b, #38f9d7, #4ecdc4); }
+        .japanese-text { font-size: 1.9em; font-weight: bold; color: #2c3e50; margin-bottom: 10px; font-family: 'Hiragino Kaku Gothic Pro', 'Yu Gothic', sans-serif; line-height: 1.4; }
+        .romanji { font-size: 1.25em; color: #7f8c8d; font-style: italic; margin-bottom: 8px; }
+        .english { font-size: 1.2em; color: #23a06a; font-weight: 600; margin-bottom: 15px; }
+        .audio-controls { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+        .play-btn { background: linear-gradient(135deg, #43e97b, #38f9d7); color: white; border: none; padding: 12px 20px; border-radius: 25px; cursor: pointer; font-size: 1em; font-weight: 600; transition: all 0.3s ease; display: flex; align-items: center; gap: 8px; }
+        .play-btn:hover { transform: scale(1.05); }
+        .play-btn:active { transform: scale(0.95); }
+        .control-group { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
+        .volume-control, .speed-control { display: flex; align-items: center; gap: 8px; }
+        .speed-label { font-size: 0.9em; font-weight: 700; color: #e63946; min-width: 40px; text-align: center; }
+        .volume-slider { width: 80px; height: 5px; border-radius: 5px; background: #ddd; outline: none; cursor: pointer; }
+        .volume-slider::-webkit-slider-thumb { appearance: none; width: 15px; height: 15px; border-radius: 50%; background: #4ecdc4; cursor: pointer; }
+        .speed-slider { width: 120px; height: 8px; border-radius: 5px; background: #ffd6d6; outline: none; cursor: pointer; }
+        .speed-slider::-webkit-slider-thumb { appearance: none; width: 20px; height: 20px; border-radius: 50%; background: #e63946; cursor: pointer; border: 2px solid #fff; box-shadow: 0 0 4px rgba(230,57,70,0.6); }
+        .speed-slider::-moz-range-thumb { width: 20px; height: 20px; border-radius: 50%; background: #e63946; cursor: pointer; border: 2px solid #fff; }
+        .status { font-size: 0.9em; color: #7f8c8d; margin-left: auto; font-style: italic; }
+        .footer { text-align: center; padding: 20px; background: #f8f9fa; color: #666; font-size: 0.9em; }
+        @media (max-width: 600px) {
+            .header h1 { font-size: 1.7em; }
+            .japanese-text { font-size: 1.4em; }
+            .audio-controls { flex-direction: column; align-items: stretch; }
+            .control-group { justify-content: center; }
+            .volume-control, .speed-control { margin-left: 0; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🇯🇵 Practice Phrases in Japanese</h1>
+            <p>Full sentences for likes, dislikes, and questions</p>
+        </div>
+
+        <div class="voice-picker">
+            <label for="voiceSelect">🗣 Voice:</label>
+            <select id="voiceSelect" onchange="onVoicePick()"></select>
+        </div>
+
+        <div class="content">
+            <div class="section-title">Talking About Likes</div>
+
+            <div class="phrase-card">
+                <div class="english">I like food.</div>
+                <div class="japanese-text">私は食べ物が好きです。</div>
+                <div class="romanji">Watashi wa tabemono ga suki desu.</div>
+                <div class="audio-controls">
+                    <button class="play-btn" onclick="speak('私は食べ物が好きです')">🔊 Play</button>
+                    <div class="control-group">
+                        <div class="volume-control"><span>🔈</span><input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" oninput="setVolume(this.value)"></div>
+                        <div class="speed-control"><span>🐢</span><input type="range" class="speed-slider" min="0.5" max="1.5" step="0.1" value="1" oninput="setSpeed(this.value)"><span>🐇</span><span class="speed-label" id="speed-label-1">1.0x</span></div>
+                    </div>
+                    <div class="status" id="status-1"></div>
+                </div>
+            </div>
+
+            <div class="phrase-card">
+                <div class="english">I like Japanese food.</div>
+                <div class="japanese-text">私は日本の食べ物が好きです。</div>
+                <div class="romanji">Watashi wa Nihon no tabemono ga suki desu.</div>
+                <div class="audio-controls">
+                    <button class="play-btn" onclick="speak('私は日本の食べ物が好きです')">🔊 Play</button>
+                    <div class="control-group">
+                        <div class="volume-control"><span>🔈</span><input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" oninput="setVolume(this.value)"></div>
+                        <div class="speed-control"><span>🐢</span><input type="range" class="speed-slider" min="0.5" max="1.5" step="0.1" value="1" oninput="setSpeed(this.value)"><span>🐇</span><span class="speed-label" id="speed-label-2">1.0x</span></div>
+                    </div>
+                    <div class="status" id="status-2"></div>
+                </div>
+            </div>
+
+            <div class="phrase-card">
+                <div class="english">I like drinks.</div>
+                <div class="japanese-text">私は飲み物が好きです。</div>
+                <div class="romanji">Watashi wa nomimono ga suki desu.</div>
+                <div class="audio-controls">
+                    <button class="play-btn" onclick="speak('私は飲み物が好きです')">🔊 Play</button>
+                    <div class="control-group">
+                        <div class="volume-control"><span>🔈</span><input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" oninput="setVolume(this.value)"></div>
+                        <div class="speed-control"><span>🐢</span><input type="range" class="speed-slider" min="0.5" max="1.5" step="0.1" value="1" oninput="setSpeed(this.value)"><span>🐇</span><span class="speed-label" id="speed-label-3">1.0x</span></div>
+                    </div>
+                    <div class="status" id="status-3"></div>
+                </div>
+            </div>
+
+            <div class="phrase-card">
+                <div class="english">I like cold drinks.</div>
+                <div class="japanese-text">私は冷たい飲み物が好きです。</div>
+                <div class="romanji">Watashi wa tsumetai nomimono ga suki desu.</div>
+                <div class="audio-controls">
+                    <button class="play-btn" onclick="speak('私は冷たい飲み物が好きです')">🔊 Play</button>
+                    <div class="control-group">
+                        <div class="volume-control"><span>🔈</span><input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" oninput="setVolume(this.value)"></div>
+                        <div class="speed-control"><span>🐢</span><input type="range" class="speed-slider" min="0.5" max="1.5" step="0.1" value="1" oninput="setSpeed(this.value)"><span>🐇</span><span class="speed-label" id="speed-label-4">1.0x</span></div>
+                    </div>
+                    <div class="status" id="status-4"></div>
+                </div>
+            </div>
+
+            <div class="section-title">Asking About Preferences</div>
+
+            <div class="phrase-card">
+                <div class="english">What do you like?</div>
+                <div class="japanese-text">何が好きですか？</div>
+                <div class="romanji">Nani ga suki desu ka?</div>
+                <div class="audio-controls">
+                    <button class="play-btn" onclick="speak('何が好きですか')">🔊 Play</button>
+                    <div class="control-group">
+                        <div class="volume-control"><span>🔈</span><input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" oninput="setVolume(this.value)"></div>
+                        <div class="speed-control"><span>🐢</span><input type="range" class="speed-slider" min="0.5" max="1.5" step="0.1" value="1" oninput="setSpeed(this.value)"><span>🐇</span><span class="speed-label" id="speed-label-5">1.0x</span></div>
+                    </div>
+                    <div class="status" id="status-5"></div>
+                </div>
+            </div>
+
+            <div class="phrase-card">
+                <div class="english">What do you dislike / hate?</div>
+                <div class="japanese-text">何が嫌いですか？</div>
+                <div class="romanji">Nani ga kirai desu ka?</div>
+                <div class="audio-controls">
+                    <button class="play-btn" onclick="speak('何が嫌いですか')">🔊 Play</button>
+                    <div class="control-group">
+                        <div class="volume-control"><span>🔈</span><input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" oninput="setVolume(this.value)"></div>
+                        <div class="speed-control"><span>🐢</span><input type="range" class="speed-slider" min="0.5" max="1.5" step="0.1" value="1" oninput="setSpeed(this.value)"><span>🐇</span><span class="speed-label" id="speed-label-6">1.0x</span></div>
+                    </div>
+                    <div class="status" id="status-6"></div>
+                </div>
+            </div>
+
+            <div class="section-title">Everyday Questions</div>
+
+            <div class="phrase-card">
+                <div class="english">What is this?</div>
+                <div class="japanese-text">これはなんですか？</div>
+                <div class="romanji">Kore wa nan desu ka?</div>
+                <div class="audio-controls">
+                    <button class="play-btn" onclick="speak('これはなんですか')">🔊 Play</button>
+                    <div class="control-group">
+                        <div class="volume-control"><span>🔈</span><input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" oninput="setVolume(this.value)"></div>
+                        <div class="speed-control"><span>🐢</span><input type="range" class="speed-slider" min="0.5" max="1.5" step="0.1" value="1" oninput="setSpeed(this.value)"><span>🐇</span><span class="speed-label" id="speed-label-7">1.0x</span></div>
+                    </div>
+                    <div class="status" id="status-7"></div>
+                </div>
+            </div>
+
+            <div class="phrase-card">
+                <div class="english">Who is that person?</div>
+                <div class="japanese-text">あの人はだれですか？</div>
+                <div class="romanji">Ano hito wa dare desu ka?</div>
+                <div class="audio-controls">
+                    <button class="play-btn" onclick="speak('あの人はだれですか')">🔊 Play</button>
+                    <div class="control-group">
+                        <div class="volume-control"><span>🔈</span><input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" oninput="setVolume(this.value)"></div>
+                        <div class="speed-control"><span>🐢</span><input type="range" class="speed-slider" min="0.5" max="1.5" step="0.1" value="1" oninput="setSpeed(this.value)"><span>🐇</span><span class="speed-label" id="speed-label-8">1.0x</span></div>
+                    </div>
+                    <div class="status" id="status-8"></div>
+                </div>
+            </div>
+
+            <div class="phrase-card">
+                <div class="english">Where is the bathroom?</div>
+                <div class="japanese-text">トイレはどこですか？</div>
+                <div class="romanji">Toire wa doko desu ka?</div>
+                <div class="audio-controls">
+                    <button class="play-btn" onclick="speak('トイレはどこですか')">🔊 Play</button>
+                    <div class="control-group">
+                        <div class="volume-control"><span>🔈</span><input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" oninput="setVolume(this.value)"></div>
+                        <div class="speed-control"><span>🐢</span><input type="range" class="speed-slider" min="0.5" max="1.5" step="0.1" value="1" oninput="setSpeed(this.value)"><span>🐇</span><span class="speed-label" id="speed-label-9">1.0x</span></div>
+                    </div>
+                    <div class="status" id="status-9"></div>
+                </div>
+            </div>
+
+            <div class="phrase-card">
+                <div class="english">When is it?</div>
+                <div class="japanese-text">いつですか？</div>
+                <div class="romanji">Itsu desu ka?</div>
+                <div class="audio-controls">
+                    <button class="play-btn" onclick="speak('いつですか')">🔊 Play</button>
+                    <div class="control-group">
+                        <div class="volume-control"><span>🔈</span><input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" oninput="setVolume(this.value)"></div>
+                        <div class="speed-control"><span>🐢</span><input type="range" class="speed-slider" min="0.5" max="1.5" step="0.1" value="1" oninput="setSpeed(this.value)"><span>🐇</span><span class="speed-label" id="speed-label-10">1.0x</span></div>
+                    </div>
+                    <div class="status" id="status-10"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>💡 Pick "Kyoko" or "Google 日本語" from the Voice menu, set the red speed slider, then press Play.</p>
+            <p>Compatible with all modern web browsers that support the Web Speech API.</p>
+        </div>
+    </div>
+
+    <script>
+        let currentVolume = 0.8;
+        let currentSpeed = 1.0;
+        let selectedVoice = null;
+        const synth = window.speechSynthesis;
+
+        function populateVoices() {
+            const voices = synth.getVoices();
+            const ja = voices.filter(v => v.lang.toLowerCase().includes('ja'));
+            if (!ja.length) return;
+            ja.sort((a, b) => {
+                const rank = n => /kyoko/i.test(n) ? 0 : /google/i.test(n) ? 1 : 2;
+                return rank(a.name) - rank(b.name);
+            });
+            const select = document.getElementById('voiceSelect');
+            select.innerHTML = '';
+            ja.forEach(v => {
+                const opt = document.createElement('option');
+                opt.value = v.name;
+                opt.textContent = v.name + ' (' + v.lang + ')';
+                select.appendChild(opt);
+            });
+            selectedVoice = ja[0];
+            select.value = selectedVoice.name;
+        }
+
+        function onVoicePick() {
+            const name = document.getElementById('voiceSelect').value;
+            selectedVoice = synth.getVoices().find(v => v.name === name) || null;
+        }
+
+        function setVolume(v) {
+            currentVolume = parseFloat(v);
+            document.querySelectorAll('.volume-slider').forEach(s => s.value = v);
+        }
+
+        function setSpeed(v) {
+            currentSpeed = parseFloat(v);
+            document.querySelectorAll('.speed-slider').forEach(s => s.value = v);
+            document.querySelectorAll('.speed-label').forEach(l => l.textContent = currentSpeed.toFixed(1) + 'x');
+        }
+
+        function speak(text) {
+            if (!('speechSynthesis' in window)) { alert('Sorry, your browser does not support text-to-speech.'); return; }
+            synth.cancel();
+            setTimeout(function() {
+                const u = new SpeechSynthesisUtterance(text);
+                u.rate = currentSpeed;
+                u.volume = currentVolume;
+                u.pitch = 1;
+                if (selectedVoice) { u.voice = selectedVoice; u.lang = selectedVoice.lang; }
+                else { u.lang = 'ja-JP'; }
+                u.onstart = () => updateStatus('Playing at ' + currentSpeed.toFixed(1) + 'x...');
+                u.onend = () => updateStatus('');
+                u.onerror = () => updateStatus('');
+                synth.speak(u);
+            }, 60);
+        }
+
+        function updateStatus(message) {
+            document.querySelectorAll('[id^="status-"]').forEach(e => e.textContent = message);
+        }
+
+        if ('onvoiceschanged' in synth) synth.onvoiceschanged = populateVoices;
+        setTimeout(populateVoices, 300);
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.volume-slider').forEach(s => s.value = currentVolume);
+            document.querySelectorAll('.speed-slider').forEach(s => s.value = currentSpeed);
+            document.querySelectorAll('.speed-label').forEach(l => l.textContent = currentSpeed.toFixed(1) + 'x');
+        });
+    </script>
+</body>
+</html>
