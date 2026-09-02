@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Japanese Work & Invitations with Audio Pronunciation</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #4568dc 0%, #b06ab3 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: rgba(255,255,255,0.95); border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #4568dc 0%, #b06ab3 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 2.5em; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        .header p { font-size: 1.1em; opacity: 0.95; }
+        .voice-picker { background: #eef1fc; padding: 16px 30px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; border-bottom: 1px solid #dde3f8; }
+        .voice-picker label { font-weight: 600; color: #3b4fa8; }
+        .voice-picker select { padding: 8px 12px; border-radius: 8px; border: 1px solid #c2cbf0; font-size: 0.95em; flex: 1; min-width: 200px; }
+        .content { padding: 30px; }
+        .section-title { font-size: 1.3em; font-weight: 700; color: #3b4fa8; margin: 10px 0 8px; padding-bottom: 8px; border-bottom: 2px solid #dde3f8; }
+        .section-note { font-size: 0.95em; color: #7f8c8d; margin-bottom: 20px; font-style: italic; }
+        .work-card { background: white; border-radius: 15px; padding: 25px; margin-bottom: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); border-left: 5px solid #4568dc; transition: all 0.3s ease; position: relative; overflow: hidden; }
+        .work-card.example { border-left-color: #b06ab3; background: #fdfaff; margin-left: 20px; }
+        .work-card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0,0,0,0.15); }
+        .work-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: linear-gradient(90deg, #4568dc, #b06ab3, #4ecdc4); }
+        .kanji-text { font-size: 1.6em; font-weight: bold; color: #34495e; margin-bottom: 4px; font-family: 'Hiragino Kaku Gothic Pro', 'Yu Gothic', sans-serif; }
+        .japanese-text { font-size: 1.9em; font-weight: bold; color: #2c3e50; margin-bottom: 10px; font-family: 'Hiragino Kaku Gothic Pro', 'Yu Gothic', sans-serif; line-height: 1.4; }
+        .romanji { font-size: 1.25em; color: #7f8c8d; font-style: italic; margin-bottom: 8px; }
+        .english { font-size: 1.2em; color: #5a5ac8; font-weight: 600; margin-bottom: 15px; }
+        .audio-controls { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+        .play-btn { background: linear-gradient(135deg, #4568dc, #b06ab3); color: white; border: none; padding: 12px 20px; border-radius: 25px; cursor: pointer; font-size: 1em; font-weight: 600; transition: all 0.3s ease; display: flex; align-items: center; gap: 8px; }
+        .play-btn:hover { transform: scale(1.05); }
+        .play-btn:active { transform: scale(0.95); }
+        .control-group { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
+        .volume-control, .speed-control { display: flex; align-items: center; gap: 8px; }
+        .speed-label { font-size: 0.9em; font-weight: 700; color: #e63946; min-width: 40px; text-align: center; }
+        .volume-slider { width: 80px; height: 5px; border-radius: 5px; background: #ddd; outline: none; cursor: pointer; }
+        .volume-slider::-webkit-slider-thumb { appearance: none; width: 15px; height: 15px; border-radius: 50%; background: #4ecdc4; cursor: pointer; }
+        .speed-slider { width: 120px; height: 8px; border-radius: 5px; background: #ffd6d6; outline: none; cursor: pointer; }
+        .speed-slider::-webkit-slider-thumb { appearance: none; width: 20px; height: 20px; border-radius: 50%; background: #e63946; cursor: pointer; border: 2px solid #fff; box-shadow: 0 0 4px rgba(230,57,70,0.6); }
+        .speed-slider::-moz-range-thumb { width: 20px; height: 20px; border-radius: 50%; background: #e63946; cursor: pointer; border: 2px solid #fff; }
+        .status { font-size: 0.9em; color: #7f8c8d; margin-left: auto; font-style: italic; }
+        .footer { text-align: center; padding: 20px; background: #f8f9fa; color: #666; font-size: 0.9em; }
+        @media (max-width: 600px) {
+            .header h1 { font-size: 1.7em; }
+            .japanese-text { font-size: 1.4em; }
+            .kanji-text { font-size: 1.3em; }
+            .work-card.example { margin-left: 0; }
+            .audio-controls { flex-direction: column; align-items: stretch; }
+            .control-group { justify-content: center; }
+            .volume-control, .speed-control { margin-left: 0; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🇯🇵 Work &amp; Invitations</h1>
+            <p>Inviting colleagues and talking about work</p>
+        </div>
+
+        <div class="voice-picker">
+            <label for="voiceSelect">🗣 Voice:</label>
+            <select id="voiceSelect" onchange="onVoicePick()"></select>
+        </div>
+
+        <div class="content">
+            <div class="section-title">Inviting Someone</div>
+            <div class="section-note">～ませんか is a polite way to suggest doing something together.</div>
+
+            <div class="work-card">
+                <div class="english">Shall we go to ～?</div>
+                <div class="kanji-text">～に 行きませんか</div>
+                <div class="japanese-text">～に いきませんか</div>
+                <div class="romanji">～ ni ikimasen ka</div>
+                <div class="audio-controls">
+                    <button class="play-btn" onclick="speak('いきませんか')">🔊 Play</button>
+                    <div class="control-group">
+                        <div class="volume-control"><span>🔈</span><input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" oninput="setVolume(this.value)"></div>
+                        <div class="speed-control"><span>🐢</span><input type="range" class="speed-slider" min="0.5" max="1.5" step="0.1" value="1" oninput="setSpeed(this.value)"><span>🐇</span><span class="speed-label">1.0x</span></div>
+                    </div>
+                    <div class="status"></div>
+                </div>
+            </div>
+
+            <div class="work-card example">
+                <div class="english">Shall we go to the office together?</div>
+                <div class="japanese-text">いっしょに 会社に 行きませんか。</div>
+                <div class="romanji">Issho ni kaisha ni ikimasen ka?</div>
+                <div class="audio-controls">
+                    <button class="play-btn" onclick="speak('いっしょに 会社に 行きませんか')">🔊 Play</button>
+                    <div class="control-group">
+                        <div class="volume-control"><span>🔈</span><input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" oninput="setVolume(this.value)"></div>
+                        <div class="speed-control"><span>🐢</span><input type="range" class="speed-slider" min="0.5" max="1.5" step="0.1" value="1" oninput="setSpeed(this.value)"><span>🐇</span><span class="speed-label">1.0x</span></div>
+                    </div>
+                    <div class="status"></div>
+                </div>
+            </div>
+
+            <div class="section-title">Responding</div>
+            <div class="section-note">Accepting or declining what's been suggested.</div>
+
+            <div class="work-card">
+                <div class="english">Sounds good / That's good</div>
+                <div class="japanese-text">いいですね</div>
+                <div class="romanji">Ii desu ne</div>
+                <div class="audio-controls">
+                    <button class="play-btn" onclick="speak('いいですね')">🔊 Play</button>
+                    <div class="control-group">
+                        <div class="volume-control"><span>🔈</span><input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" oninput="setVolume(this.value)"></div>
+                        <div class="speed-control"><span>🐢</span><input type="range" class="speed-slider" min="0.5" max="1.5" step="0.1" value="1" oninput="setSpeed(this.value)"><span>🐇</span><span class="speed-label">1.0x</span></div>
+                    </div>
+                    <div class="status"></div>
+                </div>
+            </div>
+
+            <div class="work-card">
+                <div class="english">That's bad / Not good</div>
+                <div class="japanese-text">わるいです</div>
+                <div class="romanji">Warui desu</div>
+                <div class="audio-controls">
+                    <button class="play-btn" onclick="speak('わるいです')">🔊 Play</button>
+                    <div class="control-group">
+                        <div class="volume-control"><span>🔈</span><input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" oninput="setVolume(this.value)"></div>
+                        <div class="speed-control"><span>🐢</span><input type="range" class="speed-slider" min="0.5" max="1.5" step="0.1" value="1" oninput="setSpeed(this.value)"><span>🐇</span><span class="speed-label">1.0x</span></div>
+                    </div>
+                    <div class="status"></div>
+                </div>
+            </div>
+
+            <div class="section-title">Work Vocabulary</div>
+            <div class="section-note">Each word is followed by an example sentence using it.</div>
+
+            <div class="work-card">
+                <div class="english">To meet</div>
+                <div class="kanji-text">会います</div>
+                <div class="japanese-text">あいます</div>
+                <div class="romanji">Aimasu</div>
+                <div class="audio-controls">
+                    <button class="play-btn" onclick="speak('あいます')">🔊 Play</button>
+                    <div class="control-group">
+                        <div class="volume-control"><span>🔈</span><input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" oninput="setVolume(this.value)"></div>
+                        <div class="speed-control"><span>🐢</span><input type="range" class="speed-slider" min="0.5" max="1.5" step="0.1" value="1" oninput="setSpeed(this.value)"><span>🐇</span><span class="speed-label">1.0x</span></div>
+                    </div>
+                    <div class="status"></div>
+                </div>
+            </div>
+
+            <div class="work-card example">
+                <div class="english">I meet my friend.</div>
+                <div class="japanese-text">ともだちに 会います。</div>
+                <div class="romanji">Tomodachi ni aimasu.</div>
+                <div class="audio-controls">
+                    <button class="play-btn" onclick="speak('ともだちに 会います')">🔊 Play</button>
+                    <div class="control-group">
+                        <div class="volume-control"><span>🔈</span><input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" oninput="setVolume(this.value)"></div>
+                        <div class="speed-control"><span>🐢</span><input type="range" class="speed-slider" min="0.5" max="1.5" step="0.1" value="1" oninput="setSpeed(this.value)"><span>🐇</span><span class="speed-label">1.0x</span></div>
+                    </div>
+                    <div class="status"></div>
+                </div>
+            </div>
+
+            <div class="work-card">
+                <div class="english">Together</div>
+                <div class="japanese-text">いっしょに</div>
+                <div class="romanji">Issho ni</div>
+                <div class="audio-controls">
+                    <button class="play-btn" onclick="speak('いっしょに')">🔊 Play</button>
+                    <div class="control-group">
+                        <div class="volume-control"><span>🔈</span><input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" oninput="setVolume(this.value)"></div>
+                        <div class="speed-control"><span>🐢</span><input type="range" class="speed-slider" min="0.5" max="1.5" step="0.1" value="1" oninput="setSpeed(this.value)"><span>🐇</span><span class="speed-label">1.0x</span></div>
+                    </div>
+                    <div class="status"></div>
+                </div>
+            </div>
+
+            <div class="work-card example">
+                <div class="english">We work together.</div>
+                <div class="japanese-text">いっしょに 働きます。</div>
+                <div class="romanji">Issho ni hatarakimasu.</div>
+                <div class="audio-controls">
+                    <button class="play-btn" onclick="speak('いっしょに 働きます')">🔊 Play</button>
+                    <div class="control-group">
+                        <div class="volume-control"><span>🔈</span><input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" oninput="setVolume(this.value)"></div>
+                        <div class="speed-control"><span>🐢</span><input type="range" class="speed-slider" min="0.5" max="1.5" step="0.1" value="1" oninput="setSpeed(this.value)"><span>🐇</span><span class="speed-label">1.0x</span></div>
+                    </div>
+                    <div class="status"></div>
+                </div>
+            </div>
+
+            <div class="work-card">
+                <div class="english">Work / job</div>
+                <div class="kanji-text">仕事</div>
+                <div class="japanese-text">しごと</div>
+                <div class="romanji">Shigoto</div>
+                <div class="audio-controls">
+                    <button class="play-btn" onclick="speak('仕事')">🔊 Play</button>
+                    <div class="control-group">
+                        <div class="volume-control"><span>🔈</span><input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" oninput="setVolume(this.value)"></div>
+                        <div class="speed-control"><span>🐢</span><input type="range" class="speed-slider" min="0.5" max="1.5" step="0.1" value="1" oninput="setSpeed(this.value)"><span>🐇</span><span class="speed-label">1.0x</span></div>
+                    </div>
+                    <div class="status"></div>
+                </div>
+            </div>
+
+            <div class="work-card example">
+                <div class="english">I go to work.</div>
+                <div class="japanese-text">仕事に 行きます。</div>
+                <div class="romanji">Shigoto ni ikimasu.</div>
+                <div class="audio-controls">
+                    <button class="play-btn" onclick="speak('仕事に 行きます')">🔊 Play</button>
+                    <div class="control-group">
+                        <div class="volume-control"><span>🔈</span><input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" oninput="setVolume(this.value)"></div>
+                        <div class="speed-control"><span>🐢</span><input type="range" class="speed-slider" min="0.5" max="1.5" step="0.1" value="1" oninput="setSpeed(this.value)"><span>🐇</span><span class="speed-label">1.0x</span></div>
+                    </div>
+                    <div class="status"></div>
+                </div>
+            </div>
+
+            <div class="work-card">
+                <div class="english">To work</div>
+                <div class="kanji-text">働きます</div>
+                <div class="japanese-text">はたらきます</div>
+                <div class="romanji">Hatarakimasu</div>
+                <div class="audio-controls">
+                    <button class="play-btn" onclick="speak('はたらきます')">🔊 Play</button>
+                    <div class="control-group">
+                        <div class="volume-control"><span>🔈</span><input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" oninput="setVolume(this.value)"></div>
+                        <div class="speed-control"><span>🐢</span><input type="range" class="speed-slider" min="0.5" max="1.5" step="0.1" value="1" oninput="setSpeed(this.value)"><span>🐇</span><span class="speed-label">1.0x</span></div>
+                    </div>
+                    <div class="status"></div>
+                </div>
+            </div>
+
+            <div class="work-card example">
+                <div class="english">I work from 9 o'clock.</div>
+                <div class="japanese-text">9じから 働きます。</div>
+                <div class="romanji">Ku-ji kara hatarakimasu.</div>
+                <div class="audio-controls">
+                    <button class="play-btn" onclick="speak('くじから 働きます')">🔊 Play</button>
+                    <div class="control-group">
+                        <div class="volume-control"><span>🔈</span><input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" oninput="setVolume(this.value)"></div>
+                        <div class="speed-control"><span>🐢</span><input type="range" class="speed-slider" min="0.5" max="1.5" step="0.1" value="1" oninput="setSpeed(this.value)"><span>🐇</span><span class="speed-label">1.0x</span></div>
+                    </div>
+                    <div class="status"></div>
+                </div>
+            </div>
+
+            <div class="work-card">
+                <div class="english">Meeting</div>
+                <div class="kanji-text">会議</div>
+                <div class="japanese-text">かいぎ</div>
+                <div class="romanji">Kaigi</div>
+                <div class="audio-controls">
+                    <button class="play-btn" onclick="speak('会議')">🔊 Play</button>
+                    <div class="control-group">
+                        <div class="volume-control"><span>🔈</span><input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" oninput="setVolume(this.value)"></div>
+                        <div class="speed-control"><span>🐢</span><input type="range" class="speed-slider" min="0.5" max="1.5" step="0.1" value="1" oninput="setSpeed(this.value)"><span>🐇</span><span class="speed-label">1.0x</span></div>
+                    </div>
+                    <div class="status"></div>
+                </div>
+            </div>
+
+            <div class="work-card example">
+                <div class="english">Shall we go to the meeting together?</div>
+                <div class="japanese-text">いっしょに 会議に 行きませんか。</div>
+                <div class="romanji">Issho ni kaigi ni ikimasen ka?</div>
+                <div class="audio-controls">
+                    <button class="play-btn" onclick="speak('いっしょに 会議に 行きませんか')">🔊 Play</button>
+                    <div class="control-group">
+                        <div class="volume-control"><span>🔈</span><input type="range" class="volume-slider" min="0" max="1" step="0.1" value="0.8" oninput="setVolume(this.value)"></div>
+                        <div class="speed-control"><span>🐢</span><input type="range" class="speed-slider" min="0.5" max="1.5" step="0.1" value="1" oninput="setSpeed(this.value)"><span>🐇</span><span class="speed-label">1.0x</span></div>
+                    </div>
+                    <div class="status"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>💡 Pick "Kyoko" or "Google 日本語" from the Voice menu, set the red speed slider, then press Play.</p>
+            <p>Compatible with all modern web browsers that support the Web Speech API.</p>
+        </div>
+    </div>
+
+    <script>
+        let currentVolume = 0.8;
+        let currentSpeed = 1.0;
+        let selectedVoice = null;
+        const synth = window.speechSynthesis;
+
+        function populateVoices() {
+            const voices = synth.getVoices();
+            const ja = voices.filter(v => v.lang.toLowerCase().includes('ja'));
+            if (!ja.length) return;
+            ja.sort((a, b) => {
+                const rank = n => /kyoko/i.test(n) ? 0 : /google/i.test(n) ? 1 : 2;
+                return rank(a.name) - rank(b.name);
+            });
+            const select = document.getElementById('voiceSelect');
+            select.innerHTML = '';
+            ja.forEach(v => {
+                const opt = document.createElement('option');
+                opt.value = v.name;
+                opt.textContent = v.name + ' (' + v.lang + ')';
+                select.appendChild(opt);
+            });
+            selectedVoice = ja[0];
+            select.value = selectedVoice.name;
+        }
+
+        function onVoicePick() {
+            const name = document.getElementById('voiceSelect').value;
+            selectedVoice = synth.getVoices().find(v => v.name === name) || null;
+        }
+
+        function setVolume(v) {
+            currentVolume = parseFloat(v);
+            document.querySelectorAll('.volume-slider').forEach(s => s.value = v);
+        }
+
+        function setSpeed(v) {
+            currentSpeed = parseFloat(v);
+            document.querySelectorAll('.speed-slider').forEach(s => s.value = v);
+            document.querySelectorAll('.speed-label').forEach(l => l.textContent = currentSpeed.toFixed(1) + 'x');
+        }
+
+        function speak(text) {
+            if (!('speechSynthesis' in window)) { alert('Sorry, your browser does not support text-to-speech.'); return; }
+            synth.cancel();
+            setTimeout(function() {
+                const u = new SpeechSynthesisUtterance(text);
+                u.rate = currentSpeed;
+                u.volume = currentVolume;
+                u.pitch = 1;
+                if (selectedVoice) { u.voice = selectedVoice; u.lang = selectedVoice.lang; }
+                else { u.lang = 'ja-JP'; }
+                u.onstart = () => updateStatus('Playing at ' + currentSpeed.toFixed(1) + 'x...');
+                u.onend = () => updateStatus('');
+                u.onerror = () => updateStatus('');
+                synth.speak(u);
+            }, 60);
+        }
+
+        function updateStatus(message) {
+            document.querySelectorAll('.status').forEach(e => e.textContent = message);
+        }
+
+        if ('onvoiceschanged' in synth) synth.onvoiceschanged = populateVoices;
+        setTimeout(populateVoices, 300);
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.volume-slider').forEach(s => s.value = currentVolume);
+            document.querySelectorAll('.speed-slider').forEach(s => s.value = currentSpeed);
+            document.querySelectorAll('.speed-label').forEach(l => l.textContent = currentSpeed.toFixed(1) + 'x');
+        });
+    </script>
+</body>
+</html>
